@@ -1,7 +1,7 @@
 import json
 import os
-from datetime import datetime, timedelta, timezone
 import time
+from datetime import datetime, timedelta, timezone
 from os.path import exists, join
 from threading import Lock, Thread
 from time import sleep
@@ -46,6 +46,7 @@ class dwx_client:
         self.path_orders_stored = join(metatrader_dir_path, "DWX", "DWX_Orders_Stored.txt")
         self.path_messages_stored = join(metatrader_dir_path, "DWX", "DWX_Messages_Stored.txt")
         self.path_execution_receipts = join(metatrader_dir_path, "DWX", "DWX_Execution_Receipts.txt")
+        self.path_python_heartbeat = join(metatrader_dir_path, "DWX", "DWX_Python_Heartbeat.txt")
         self.path_commands_prefix = join(metatrader_dir_path, "DWX", "DWX_Commands_")
 
         self.num_command_files = 50
@@ -608,3 +609,12 @@ class dwx_client:
 
         print(f"[Receipt] ERROR: Timed out waiting for receipt for command ID: {command_id}")
         return False
+
+    def _send_heartbeat(self):
+        """Writes the current UTC timestamp to a file for the MQL4 EA to read."""
+        try:
+            with open(self.path_python_heartbeat, "w") as f:
+                f.write(str(int(datetime.now(timezone.utc).timestamp())))
+        except Exception as e:
+            # Use logging which is now set up in main.py
+            print(f"Error sending heartbeat: {e}")

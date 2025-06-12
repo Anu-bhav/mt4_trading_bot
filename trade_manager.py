@@ -20,6 +20,7 @@ class TradeManager:
         self.config = config
         self.risk_config = config.RISK_CONFIG
         self.required_history_bars = required_history_bars
+        self.last_bar_timestamp = 0
 
         self.state_file_path = join(config.METATRADER_DIR_PATH, "DWX", "trade_manager_state.json")
 
@@ -178,17 +179,54 @@ class TradeManager:
             self._save_state()
 
     def on_bar_data(self, symbol, time_frame, time, open_p, high_p, low_p, close_p, tick_volume):
+        """The main entry point for live bar data from the client."""
         if not self.is_preloaded:
             return
         if symbol != self.config.STRATEGY_SYMBOL or time_frame != self.config.STRATEGY_TIMEFRAME:
             return
-        if time in self.market_data_df["time"].values:
+
+        # --- [Gotcha 2.2] Bad Candle / Corrupted Data Check ---
+        if not (open_p > 0 and high_p > 0 and low_p > 0 and close_p > 0 and high_p >= low_p):
+            print(f"[DATA WARNING] Received a bad/corrupted candle, ignoring: {symbol} {time}")
             return
+
+        # Prevent processing duplicate bars
+        if time <= self.last_bar_timestamp:
+            return
+
+        # --- [Gotcha 2.1] Gaps in Data (Missed Candle) Check ---
+        if self.last_bar_timestamp > 0:  # Don't check on the very first bar
+            time_diff_seconds = time - self.last_bar_timestamp
+
+            # Get the expected interval for the timeframe
+            try:
+                tf_str = self.config.STRATEGY_TIMEFRAME
+                if "M" in tf_str:
+                    interval_seconds = int(tf_str.replace("M", "")) * 60
+                elif "H" in tf_str:
+                    interval_seconds = int(tf_str.replace("H", "")) * 3600
+                else:
+                    interval_seconds = 60  # Default to 1 minute
+            except:
+                interval_seconds = 60
+
+            # If the time difference is more than 2x the expected interval, we likely missed a candle.
+            if time_diff_seconds > (interval_seconds * 1.9):
+                print(
+                    f"[DATA WARNING] Potential data gap detected. Time since last bar: {time_diff_seconds}s. Expected ~{interval_seconds}s."
+                )
+                # In a more advanced system, you could trigger a historical data re-request here.
+                # For now, we just log a warning.
+
+        # Update the timestamp of the last processed bar
+        self.last_bar_timestamp = time
+
         print(f"\n--- New Live Bar Received: {symbol} {time_frame} at {time} ---")
         self.market_data_df.loc[len(self.market_data_df)] = [time, open_p, high_p, low_p, close_p, tick_volume]
         max_rows = self.required_history_bars + 200
         if len(self.market_data_df) > max_rows:
             self.market_data_df = self.market_data_df.iloc[-max_rows:]
+
         self.analyze_and_trade()
 
     def update_position_status(self):

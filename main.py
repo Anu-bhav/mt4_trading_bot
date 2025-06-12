@@ -1,12 +1,14 @@
 # main.py
-from calendar import c
 import importlib
+import logging
 import time
+from calendar import c
 from datetime import datetime, timedelta, timezone
 
 import config as cfg
 from api.dwx_client import dwx_client
 from event_handler import MyEventHandler
+from logger_setup import setup_logger
 
 # Import your strategies
 from trade_manager import TradeManager
@@ -49,7 +51,11 @@ def strategy_factory(strategy_name: str, config_params: dict):
 
 
 def main():
-    print("Initializing trading bot...")
+    # --- SETUP LOGGER FIRST ---
+    setup_logger()
+
+    # Now, instead of print(), we use logging.info()
+    logging.info("Initializing trading bot...")
 
     dwx = dwx_client(event_handler=None, metatrader_dir_path=cfg.METATRADER_DIR_PATH, verbose=False)
 
@@ -115,8 +121,16 @@ def main():
     # --- Main Loop ---
     print("\nBot is running. Press Ctrl+C to stop.")
     try:
+        last_heartbeat_time = time.time()
         while dwx.ACTIVE:
-            time.sleep(1)
+            time.sleep(1)  # Main loop sleeps for 1 second
+
+            # Send a heartbeat every 15 seconds
+            if time.time() - last_heartbeat_time > 15:
+                dwx._send_heartbeat()
+                last_heartbeat_time = time.time()
+                logging.info("Python heartbeat sent.")
+
     except KeyboardInterrupt:
         print("\nStopping bot...")
         dwx.close_orders_by_magic(cfg.MAGIC_NUMBER)
