@@ -1,6 +1,7 @@
 import json
 import os
 from datetime import datetime, timedelta, timezone
+import time
 from os.path import exists, join
 from threading import Lock, Thread
 from time import sleep
@@ -44,6 +45,7 @@ class dwx_client:
         self.path_historic_trades = join(metatrader_dir_path, "DWX", "DWX_Historic_Trades.txt")
         self.path_orders_stored = join(metatrader_dir_path, "DWX", "DWX_Orders_Stored.txt")
         self.path_messages_stored = join(metatrader_dir_path, "DWX", "DWX_Messages_Stored.txt")
+        self.path_execution_receipts = join(metatrader_dir_path, "DWX", "DWX_Execution_Receipts.txt")
         self.path_commands_prefix = join(metatrader_dir_path, "DWX", "DWX_Commands_")
 
         self.num_command_files = 50
@@ -460,7 +462,7 @@ class dwx_client:
         expiration=0,
     ):
         data = [symbol, order_type, lots, price, stop_loss, take_profit, magic, comment, expiration]
-        self.send_command("OPEN_ORDER", ",".join(str(p) for p in data))
+        return self.send_command("OPEN_ORDER", ",".join(str(p) for p in data))
 
     """Sends a MODIFY_ORDER command to modify an order.
 
@@ -479,7 +481,7 @@ class dwx_client:
 
     def modify_order(self, ticket, price=0, stop_loss=0, take_profit=0, expiration=0):
         data = [ticket, price, stop_loss, take_profit, expiration]
-        self.send_command("MODIFY_ORDER", ",".join(str(p) for p in data))
+        return self.send_command("MODIFY_ORDER", ",".join(str(p) for p in data))
 
     """Sends a CLOSE_ORDER command to close an order.
 
@@ -494,13 +496,13 @@ class dwx_client:
 
     def close_order(self, ticket, lots=0.0):
         data = [ticket, lots]
-        self.send_command("CLOSE_ORDER", ",".join(str(p) for p in data))
+        return self.send_command("CLOSE_ORDER", ",".join(str(p) for p in data))
 
     """Sends a CLOSE_ALL_ORDERS command to close all orders.
     """
 
     def close_all_orders(self):
-        self.send_command("CLOSE_ALL_ORDERS", "")
+        return self.send_command("CLOSE_ALL_ORDERS", "")
 
     """Sends a CLOSE_ORDERS_BY_SYMBOL command to close all orders
     with a given symbol.
@@ -511,7 +513,7 @@ class dwx_client:
     """
 
     def close_orders_by_symbol(self, symbol):
-        self.send_command("CLOSE_ORDERS_BY_SYMBOL", symbol)
+        return self.send_command("CLOSE_ORDERS_BY_SYMBOL", symbol)
 
     """Sends a CLOSE_ORDERS_BY_MAGIC command to close all orders
     with a given magic number.
@@ -523,7 +525,7 @@ class dwx_client:
     """
 
     def close_orders_by_magic(self, magic):
-        self.send_command("CLOSE_ORDERS_BY_MAGIC", magic)
+        return self.send_command("CLOSE_ORDERS_BY_MAGIC", magic)
 
     """Sends a RESET_COMMAND_IDS command to reset stored command IDs. 
     This should be used when restarting the python side without restarting 
@@ -582,3 +584,27 @@ class dwx_client:
 
         # release lock again
         self.lock.release()
+
+        return self.command_id
+
+    def wait_for_receipt(self, command_id: int, timeout_seconds: int = 5) -> bool:
+        """
+        Waits for a specific command ID to appear in the execution receipt file.
+        This confirms the MT4 server has processed the command.
+        """
+        start_time = time.time()
+        while time.time() - start_time < timeout_seconds:
+            text = self.try_read_file(self.path_execution_receipts)
+            if text:
+                try:
+                    receipt_id, _ = text.split("|")
+                    if int(receipt_id) == command_id:
+                        print(f"[Receipt] Confirmed execution for command ID: {command_id}")
+                        return True
+                except (ValueError, IndexError):
+                    print(f"[Receipt] WARN: Could not parse receipt file content: {text}")
+
+            time.sleep(self.sleep_delay)
+
+        print(f"[Receipt] ERROR: Timed out waiting for receipt for command ID: {command_id}")
+        return False

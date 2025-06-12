@@ -71,7 +71,11 @@ class TradeManager:
                 current_trade_type = list(self._get_open_positions().values())[0]["type"]
                 if (signal == "BUY" and current_trade_type == "sell") or (signal == "SELL" and current_trade_type == "buy"):
                     print(f">>> EXECUTION: Reversing signal '{signal}' received. Closing all trades!")
-                    self.dwx.close_orders_by_magic(self.config.MAGIC_NUMBER)
+                    # --- NEW VERIFICATION LOGIC ---
+                    command_id = self.dwx.close_orders_by_magic(self.config.MAGIC_NUMBER)
+                    if self.dwx.wait_for_receipt(command_id):
+                        print("Verifying trade state after REVERSAL CLOSE...")
+                        self.update_position_status()
             # Check for an entry signal
             elif not self.in_position:
                 open_positions = self._get_open_positions()  # Re-check just in case
@@ -145,7 +149,8 @@ class TradeManager:
             return
 
         print(f">>> EXECUTION: {signal.upper()} signal received. Sending order! [Lots: {lot_size}]")
-        self.dwx.open_order(
+        # --- NEW VERIFICATION LOGIC ---
+        command_id = self.dwx.open_order(
             symbol=self.config.STRATEGY_SYMBOL,
             order_type=signal,
             lots=lot_size,
@@ -154,6 +159,14 @@ class TradeManager:
             take_profit=take_profit_price,
             magic=self.config.MAGIC_NUMBER,
         )
+
+        # Wait for the server to acknowledge it has processed the command.
+        if self.dwx.wait_for_receipt(command_id):
+            print("Verifying trade state after OPEN...")
+            # After confirmation, we force an immediate state update.
+            self.update_position_status()
+        else:
+            print("[ERROR] OPEN_ORDER command was not confirmed by the server.")
 
     def manage_open_positions(self):
         """Manages all currently open trades for this strategy."""
@@ -175,17 +188,29 @@ class TradeManager:
                 if order_type == "buy":
                     new_sl = current_price * (1 - trailing_sl_percent)
                     if new_sl > current_sl:
-                        self.dwx.modify_order(ticket, stop_loss=new_sl)
+                        print(f"[Trailing Stop] Modifying order {ticket} SL to {new_sl:.5f}")
+                        # --- NEW VERIFICATION LOGIC ---
+                        command_id = self.dwx.modify_order(ticket, stop_loss=new_sl)
+                        self.dwx.wait_for_receipt(command_id)
                 elif order_type == "sell":
                     new_sl = current_price * (1 + trailing_sl_percent)
                     if new_sl < current_sl or current_sl == 0:
-                        self.dwx.modify_order(ticket, stop_loss=new_sl)
+                        print(f"[Trailing Stop] Modifying order {ticket} SL to {new_sl:.5f}")
+                        # --- NEW VERIFICATION LOGIC ---
+                        command_id = self.dwx.modify_order(ticket, stop_loss=new_sl)
+                        self.dwx.wait_for_receipt(command_id)
 
             for i, rule in enumerate(self.risk_config["PARTIAL_CLOSE_RULES"]):
                 vol_pct, profit_pct = rule
                 if profit_percent >= profit_pct and self.partials_taken.get(ticket, {}).get(i) is None:
                     close_vol = order["lots"] * (vol_pct / 100.0)
-                    self.dwx.close_order(ticket, lots=close_vol)
+                    print(f"[Partial Close] Closing {close_vol:.2f} lots for order {ticket}")
+                    # --- NEW VERIFICATION LOGIC ---
+                    command_id = self.dwx.close_order(ticket, lots=close_vol)
+                    if self.dwx.wait_for_receipt(command_id):
+                        print("Verifying trade state after PARTIAL CLOSE...")
+                        self.update_position_status()
+
                     if ticket not in self.partials_taken:
                         self.partials_taken[ticket] = {}
                     self.partials_taken[ticket][i] = True
