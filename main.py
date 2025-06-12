@@ -5,16 +5,41 @@ from datetime import datetime, timedelta, timezone
 import config as cfg
 from api.dwx_client import dwx_client
 from event_handler import MyEventHandler
+from strategies.rsi_strategy import RsiStrategy
+
+# Import your strategies
 from strategies.sma_crossover import SmaCrossover
 from trade_manager import TradeManager
 
 
 def main():
-    dwx = dwx_client(event_handler=None, metatrader_dir_path=cfg.METATRADER_DIR_PATH, verbose=True)
-    strategy_params = cfg.STRATEGY_PARAMS["sma_crossover"]
-    my_strategy_logic = SmaCrossover(**strategy_params)
-    my_trade_manager = TradeManager(dwx, my_strategy_logic, cfg)
-    my_event_handler = MyEventHandler(my_trade_manager)
+    print("Initializing trading bot...")
+
+    dwx = dwx_client(event_handler=None, metatrader_dir_path=cfg.METATRADER_DIR_PATH, verbose=False)
+
+    # --- Activate the Desired Strategy ---
+    strategy_name = "sma_crossover"  # Change this to switch strategies
+    strategy_params = cfg.STRATEGY_PARAMS[strategy_name]
+
+    # --- THIS IS THE NEW LOGIC ---
+    # Dynamically determine the longest lookback period the strategy needs.
+    # This makes the TradeManager independent of parameter names like 'long_period' or 'rsi_period'.
+    if strategy_params:
+        required_history_bars = max(strategy_params.values())
+    else:
+        required_history_bars = 20  # A safe default if no params are given
+
+    if strategy_name == "rsi_strategy":
+        my_strategy_logic = RsiStrategy(**strategy_params)
+    elif strategy_name == "sma_crossover":
+        my_strategy_logic = SmaCrossover(**strategy_params)
+    else:
+        raise ValueError(f"Strategy '{strategy_name}' not recognized.")
+
+    # Pass the calculated required history to the TradeManager
+    my_trade_manager = TradeManager(dwx, my_strategy_logic, cfg, required_history_bars)
+
+    my_event_handler = MyEventHandler(dwx, my_trade_manager)
     dwx.event_handler = my_event_handler
 
     dwx.start()
@@ -22,11 +47,8 @@ def main():
         time.sleep(1)
     print("DWX Client started.")
 
-    # Request historical data
     print("Requesting historical data for preloading...")
-    # ... (logic to calculate start_time and end_time is the same) ...
-    long_period = cfg.STRATEGY_PARAMS["sma_crossover"]["long_period"]
-    num_bars_to_fetch = long_period + 200
+    num_bars_to_fetch = required_history_bars + 200  # Use the same value for the fetch request
     timeframe_minutes = cfg.STRATEGY_TIMEFRAME.replace("M", "")
     timeframe_minutes = int(timeframe_minutes)
     minutes_to_fetch = num_bars_to_fetch * timeframe_minutes
@@ -60,7 +82,6 @@ def main():
         while dwx.ACTIVE:
             time.sleep(1)
     except KeyboardInterrupt:
-        # ... (rest of the code is the same) ...
         print("\nStopping bot...")
         dwx.close_orders_by_magic(cfg.MAGIC_NUMBER)
         dwx.stop()

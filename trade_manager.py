@@ -5,11 +5,15 @@ from utils import risk_manager
 
 
 class TradeManager:
-    def __init__(self, dwx, strategy_object, config):
+    # --- MODIFICATION IN THE __init__ SIGNATURE AND BODY ---
+    def __init__(self, dwx, strategy_object, config, required_history_bars: int):
         self.dwx = dwx
         self.strategy = strategy_object
         self.config = config
         self.risk_config = config.RISK_CONFIG
+
+        # Store the required history length
+        self.required_history_bars = required_history_bars
 
         self.partials_taken = {}
         self.is_preloaded = False
@@ -22,17 +26,31 @@ class TradeManager:
         self.update_position_status()
 
     def _update_value_per_point(self):
-        """Gets the instrument's contract value information."""
+        """
+        Gets the instrument's contract value information dynamically.
+        This is now robust for any instrument (Forex, commodities, etc.).
+        """
         symbol_data = self.dwx.market_data.get(self.config.STRATEGY_SYMBOL)
-        if symbol_data and symbol_data.get("tick_value"):
-            digits = 5  # This should ideally be fetched from symbol properties
-            tick_size = 1 / (10**digits)
+
+        # Check if the data and all required keys are present
+        if symbol_data and "tick_value" in symbol_data and "digits" in symbol_data:
+            # --- THIS IS THE DYNAMIC LOGIC ---
+            # We get the 'digits' value sent from the MT4 server.
+            digits = symbol_data.get("digits")
             tick_value = symbol_data.get("tick_value")
 
+            # A tick is the smallest possible price change.
+            tick_size = 1 / (10**digits)
+
+            # Value per point is how much money a 1.0 price move is worth for a 1.0 lot size.
             self.value_per_point = tick_value / tick_size
-            print(f"[INFO] Value per point for {self.config.STRATEGY_SYMBOL} updated to: {self.value_per_point}")
+
+            print(f"[INFO] Properties for {self.config.STRATEGY_SYMBOL}: Digits={digits}, TickValue={tick_value}")
+            print(f"[INFO] Calculated Value per Point updated to: {self.value_per_point}")
         else:
-            print(f"[WARNING] Could not get tick value for {self.config.STRATEGY_SYMBOL}. Risk calculations may be incorrect.")
+            print(
+                f"[WARNING] Could not get complete market data for {self.config.STRATEGY_SYMBOL}. Risk calculations may be incorrect."
+            )
 
     def preload_data(self, symbol, time_frame, data):
         if symbol != self.config.STRATEGY_SYMBOL or time_frame != self.config.STRATEGY_TIMEFRAME:
@@ -87,13 +105,19 @@ class TradeManager:
             print("Decision: No action taken based on current signal and position status.")
 
     def _execute_new_trade(self, signal):
-        """Handles the logic for opening a new trade using percentage-based SL/TP."""
-        current_price = self.market_data_df["close"].iloc[-1]
+        """Handles the logic for opening a new trade."""
+        # --- DEFENSIVE GUARD CLAUSE ---
+        # Before doing anything, ensure we have the account equity information.
+        account_equity = self.dwx.account_info.get("equity", 0)
+        if account_equity <= 0:
+            print("[ERROR] Account equity is 0 or not available yet. Aborting trade execution.")
+            print("[INFO] This is normal on first startup, will resolve on the next tick/bar.")
+            return
 
+        current_price = self.market_data_df["close"].iloc[-1]
         sl_percent = self.risk_config["STOP_LOSS_PERCENT"] / 100.0
         tp_percent = self.risk_config["TAKE_PROFIT_PERCENT"] / 100.0
 
-        # Calculate SL/TP based on trade direction
         if signal == "buy":
             stop_loss_price = current_price * (1 - sl_percent)
             take_profit_price = current_price * (1 + tp_percent) if self.risk_config["TAKE_PROFIT_PERCENT"] > 0 else 0
@@ -105,14 +129,19 @@ class TradeManager:
 
         stop_loss_distance = abs(current_price - stop_loss_price)
 
-        # Calculate Lot Size
         if self.risk_config["USE_FIXED_LOT_SIZE"]:
             lot_size = self.risk_config["FIXED_LOT_SIZE"]
         else:
             if self.value_per_point <= 0:
                 self._update_value_per_point()
+
+            # --- ADDING DIAGNOSTIC PRINT ---
+            print(
+                f"[Risk Calc] Inputs: Equity={account_equity}, Risk={self.risk_config['RISK_PER_TRADE_PERCENT']}%, SL Dist={stop_loss_distance}, Val/Point={self.value_per_point}"
+            )
+
             lot_size = risk_manager.calculate_lot_size(
-                account_balance=self.dwx.account_info.get("equity", 0),
+                account_balance=account_equity,
                 risk_percent=self.risk_config["RISK_PER_TRADE_PERCENT"],
                 stop_loss_price_distance=stop_loss_distance,
                 value_per_point=self.value_per_point,
@@ -122,7 +151,7 @@ class TradeManager:
             print(f"[ERROR] Calculated lot size is {lot_size}. Aborting trade.")
             return
 
-        print(f">>> EXECUTION: {signal.upper()} signal received. Sending order!")
+        print(f">>> EXECUTION: {signal.upper()} signal received. Sending order! [Lots: {lot_size}]")
         self.dwx.open_order(
             symbol=self.config.STRATEGY_SYMBOL,
             order_type=signal,
@@ -198,7 +227,9 @@ class TradeManager:
         print(f"\n--- New Live Bar Received: {symbol} {time_frame} at {time} ---")
         self.market_data_df.loc[len(self.market_data_df)] = [time, open_p, high_p, low_p, close_p, tick_volume]
 
-        max_rows = self.strategy.long_period + 200
+        # --- THIS LINE IS NOW ROBUST AND GENERIC ---
+        # It uses the value passed during initialization.
+        max_rows = self.required_history_bars + 200
         if len(self.market_data_df) > max_rows:
             self.market_data_df = self.market_data_df.iloc[-max_rows:]
 
