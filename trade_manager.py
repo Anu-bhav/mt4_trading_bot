@@ -49,25 +49,36 @@ class TradeManager:
         self.analyze_and_trade()
 
     def analyze_and_trade(self):
-        """Main decision-making logic."""
-        self.manage_open_positions()
+        """
+        Main decision-making logic. It is now the single source of truth for state.
+        """
+        # 1. ALWAYS get the latest position status first. This eliminates race conditions.
+        self.update_position_status()
 
+        # 2. If we are in a position, the primary job is to manage it.
+        if self.in_position:
+            self.manage_open_positions()
+
+        # 3. Get a signal from the strategy.
         signal = self.strategy.get_signal(self.market_data_df.copy())
-        open_positions = self._get_open_positions()
 
-        print(f"Signal Check: Received '{signal}' | Open Positions: {len(open_positions)}")
+        print(f"Signal Check: Received '{signal}' | In Position: {self.in_position}")
 
-        if not self.in_position and len(open_positions) < self.risk_config["MAX_OPEN_POSITIONS"]:
-            if signal in ["BUY", "SELL"]:
-                self._execute_new_trade(signal)
-        elif self.in_position:
-            current_trade_type = list(open_positions.values())[0]["type"]
-            if (signal == "BUY" and current_trade_type == "sell") or (signal == "SELL" and current_trade_type == "buy"):
-                print(f">>> EXECUTION: Reversing signal '{signal}' received. Closing all trades!")
-                self.dwx.close_orders_by_magic(self.config.MAGIC_NUMBER)
-        # Added else block for clarity in logs
-        else:
-            print("Decision: No action taken (e.g., already in position and signal matches).")
+        # 4. The Decision Tree (now simpler and more robust)
+        if signal in ["BUY", "SELL"]:
+            # Check for an exit signal
+            if self.in_position:
+                current_trade_type = list(self._get_open_positions().values())[0]["type"]
+                if (signal == "BUY" and current_trade_type == "sell") or (signal == "SELL" and current_trade_type == "buy"):
+                    print(f">>> EXECUTION: Reversing signal '{signal}' received. Closing all trades!")
+                    self.dwx.close_orders_by_magic(self.config.MAGIC_NUMBER)
+            # Check for an entry signal
+            elif not self.in_position:
+                open_positions = self._get_open_positions()  # Re-check just in case
+                if len(open_positions) < self.risk_config["MAX_OPEN_POSITIONS"]:
+                    self._execute_new_trade(signal)
+        else:  # signal is 'HOLD'
+            print("Decision: No signal. Holding current position or remaining flat.")
 
     def _execute_new_trade(self, signal):
         """Handles the complete logic for validating and opening a new trade."""
@@ -192,23 +203,29 @@ class TradeManager:
         max_rows = self.required_history_bars + 200
         if len(self.market_data_df) > max_rows:
             self.market_data_df = self.market_data_df.iloc[-max_rows:]
+
+        # This method is now just a data handler. All logic is in analyze_and_trade.
         self.analyze_and_trade()
 
     def update_position_status(self):
-        """Updates the in_position flag and resets state if flat."""
+        """
+        Updates the in_position flag and resets state if flat. This is the sole
+        authority on the bot's position status.
+        """
         open_positions = self._get_open_positions()
-        self.in_position = len(open_positions) > 0
-        if not self.in_position:
+        is_now_in_position = len(open_positions) > 0
+
+        # Check if the state has changed from in-position to flat
+        if self.in_position and not is_now_in_position:
+            print("[STATE CHANGE] Position has been closed. Resetting partials taken.")
             self.partials_taken = {}
 
-    # --- THIS IS THE RESTORED HELPER FUNCTION ---
+        self.in_position = is_now_in_position
+
     def _get_open_positions(self):
-        """
-        Helper to get all open positions for this strategy's magic number.
-        It only returns market orders (buy/sell), not pending ones.
-        """
+        """Helper to get all open positions for this strategy's magic number."""
         return {
-            ticket: order
-            for ticket, order in self.dwx.open_orders.items()
-            if int(order.get("magic", -1)) == self.config.MAGIC_NUMBER and order.get("type") in ["buy", "sell"]
+            t: o
+            for t, o in self.dwx.open_orders.items()
+            if int(o.get("magic", -1)) == self.config.MAGIC_NUMBER and o.get("type") in ["buy", "sell"]
         }
