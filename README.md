@@ -36,9 +36,8 @@ your_trading_bot/
 3.  **Required MQL4 Expert Advisor**: The `DWX_server_MT4.mq4` Expert Advisor must be placed in your MT4 terminal's `MQL4/Experts` directory. This EA acts as the server that communicates with the Python client.
 4.  **Python Libraries**:
     ```bash
-    pip install pandas talib-binary
+    pip install pandas
     ```
-    _(Note: `talib-binary` is a simple way to install TA-Lib. If it fails, you may need to install the TA-Lib C library manually first. See the [official TA-Lib documentation](https://mrjbq7.github.io/ta-lib/install.html) for instructions.)_
 
 ## Setup and Configuration
 
