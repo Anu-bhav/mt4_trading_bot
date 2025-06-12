@@ -289,37 +289,35 @@ class dwx_client:
     def check_historic_data(self):
         while self.ACTIVE:
             sleep(self.sleep_delay)
-
             if not self.START:
                 continue
 
-            text = self.try_read_file(self.path_historic_data)
+            text_hist_data = self.try_read_file(self.path_historic_data)
+            if len(text_hist_data.strip()) > 0 and text_hist_data != self._last_historic_data_str:
+                try:
+                    data = json.loads(text_hist_data)
+                    self._last_historic_data_str = text_hist_data
+                    for st in data.keys():
+                        self.historic_data[st] = data[st]
+                        if self.event_handler is not None:
+                            symbol, time_frame = st.split("_")
+                            self.event_handler.on_historic_data(symbol, time_frame, data[st])
+                    self.try_remove_file(self.path_historic_data)
+                except json.JSONDecodeError:
+                    print(f"[ERROR] Corrupted JSON in {self.path_historic_data}: {text_hist_data}")
 
-            if len(text.strip()) > 0 and text != self._last_historic_data_str:
-                self._last_historic_data_str = text
-
-                data = json.loads(text)
-
-                for st in data.keys():
-                    self.historic_data[st] = data[st]
+            text_hist_trades = self.try_read_file(self.path_historic_trades)
+            if len(text_hist_trades.strip()) > 0 and text_hist_trades != self._last_historic_trades_str:
+                try:
+                    data = json.loads(text_hist_trades)
+                    self._last_historic_trades_str = text_hist_trades
+                    self.historic_trades = data
+                    # This is the line that now has the safety check.
                     if self.event_handler is not None:
-                        symbol, time_frame = st.split("_")
-                        self.event_handler.on_historic_data(symbol, time_frame, data[st])
-
-                self.try_remove_file(self.path_historic_data)
-
-            # also check historic trades in the same thread.
-            text = self.try_read_file(self.path_historic_trades)
-
-            if len(text.strip()) > 0 and text != self._last_historic_trades_str:
-                self._last_historic_trades_str = text
-
-                data = json.loads(text)
-
-                self.historic_trades = data
-                self.event_handler.on_historic_trades()
-
-                self.try_remove_file(self.path_historic_trades)
+                        self.event_handler.on_historic_trades()
+                    self.try_remove_file(self.path_historic_trades)
+                except json.JSONDecodeError:
+                    print(f"[ERROR] Corrupted JSON in {self.path_historic_trades}: {text_hist_trades}")
 
     """Loads stored orders from file (in case of a restart). 
     """

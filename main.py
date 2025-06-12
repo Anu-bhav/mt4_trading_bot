@@ -1,15 +1,51 @@
 # main.py
+from calendar import c
+import importlib
 import time
 from datetime import datetime, timedelta, timezone
 
 import config as cfg
 from api.dwx_client import dwx_client
 from event_handler import MyEventHandler
-from strategies.rsi_strategy import RsiStrategy
 
 # Import your strategies
-from strategies.sma_crossover import SmaCrossover
 from trade_manager import TradeManager
+
+
+# --- THIS IS THE NEW STRATEGY FACTORY FUNCTION ---
+def strategy_factory(strategy_name: str, config_params: dict):
+    """
+    Dynamically imports and instantiates a strategy class based on its name.
+
+    Args:
+        strategy_name (str): The name of the strategy (e.g., 'sma_crossover').
+        config_params (dict): The dictionary of parameters for this strategy from config.py.
+
+    Returns:
+        An instantiated strategy object.
+
+    """
+    # Convert snake_case name to PascalCase for the class name.
+    # e.g., 'sma_crossover' -> 'SmaCrossover'
+    class_name = "".join(word.capitalize() for word in strategy_name.split("_"))
+
+    try:
+        # Dynamically import the module from the 'strategies' folder.
+        # e.g., from strategies.sma_crossover import SmaCrossover
+        module = importlib.import_module(f"strategies.{strategy_name}")
+
+        # Get the class from the imported module.
+        StrategyClass = getattr(module, class_name)
+
+        # Instantiate the class with its parameters.
+        # The ** operator unpacks the dictionary into keyword arguments.
+        return StrategyClass(**config_params)
+
+    except (ImportError, AttributeError) as e:
+        print(f"[FATAL ERROR] Could not load strategy '{strategy_name}'.")
+        print(f"Please ensure 'strategies/{strategy_name}.py' exists and contains a class named '{class_name}'.")
+        print(f"Error details: {e}")
+        return None
 
 
 def main():
@@ -18,7 +54,12 @@ def main():
     dwx = dwx_client(event_handler=None, metatrader_dir_path=cfg.METATRADER_DIR_PATH, verbose=False)
 
     # --- Activate the Desired Strategy ---
-    strategy_name = "sma_crossover"  # Change this to switch strategies
+    strategy_name = cfg.STRATEGY_NAME
+    if strategy_name not in cfg.STRATEGY_PARAMS:
+        print(f"[FATAL ERROR] Strategy '{strategy_name}' is not defined in the configuration.")
+        return
+
+    print(f"Activating strategy: {strategy_name}")
     strategy_params = cfg.STRATEGY_PARAMS[strategy_name]
 
     # --- THIS IS THE NEW LOGIC ---
@@ -27,14 +68,9 @@ def main():
     if strategy_params:
         required_history_bars = max(strategy_params.values())
     else:
-        required_history_bars = 20  # A safe default if no params are given
+        required_history_bars = 60  # A safe default if no params are given
 
-    if strategy_name == "rsi_strategy":
-        my_strategy_logic = RsiStrategy(**strategy_params)
-    elif strategy_name == "sma_crossover":
-        my_strategy_logic = SmaCrossover(**strategy_params)
-    else:
-        raise ValueError(f"Strategy '{strategy_name}' not recognized.")
+    my_strategy_logic = strategy_factory(strategy_name, strategy_params)
 
     # Pass the calculated required history to the TradeManager
     my_trade_manager = TradeManager(dwx, my_strategy_logic, cfg, required_history_bars)

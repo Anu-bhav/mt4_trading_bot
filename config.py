@@ -1,15 +1,19 @@
 # config.py
 METATRADER_DIR_PATH = r"C:\\Users\\User\\AppData\\Roaming\\MetaQuotes\\Terminal\\B3FBDE368DD9733D40FCC49B61D1B808\\MQL4\\Files\\"
 
-BAR_DATA_SUBSCRIPTIONS = [["GOLD", "M1"]]
+BAR_DATA_SUBSCRIPTIONS = [["ETHUSD", "M1"]]
 
-STRATEGY_SYMBOL = "GOLD"
+STRATEGY_SYMBOL = "ETHUSD"
 STRATEGY_TIMEFRAME = "M1"
+
+STRATEGY_NAME = "sma_crossover"  # Options: sma_crossover, rsi_strategy, tick_counter_strategy, etc.
 
 STRATEGY_PARAMS = {
     "sma_crossover": {"short_period": 10, "long_period": 20},
     # --- NEW STRATEGY CONFIGURATION ---
     "rsi_strategy": {"rsi_period": 14, "oversold_threshold": 30, "overbought_threshold": 70},
+    # --- NEW DUMMY STRATEGY CONFIG ---
+    "tick_counter_strategy": {},  # This strategy has no parameters
 }
 
 # --- RISK & TRADE MANAGEMENT CONFIG (Pure Percentage-Based) ---
