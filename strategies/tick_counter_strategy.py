@@ -17,6 +17,12 @@ class TickCounterStrategy(BaseStrategy):
         # This counter will track how many bars we have processed.
         self.bar_counter = 0
         print("TickCounterStrategy initialized: A dummy strategy for testing.")
+        self.reset()  # Call reset on initialization for clean startup
+
+    def reset(self):
+        """Resets the state of the strategy."""
+        print("[Strategy State] TickCounterStrategy state has been reset.")
+        self.bar_counter = 0
 
     def get_signal(self, market_data: pd.DataFrame) -> str:
         """

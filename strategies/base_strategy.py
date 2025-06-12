@@ -26,3 +26,11 @@ class BaseStrategy(ABC):
         :return: str Signal ('BUY', 'SELL', or 'HOLD').
         """
         pass
+
+    @abstractmethod
+    def reset(self):
+        """
+        Resets the internal state of the strategy to its initial condition.
+        This is crucial for handling events like data gaps.
+        """
+        pass

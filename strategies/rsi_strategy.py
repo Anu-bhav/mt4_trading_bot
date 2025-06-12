@@ -24,6 +24,12 @@ class RsiStrategy(BaseStrategy):
         print(
             f"RsiStrategy initialized with Period={self.rsi_period}, OS={self.oversold_threshold}, OB={self.overbought_threshold}"
         )
+        self.reset()  # Call reset on initialization for clean startup
+
+    def reset(self):
+        """Resets the state of the strategy."""
+        print("[Strategy State] RsiStrategy state has been reset.")
+        self.last_market_position = "HOLD"
 
     def get_signal(self, market_data: pd.DataFrame) -> str:
         """
@@ -35,8 +41,8 @@ class RsiStrategy(BaseStrategy):
         close_prices = market_data["close"]
 
         # Calculate RSI using the TA-Lib library
-        rsi_values = talib.RSI(close_prices, timeperiod=self.rsi_period)
-        current_rsi = rsi_values.iloc[-1]
+        rsi_values = talib.RSI(close_prices.values.astype(float), timeperiod=self.rsi_period)
+        current_rsi = rsi_values[-1]
 
         if pd.isna(current_rsi):
             return "HOLD"

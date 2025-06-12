@@ -16,6 +16,12 @@ class SmaCrossover(BaseStrategy):
         self.long_period = long_period
         self.last_market_position = "HOLD"
         print(f"SmaCrossover Strategy initialized with periods: {self.short_period}/{self.long_period}")
+        self.reset()  # Call reset on initialization for clean startup
+
+    def reset(self):
+        """Resets the state of the strategy."""
+        print("[Strategy State] SmaCrossover state has been reset.")
+        self.last_market_position = "HOLD"
 
     def get_signal(self, market_data: pd.DataFrame) -> str:
         """Generates a signal based on the market data."""

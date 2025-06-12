@@ -210,13 +210,13 @@ class TradeManager:
             except:
                 interval_seconds = 60
 
-            # If the time difference is more than 2x the expected interval, we likely missed a candle.
+            # --- THE NEW, ROBUST GAP HANDLING LOGIC ---
             if time_diff_seconds > (interval_seconds * 1.9):
                 print(
-                    f"[DATA WARNING] Potential data gap detected. Time since last bar: {time_diff_seconds}s. Expected ~{interval_seconds}s."
+                    f"[DATA WARNING] Data gap detected. Time since last bar: {time_diff_seconds}s. Expected ~{interval_seconds}s."
                 )
-                # In a more advanced system, you could trigger a historical data re-request here.
-                # For now, we just log a warning.
+                print("[ACTION] Resetting strategy state to prevent decisions based on stale data.")
+                self.strategy.reset()  # Reset the strategy's internal memory
 
         # Update the timestamp of the last processed bar
         self.last_bar_timestamp = time
