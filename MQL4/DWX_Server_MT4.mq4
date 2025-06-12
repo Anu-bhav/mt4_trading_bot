@@ -17,7 +17,7 @@
 
 input string t0 = "--- General Parameters ---";
 // if the timer is too small, we might have problems accessing the files from python (mql will write to file every update time). 
-input int MILLISECOND_TIMER = 25;
+input int MILLISECOND_TIMER = 500;
 
 input int numLastMessages = 50;
 input string t1 = "If true, it will open charts for bar data symbols, ";
@@ -25,9 +25,9 @@ input string t2 = "which reduces the delay on a new bar.";
 input bool openChartsForBarData = true;
 input bool openChartsForHistoricData = true;
 input string t3 = "--- Trading Parameters ---";
-input int MaximumOrders = 1;
-input double MaximumLotSize = 0.01;
-input int SlippagePoints = 3;
+input int MaximumOrders = 20;
+input double MaximumLotSize = 100.0;
+input int SlippagePoints = 30;
 input int lotSizeDigits = 2;
 
 int maxCommandFiles = 50;
@@ -724,12 +724,36 @@ void CheckMarketData() {
          if (!first)
             text += ", ";
          
-         text += StringFormat("\"%s\": {\"bid\": %.5f, \"ask\": %.5f, \"tick_value\": %.5f}", 
-                              MarketDataSymbols[i], 
-                              lastTick.bid, 
-                              lastTick.ask,
-                              MarketInfo(MarketDataSymbols[i], MODE_TICKVALUE));
-         
+         //text += StringFormat("\"%s\": {\"bid\": %.5f, \"ask\": %.5f, \"tick_value\": %.5f, \"digits\": %d, \"stoplevel\": %d}", 
+           //          MarketDataSymbols[i], 
+             //        lastTick.bid, 
+               //      lastTick.ask,
+                 //    MarketInfo(MarketDataSymbols[i], MODE_TICKVALUE),
+                   //  (int)MarketInfo(MarketDataSymbols[i], MODE_DIGITS),
+                     //(int)MarketInfo(MarketDataSymbols[i], MODE_STOPLEVEL));
+         text += StringFormat("\"%s\": {"
+                     "\"bid\": %." + IntegerToString((int)MarketInfo(MarketDataSymbols[i], MODE_DIGITS)) + "f, "
+                     "\"ask\": %." + IntegerToString((int)MarketInfo(MarketDataSymbols[i], MODE_DIGITS)) + "f, "
+                     "\"spread\": %d, "
+                     "\"tick_value\": %.2f, "
+                     "\"digits\": %d, "
+                     "\"stoplevel\": %d, "
+                     "\"lot_min\": %.2f, "
+                     "\"lot_max\": %.2f, "
+                     "\"lot_step\": %.2f"
+                  "}",
+                  MarketDataSymbols[i],
+                  lastTick.bid,
+                  lastTick.ask,
+                  (int)MarketInfo(MarketDataSymbols[i], MODE_SPREAD),      // The spread in points
+                  MarketInfo(MarketDataSymbols[i], MODE_TICKVALUE),     // Value of 1 tick for 1 lot
+                  (int)MarketInfo(MarketDataSymbols[i], MODE_DIGITS),        // Number of decimal places
+                  (int)MarketInfo(MarketDataSymbols[i], MODE_STOPLEVEL),   // Min stop distance in points
+                  MarketInfo(MarketDataSymbols[i], MODE_MINLOT),         // Minimum lot size
+                  MarketInfo(MarketDataSymbols[i], MODE_MAXLOT),         // Maximum lot size
+                  MarketInfo(MarketDataSymbols[i], MODE_LOTSTEP)        // The smallest lot increment
+                  );
+                  
          first = false;
       } else {
          SendError("GET_BID_ASK", "Could not get bid/ask for " + MarketDataSymbols[i] + ". Last error: " + ErrorDescription(GetLastError()));
