@@ -116,46 +116,48 @@ class TradeManager:
 
     def _execute_new_trade(self, signal: str):
         """
-        Orchestrates the process of opening a new trade with correct, non-redundant logic.
+        Orchestrates the process of opening a new trade with correct, non-redundant logic
+        and final price normalization.
         """
         signal = signal.lower()
 
-        # 1. Check for readiness (account and market data)
         account_equity = self.dwx.account_info.get("equity", 0)
-        if account_equity <= 0:
-            logging.error("[EXECUTION ABORTED] Account equity not available.")
-            return
-
         symbol_data = self.dwx.market_data.get(self.config.STRATEGY_SYMBOL, {})
         required_keys = ["ask", "bid", "digits", "stoplevel", "spread", "lot_min", "lot_max", "lot_step", "tick_value"]
-        if not all(k in symbol_data for k in required_keys):
-            logging.error("[EXECUTION ABORTED] Market data is incomplete.")
+        if account_equity <= 0 or not all(k in symbol_data for k in required_keys):
+            logging.error("[EXECUTION ABORTED] Prerequisite data (account or market) is not available.")
             return
 
-        # 2. Determine the final, compliant Stop Loss price ONCE.
+        # 1. Determine the final, compliant Stop Loss price ONCE.
         stop_loss_price = self._get_stop_loss(signal, symbol_data)
         if stop_loss_price == 0.0:
-            logging.error("[EXECUTION ABORTED] Could not calculate a valid stop loss.")
             return
 
-        # 3. Calculate Lot Size using the final SL price.
+        # 2. Calculate Lot Size using the final SL price.
         lot_size = self._get_lot_size(signal, stop_loss_price, account_equity, symbol_data)
         if lot_size <= 0:
-            logging.error(f"[EXECUTION ABORTED] Calculated lot size is {lot_size:.2f}.")
             return
 
-        # 4. Calculate Take Profit.
+        # 3. Calculate Take Profit.
         take_profit_price = self._get_take_profit(signal, symbol_data)
 
-        # 5. Send the order with the verified parameters.
-        logging.info(f">>> EXECUTION: {signal.upper()} signal received. Sending order! [Lots: {lot_size}]")
+        # 4. --- THE DEFINITIVE FIX: NORMALIZE/ROUND THE PRICES ---
+        # This prevents "invalid stops" errors due to floating point precision.
+        digits = symbol_data["digits"]
+        final_sl = round(stop_loss_price, digits)
+        final_tp = round(take_profit_price, digits) if take_profit_price > 0 else 0.0
+
+        # 5. Send the order with the verified and finalized parameters.
+        logging.info(
+            f">>> EXECUTION: {signal.upper()} signal received. Sending order! [Lots: {lot_size}, SL: {final_sl}, TP: {final_tp}]"
+        )
         self.dwx.open_order(
             symbol=self.config.STRATEGY_SYMBOL,
             order_type=signal,
             lots=lot_size,
-            price=0,  # Market order
-            stop_loss=stop_loss_price,
-            take_profit=take_profit_price,
+            price=0,
+            stop_loss=final_sl,
+            take_profit=final_tp,
             magic=self.config.MAGIC_NUMBER,
         )
 
@@ -342,8 +344,8 @@ class TradeManager:
             risk_percent=self.risk_config["RISK_PER_TRADE_PERCENT"],
             stop_loss_price_distance=stop_loss_distance,
             value_per_point=value_per_point,
-            min_lot=symbol_data["lot_min"],
-            max_lot=symbol_data["max_lot"],
+            lot_min=symbol_data["lot_min"],
+            lot_max=symbol_data["lot_max"],
             lot_step=symbol_data["lot_step"],
         )
 
