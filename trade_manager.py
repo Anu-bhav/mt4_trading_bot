@@ -1,5 +1,6 @@
 # trade_manager.py
 import json
+import logging
 from os.path import join
 
 import pandas as pd
@@ -113,33 +114,46 @@ class TradeManager:
         else:
             print("Decision: No action taken.")
 
-    def _execute_new_trade(self, signal):
-        """Handles the logic for opening a new trade."""
+    def _execute_new_trade(self, signal: str):
+        """
+        Orchestrates the process of opening a new trade with correct, non-redundant logic.
+        """
+        signal = signal.lower()
+
+        # 1. Check for readiness (account and market data)
         account_equity = self.dwx.account_info.get("equity", 0)
         if account_equity <= 0:
-            print("[ERROR] Account equity is 0 or not available yet. Aborting trade execution.")
+            logging.error("[EXECUTION ABORTED] Account equity not available.")
             return
 
         symbol_data = self.dwx.market_data.get(self.config.STRATEGY_SYMBOL, {})
         required_keys = ["ask", "bid", "digits", "stoplevel", "spread", "lot_min", "lot_max", "lot_step", "tick_value"]
         if not all(k in symbol_data for k in required_keys):
-            print("[ERROR] Market data from server is incomplete. Cannot execute trade.")
+            logging.error("[EXECUTION ABORTED] Market data is incomplete.")
             return
 
-        lot_size = self._get_lot_size(signal.lower())
+        # 2. Determine the final, compliant Stop Loss price ONCE.
+        stop_loss_price = self._get_stop_loss(signal, symbol_data)
+        if stop_loss_price == 0.0:
+            logging.error("[EXECUTION ABORTED] Could not calculate a valid stop loss.")
+            return
+
+        # 3. Calculate Lot Size using the final SL price.
+        lot_size = self._get_lot_size(signal, stop_loss_price, account_equity, symbol_data)
         if lot_size <= 0:
-            print(f"[ERROR] Calculated lot size is {lot_size:.2f}. Aborting trade.")
+            logging.error(f"[EXECUTION ABORTED] Calculated lot size is {lot_size:.2f}.")
             return
 
-        stop_loss_price = self._get_stop_loss(signal.lower())
-        take_profit_price = self._get_take_profit(signal.lower())
+        # 4. Calculate Take Profit.
+        take_profit_price = self._get_take_profit(signal, symbol_data)
 
-        print(f">>> EXECUTION: {signal.upper()} signal received. Sending order! [Lots: {lot_size}]")
+        # 5. Send the order with the verified parameters.
+        logging.info(f">>> EXECUTION: {signal.upper()} signal received. Sending order! [Lots: {lot_size}]")
         self.dwx.open_order(
             symbol=self.config.STRATEGY_SYMBOL,
-            order_type=signal.lower(),
+            order_type=signal,
             lots=lot_size,
-            price=0,
+            price=0,  # Market order
             stop_loss=stop_loss_price,
             take_profit=take_profit_price,
             magic=self.config.MAGIC_NUMBER,
@@ -259,62 +273,86 @@ class TradeManager:
         }
 
     # --- HELPER FUNCTIONS FOR CLEANER LOGIC ---
-    def _get_stop_loss(self, signal: str) -> float:
-        symbol_data = self.dwx.market_data.get(self.config.STRATEGY_SYMBOL, {})
-        if not symbol_data:
-            return 0.0
+    def _get_stop_loss(self, signal: str, symbol_data: dict) -> float:
+        """Calculates and validates the stop loss price."""
         entry_price = symbol_data.get("ask") if signal == "buy" else symbol_data.get("bid")
-        sl_percent = self.risk_config["STOP_LOSS_PERCENT"] / 100.0
-        stop_loss_price = entry_price * (1 - sl_percent) if signal == "buy" else entry_price * (1 + sl_percent)
-        # Broker rule enforcement
-        point_size = 1 / (10 ** symbol_data["digits"])
-        min_stop_distance_price = (symbol_data["stoplevel"] + symbol_data["spread"]) * point_size
-        if signal == "buy" and stop_loss_price > (symbol_data["bid"] - min_stop_distance_price):
-            stop_loss_price = symbol_data["bid"] - min_stop_distance_price
-        elif signal == "sell" and stop_loss_price < (symbol_data["ask"] + min_stop_distance_price):
-            stop_loss_price = symbol_data["ask"] + min_stop_distance_price
-        return stop_loss_price
 
-    def _get_take_profit(self, signal: str) -> float:
+        # --- THE FIX: Add a guard clause to ensure entry_price is valid ---
+        if entry_price is None or entry_price == 0:
+            logging.error("Cannot calculate SL: Entry price is missing or zero.")
+            return 0.0
+
+        sl_percent = self.risk_config["STOP_LOSS_PERCENT"] / 100.0
+        strategy_sl_price = entry_price * (1 - sl_percent) if signal == "buy" else entry_price * (1 + sl_percent)
+
+        point_size = 1 / (10 ** symbol_data["digits"])
+        broker_min_stop_distance = (symbol_data["stoplevel"] + symbol_data["spread"]) * point_size
+        broker_sl_price = (
+            (symbol_data["bid"] - broker_min_stop_distance)
+            if signal == "buy"
+            else (symbol_data["ask"] + broker_min_stop_distance)
+        )
+
+        if signal == "buy":
+            final_sl_price = min(strategy_sl_price, broker_sl_price)
+        else:
+            final_sl_price = max(strategy_sl_price, broker_sl_price)
+
+        logging.info(
+            f"[SL CALC] Strategy SL: {strategy_sl_price:.{symbol_data['digits']}f}, Broker Min SL: {broker_sl_price:.{symbol_data['digits']}f}"
+        )
+        logging.info(f"[SL CALC] Final Compliant Stop Loss: {final_sl_price:.{symbol_data['digits']}f}")
+        return final_sl_price
+
+    def _get_take_profit(self, signal: str, symbol_data: dict) -> float:
+        """Calculates the take profit price."""
         if self.risk_config["TAKE_PROFIT_PERCENT"] <= 0:
             return 0.0
-        symbol_data = self.dwx.market_data.get(self.config.STRATEGY_SYMBOL, {})
-        if not symbol_data:
-            return 0.0
+
         entry_price = symbol_data.get("ask") if signal == "buy" else symbol_data.get("bid")
+
+        # --- THE FIX: Add a guard clause ---
+        if entry_price is None or entry_price == 0:
+            logging.error("Cannot calculate TP: Entry price is missing or zero.")
+            return 0.0
+
         tp_percent = self.risk_config["TAKE_PROFIT_PERCENT"] / 100.0
         return entry_price * (1 + tp_percent) if signal == "buy" else entry_price * (1 - tp_percent)
 
-    def _get_lot_size(self, signal: str) -> float:
+    def _get_lot_size(self, signal: str, stop_loss_price: float, account_equity: float, symbol_data: dict) -> float:
+        """Calculates and validates the lot size for a new trade."""
         if self.risk_config["USE_FIXED_LOT_SIZE"]:
             return self.risk_config["FIXED_LOT_SIZE"]
-        account_equity = self.dwx.account_info.get("equity", 0)
-        symbol_data = self.dwx.market_data.get(self.config.STRATEGY_SYMBOL, {})
-        if account_equity <= 0 or not symbol_data:
+
+        entry_price = symbol_data.get("ask") if signal == "buy" else symbol_data.get("bid")
+
+        # --- THE FIX: Add a guard clause ---
+        if entry_price is None or entry_price == 0:
+            logging.error("Cannot calculate Lot Size: Entry price is missing or zero.")
             return 0.0
 
-        stop_loss_price = self._get_stop_loss(signal)
-        entry_price = symbol_data.get("ask") if signal == "buy" else symbol_data.get("bid")
         stop_loss_distance = abs(entry_price - stop_loss_price)
 
         tick_value = symbol_data["tick_value"]
         point_size = 1 / (10 ** symbol_data["digits"])
         value_per_point = tick_value / point_size
 
-        return risk_manager.calculate_lot_size(
+        lot_size = risk_manager.calculate_lot_size(
             account_balance=account_equity,
             risk_percent=self.risk_config["RISK_PER_TRADE_PERCENT"],
             stop_loss_price_distance=stop_loss_distance,
             value_per_point=value_per_point,
             min_lot=symbol_data["lot_min"],
-            max_lot=symbol_data["lot_max"],
+            max_lot=symbol_data["max_lot"],
             lot_step=symbol_data["lot_step"],
         )
 
+        logging.info(
+            f"[Risk Calc] Inputs: Equity={account_equity}, Risk={self.risk_config['RISK_PER_TRADE_PERCENT']}%, SL Dist={stop_loss_distance}, Lot Size: {lot_size}"
+        )
+        return lot_size
+
     def _get_trailing_stop_price(self, order_type: str, current_price: float) -> float:
+        """Calculates the new trailing stop loss price."""
         trailing_sl_percent = self.risk_config["TRAILING_STOP_PERCENT"] / 100.0
-        if order_type == "buy":
-            return current_price * (1 - trailing_sl_percent)
-        elif order_type == "sell":
-            return current_price * (1 + trailing_sl_percent)
-        return 0.0
+        return current_price * (1 - trailing_sl_percent) if order_type == "buy" else current_price * (1 + trailing_sl_percent)

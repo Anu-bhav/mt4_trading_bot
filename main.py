@@ -51,43 +51,33 @@ def strategy_factory(strategy_name: str, config_params: dict):
 
 
 def main():
-    # --- SETUP LOGGER FIRST ---
     setup_logger()
-
-    # Now, instead of print(), we use logging.info()
     logging.info("Initializing trading bot...")
 
     dwx = dwx_client(event_handler=None, metatrader_dir_path=cfg.METATRADER_DIR_PATH, verbose=False)
 
-    # --- Activate the Desired Strategy ---
     strategy_name = cfg.STRATEGY_NAME
     if strategy_name not in cfg.STRATEGY_PARAMS:
-        print(f"[FATAL ERROR] Strategy '{strategy_name}' is not defined in the configuration.")
+        logging.error(f"Strategy '{strategy_name}' is not defined in the configuration.")
         return
 
-    print(f"Activating strategy: {strategy_name}")
+    logging.info(f"Activating strategy: {strategy_name} for {cfg.STRATEGY_SYMBOL} on {cfg.STRATEGY_TIMEFRAME}")
     strategy_params = cfg.STRATEGY_PARAMS[strategy_name]
 
-    # --- THIS IS THE NEW LOGIC ---
-    # Dynamically determine the longest lookback period the strategy needs.
-    # This makes the TradeManager independent of parameter names like 'long_period' or 'rsi_period'.
-    if strategy_params:
-        required_history_bars = max(strategy_params.values())
-    else:
-        required_history_bars = 60  # A safe default if no params are given
+    required_history_bars = max(strategy_params.values()) if strategy_params else 0
 
     my_strategy_logic = strategy_factory(strategy_name, strategy_params)
+    if not my_strategy_logic:
+        return
 
-    # Pass the calculated required history to the TradeManager
     my_trade_manager = TradeManager(dwx, my_strategy_logic, cfg, required_history_bars)
-
     my_event_handler = MyEventHandler(dwx, my_trade_manager)
     dwx.event_handler = my_event_handler
 
     dwx.start()
     while not dwx.START:
         time.sleep(1)
-    print("DWX Client started.")
+    logging.info("DWX Client started.")
 
     if required_history_bars > 0:
         logging.info("Requesting historical data for preloading...")
@@ -114,6 +104,9 @@ def main():
         dwx.get_historic_data(cfg.STRATEGY_SYMBOL, cfg.STRATEGY_TIMEFRAME, int(start_time.timestamp()), int(end_time.timestamp()))
 
         logging.info("Waiting for historical data preload to complete...")
+    else:
+        my_trade_manager.is_preloaded = True
+        logging.info("Strategy requires no historical data. Skipping preload.")
 
     start_wait_time = time.time()
     timeout_seconds = 30  # Set a timeout to prevent an infinite loop
@@ -129,11 +122,14 @@ def main():
     print("Preload confirmed.")
 
     # NOW, it is safe to subscribe to live data.
-    dwx.subscribe_symbols_bar_data(cfg.BAR_DATA_SUBSCRIPTIONS)
-    print("Subscribed to live bar data.")
+    # The structure is a list of lists, e.g., [['ETHUSD', 'M1']]
+    bar_data_subscriptions = [[cfg.STRATEGY_SYMBOL, cfg.STRATEGY_TIMEFRAME]]
+
+    dwx.subscribe_symbols_bar_data(bar_data_subscriptions)
+    logging.info(f"Subscribed to live bar data for: {bar_data_subscriptions}")
 
     # --- Main Loop ---
-    print("\nBot is running. Press Ctrl+C to stop.")
+    logging.info("Bot is running. Press Ctrl+C to stop.")
     try:
         last_heartbeat_time = time.time()
         while dwx.ACTIVE:

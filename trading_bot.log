@@ -412,3 +412,221 @@
 2025-06-13 04:44:00 - INFO - Python heartbeat sent.
 2025-06-13 04:44:01 - INFO - Stopping bot...
 2025-06-13 04:44:01 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 04:49:21 - INFO - Initializing trading bot...
+2025-06-13 04:49:21 - INFO - Activating strategy: sma_crossover
+2025-06-13 04:49:21 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:49:21 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:49:21 - INFO - [State] Successfully loaded saved state.
+2025-06-13 04:49:21 - INFO - TradeManager initialized.
+2025-06-13 04:49:21 - INFO - MyEventHandler initialized.
+2025-06-13 04:49:21 - INFO - DWX Client started.
+2025-06-13 04:49:21 - INFO - Requesting historical data for preloading...
+2025-06-13 04:49:21 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:49:21 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:49:22 - INFO - Historic data received for GOLD_M1. Routing to TradeManager for preloading.
+2025-06-13 04:49:22 - INFO - SUCCESS: Preloaded 169 historical bars for GOLD.
+2025-06-13 04:49:22 - INFO - --- Performing initial analysis on preloaded data... ---
+2025-06-13 04:49:22 - INFO - [Strategy Values] Short SMA=3409.0110000 | Long SMA=3411.3040000 | Prev Position: 'HOLD'
+2025-06-13 04:49:22 - INFO - Signal Check: Received 'SELL' | In Position: False
+2025-06-13 04:49:22 - INFO - >>> EXECUTION: SELL signal received. Sending order! [Lots: 2.8]
+2025-06-13 04:49:23 - INFO - Preload confirmed.
+2025-06-13 04:49:23 - INFO - Subscribed to live bar data.
+2025-06-13 04:49:23 - INFO - Bot is running. Press Ctrl+C to stop.
+2025-06-13 04:49:24 - INFO - [STATE CHANGE] Position has been closed. Resetting state.
+2025-06-13 04:49:24 - INFO - [State] Current state saved successfully.
+2025-06-13 04:50:51 - INFO - Stopping bot...
+2025-06-13 04:50:51 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 04:55:58 - INFO - Initializing trading bot...
+2025-06-13 04:55:59 - INFO - Activating strategy: sma_crossover for BTCUSD on M1
+2025-06-13 04:55:59 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:55:59 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:55:59 - INFO - [State] Successfully loaded saved state.
+2025-06-13 04:55:59 - INFO - TradeManager initialized.
+2025-06-13 04:55:59 - INFO - MyEventHandler initialized.
+2025-06-13 04:55:59 - INFO - DWX Client started.
+2025-06-13 04:55:59 - INFO - Requesting historical data for preloading...
+2025-06-13 04:55:59 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:55:59 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:56:00 - INFO - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-13 04:56:00 - INFO - SUCCESS: Preloaded 219 historical bars for BTCUSD.
+2025-06-13 04:56:00 - INFO - --- Performing initial analysis on preloaded data... ---
+2025-06-13 04:56:00 - INFO - [Strategy Values] Short SMA=103895.1700000 | Long SMA=103810.5200000 | Prev Position: 'HOLD'
+2025-06-13 04:56:00 - INFO - Signal Check: Received 'BUY' | In Position: False
+2025-06-13 04:56:00 - INFO - >>> EXECUTION: BUY signal received. Sending order! [Lots: 0.94]
+2025-06-13 04:56:01 - INFO - Preload confirmed.
+2025-06-13 04:56:01 - INFO - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-13 04:56:01 - INFO - Bot is running. Press Ctrl+C to stop.
+2025-06-13 04:56:01 - INFO - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-13 04:56:24 - INFO - Stopping bot...
+2025-06-13 04:56:24 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 04:56:34 - INFO - Initializing trading bot...
+2025-06-13 04:56:35 - INFO - Activating strategy: sma_crossover for BTCUSD on M1
+2025-06-13 04:56:35 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:56:35 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:56:35 - INFO - [State] No state file found. Starting with a fresh state.
+2025-06-13 04:56:35 - INFO - TradeManager initialized.
+2025-06-13 04:56:35 - INFO - MyEventHandler initialized.
+2025-06-13 04:56:35 - INFO - DWX Client started.
+2025-06-13 04:56:35 - INFO - Requesting historical data for preloading...
+2025-06-13 04:56:35 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:57:05 - INFO - [FATAL ERROR] Timed out waiting for historical data.
+2025-06-13 04:57:05 - INFO - Please check the 'Experts' tab in your MT4 terminal for errors.
+2025-06-13 04:57:05 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 04:57:34 - INFO - Initializing trading bot...
+2025-06-13 04:57:34 - INFO - Activating strategy: sma_crossover for BTCUSD on M1
+2025-06-13 04:57:34 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:57:34 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:57:34 - INFO - [State] No state file found. Starting with a fresh state.
+2025-06-13 04:57:34 - INFO - TradeManager initialized.
+2025-06-13 04:57:34 - INFO - MyEventHandler initialized.
+2025-06-13 04:57:34 - INFO - DWX Client started.
+2025-06-13 04:57:34 - INFO - Requesting historical data for preloading...
+2025-06-13 04:57:34 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:58:04 - INFO - [FATAL ERROR] Timed out waiting for historical data.
+2025-06-13 04:58:04 - INFO - Please check the 'Experts' tab in your MT4 terminal for errors.
+2025-06-13 04:58:04 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 04:59:24 - INFO - Initializing trading bot...
+2025-06-13 04:59:24 - INFO - Activating strategy: sma_crossover for BTCUSD on M1
+2025-06-13 04:59:24 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:59:24 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:59:24 - INFO - [State] No state file found. Starting with a fresh state.
+2025-06-13 04:59:24 - INFO - TradeManager initialized.
+2025-06-13 04:59:24 - INFO - MyEventHandler initialized.
+2025-06-13 04:59:24 - INFO - DWX Client started.
+2025-06-13 04:59:24 - INFO - Requesting historical data for preloading...
+2025-06-13 04:59:24 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:59:25 - INFO - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-13 04:59:25 - INFO - SUCCESS: Preloaded 219 historical bars for BTCUSD.
+2025-06-13 04:59:25 - INFO - --- Performing initial analysis on preloaded data... ---
+2025-06-13 04:59:25 - INFO - [Strategy Values] Short SMA=103835.0650000 | Long SMA=103890.2125000 | Prev Position: 'HOLD'
+2025-06-13 04:59:25 - INFO - Signal Check: Received 'SELL' | In Position: False
+2025-06-13 04:59:25 - INFO - >>> EXECUTION: SELL signal received. Sending order! [Lots: 0.94]
+2025-06-13 04:59:25 - INFO - Preload confirmed.
+2025-06-13 04:59:25 - INFO - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-13 04:59:25 - INFO - Bot is running. Press Ctrl+C to stop.
+2025-06-13 04:59:26 - INFO - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-13 04:59:33 - INFO - Stopping bot...
+2025-06-13 04:59:33 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 04:59:43 - INFO - Initializing trading bot...
+2025-06-13 04:59:43 - INFO - Activating strategy: sma_crossover for BTCUSD on M1
+2025-06-13 04:59:43 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:59:43 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:59:43 - INFO - [State] No state file found. Starting with a fresh state.
+2025-06-13 04:59:43 - INFO - TradeManager initialized.
+2025-06-13 04:59:43 - INFO - MyEventHandler initialized.
+2025-06-13 04:59:43 - INFO - DWX Client started.
+2025-06-13 04:59:43 - INFO - Requesting historical data for preloading...
+2025-06-13 04:59:43 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:59:44 - INFO - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-13 04:59:44 - INFO - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-13 04:59:44 - INFO - SUCCESS: Preloaded 219 historical bars for BTCUSD.
+2025-06-13 04:59:44 - INFO - --- Performing initial analysis on preloaded data... ---
+2025-06-13 04:59:44 - INFO - [Strategy Values] Short SMA=103840.4950000 | Long SMA=103892.9275000 | Prev Position: 'HOLD'
+2025-06-13 04:59:44 - INFO - Signal Check: Received 'SELL' | In Position: False
+2025-06-13 04:59:44 - INFO - >>> EXECUTION: SELL signal received. Sending order! [Lots: 0.94]
+2025-06-13 04:59:44 - INFO - Preload confirmed.
+2025-06-13 04:59:44 - INFO - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-13 04:59:44 - INFO - Bot is running. Press Ctrl+C to stop.
+2025-06-13 04:59:45 - INFO - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-13 05:01:21 - INFO - --- New Live Bar Received: BTCUSD M1 at 1749776340 ---
+2025-06-13 05:01:21 - INFO - [Strategy Values] Short SMA=103825.1000000 | Long SMA=103897.9500000 | Prev Position: 'SELL'
+2025-06-13 05:01:21 - INFO - Signal Check: Received 'HOLD' | In Position: False
+2025-06-13 05:01:21 - INFO - Decision: No action taken.
+2025-06-13 05:02:14 - INFO - Python heartbeat sent.
+2025-06-13 05:02:21 - INFO - --- New Live Bar Received: BTCUSD M1 at 1749776400 ---
+2025-06-13 05:02:21 - INFO - [Strategy Values] Short SMA=103796.0550000 | Long SMA=103895.3000000 | Prev Position: 'SELL'
+2025-06-13 05:02:21 - INFO - Signal Check: Received 'HOLD' | In Position: False
+2025-06-13 05:02:21 - INFO - Decision: No action taken.
+2025-06-13 05:03:16 - INFO - Stopping bot...
+2025-06-13 05:03:16 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 05:03:55 - INFO - Initializing trading bot...
+2025-06-13 05:03:55 - INFO - Activating strategy: sma_crossover for BTCUSD on M1
+2025-06-13 05:03:55 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 05:03:55 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 05:03:55 - INFO - [State] No state file found. Starting with a fresh state.
+2025-06-13 05:03:55 - INFO - TradeManager initialized.
+2025-06-13 05:03:55 - INFO - MyEventHandler initialized.
+2025-06-13 05:03:55 - INFO - DWX Client started.
+2025-06-13 05:03:55 - INFO - Requesting historical data for preloading...
+2025-06-13 05:03:55 - INFO - Waiting for historical data preload to complete...
+2025-06-13 05:03:55 - INFO - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-13 05:03:55 - INFO - SUCCESS: Preloaded 219 historical bars for BTCUSD.
+2025-06-13 05:03:55 - INFO - --- Performing initial analysis on preloaded data... ---
+2025-06-13 05:03:55 - INFO - [Strategy Values] Short SMA=103720.5400000 | Long SMA=103840.8875000 | Prev Position: 'HOLD'
+2025-06-13 05:03:55 - INFO - Signal Check: Received 'SELL' | In Position: False
+2025-06-13 05:03:55 - INFO - >>> EXECUTION: SELL signal received. Sending order! [Lots: 0.94]
+2025-06-13 05:03:56 - INFO - Preload confirmed.
+2025-06-13 05:03:56 - INFO - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-13 05:03:56 - INFO - Bot is running. Press Ctrl+C to stop.
+2025-06-13 05:03:57 - INFO - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-13 05:04:07 - INFO - Stopping bot...
+2025-06-13 05:04:07 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 05:04:14 - INFO - Initializing trading bot...
+2025-06-13 05:04:15 - INFO - Activating strategy: sma_crossover for BTCUSD on M1
+2025-06-13 05:04:15 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 05:04:15 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 05:04:15 - INFO - [State] No state file found. Starting with a fresh state.
+2025-06-13 05:04:15 - INFO - TradeManager initialized.
+2025-06-13 05:04:15 - INFO - MyEventHandler initialized.
+2025-06-13 05:04:15 - INFO - DWX Client started.
+2025-06-13 05:04:15 - INFO - Requesting historical data for preloading...
+2025-06-13 05:04:15 - INFO - Waiting for historical data preload to complete...
+2025-06-13 05:04:15 - INFO - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-13 05:04:15 - INFO - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-13 05:04:15 - INFO - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-13 05:04:15 - INFO - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-13 05:04:15 - INFO - SUCCESS: Preloaded 218 historical bars for BTCUSD.
+2025-06-13 05:04:15 - INFO - --- Performing initial analysis on preloaded data... ---
+2025-06-13 05:04:15 - INFO - [Strategy Values] Short SMA=103724.9800000 | Long SMA=103843.1075000 | Prev Position: 'HOLD'
+2025-06-13 05:04:15 - INFO - Signal Check: Received 'SELL' | In Position: False
+2025-06-13 05:04:15 - INFO - >>> EXECUTION: SELL signal received. Sending order! [Lots: 0.94]
+2025-06-13 05:04:16 - INFO - Preload confirmed.
+2025-06-13 05:04:16 - INFO - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-13 05:04:16 - INFO - Bot is running. Press Ctrl+C to stop.
+2025-06-13 05:04:17 - INFO - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-13 05:05:21 - INFO - --- New Live Bar Received: BTCUSD M1 at 1749776580 ---
+2025-06-13 05:05:21 - INFO - [Strategy Values] Short SMA=103698.6150000 | Long SMA=103810.6800000 | Prev Position: 'SELL'
+2025-06-13 05:05:21 - INFO - Signal Check: Received 'HOLD' | In Position: False
+2025-06-13 05:05:21 - INFO - Decision: No action taken.
+2025-06-13 05:06:21 - INFO - --- New Live Bar Received: BTCUSD M1 at 1749776640 ---
+2025-06-13 05:06:21 - INFO - [Strategy Values] Short SMA=103655.5950000 | Long SMA=103776.2275000 | Prev Position: 'SELL'
+2025-06-13 05:06:21 - INFO - Signal Check: Received 'HOLD' | In Position: False
+2025-06-13 05:06:21 - INFO - Decision: No action taken.
+2025-06-13 05:06:46 - INFO - Python heartbeat sent.
+2025-06-13 05:07:21 - INFO - --- New Live Bar Received: BTCUSD M1 at 1749776700 ---
+2025-06-13 05:07:21 - INFO - [Strategy Values] Short SMA=103604.3600000 | Long SMA=103740.6125000 | Prev Position: 'SELL'
+2025-06-13 05:07:21 - INFO - Signal Check: Received 'HOLD' | In Position: False
+2025-06-13 05:07:21 - INFO - Decision: No action taken.
+2025-06-13 05:07:58 - INFO - Stopping bot...
+2025-06-13 05:07:58 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 05:09:51 - INFO - Initializing trading bot...
+2025-06-13 05:09:52 - INFO - Activating strategy: sma_crossover for BTCUSD on M1
+2025-06-13 05:09:52 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 05:09:52 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 05:09:52 - INFO - [State] No state file found. Starting with a fresh state.
+2025-06-13 05:09:52 - INFO - TradeManager initialized.
+2025-06-13 05:09:52 - INFO - MyEventHandler initialized.
+2025-06-13 05:09:52 - INFO - DWX Client started.
+2025-06-13 05:09:52 - INFO - Requesting historical data for preloading...
+2025-06-13 05:09:52 - INFO - Waiting for historical data preload to complete...
+2025-06-13 05:09:53 - INFO - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-13 05:09:53 - INFO - SUCCESS: Preloaded 219 historical bars for BTCUSD.
+2025-06-13 05:09:53 - INFO - --- Performing initial analysis on preloaded data... ---
+2025-06-13 05:09:53 - INFO - [Strategy Values] Short SMA=103436.6800000 | Long SMA=103637.1825000 | Prev Position: 'HOLD'
+2025-06-13 05:09:53 - INFO - Signal Check: Received 'SELL' | In Position: False
+2025-06-13 05:09:53 - INFO - [SL CALC] Strategy SL: 103501.04, Broker Min SL: 103494.45
+2025-06-13 05:09:53 - INFO - [SL CALC] Final Compliant Stop Loss: 103501.04
+2025-06-13 05:09:53 - INFO - [Risk Calc] Inputs: Equity=18976.23, Risk=1.0%, SL Dist=206.58890000000247, Lot Size: 0.91
+2025-06-13 05:09:53 - INFO - [SL CALC] Strategy SL: 103501.04, Broker Min SL: 103494.45
+2025-06-13 05:09:53 - INFO - [SL CALC] Final Compliant Stop Loss: 103501.04
+2025-06-13 05:09:53 - INFO - >>> EXECUTION: SELL signal received. Sending order! [Lots: 0.91]
+2025-06-13 05:09:53 - INFO - Preload confirmed.
+2025-06-13 05:09:53 - INFO - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-13 05:09:53 - INFO - Bot is running. Press Ctrl+C to stop.
+2025-06-13 05:09:54 - INFO - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-13 05:11:21 - INFO - --- New Live Bar Received: BTCUSD M1 at 1749776940 ---
+2025-06-13 05:11:21 - INFO - [Strategy Values] Short SMA=103366.5750000 | Long SMA=103594.4325000 | Prev Position: 'SELL'
+2025-06-13 05:11:21 - INFO - Signal Check: Received 'HOLD' | In Position: False
+2025-06-13 05:11:21 - INFO - Decision: No action taken.
+2025-06-13 05:11:57 - INFO - Stopping bot...
+2025-06-13 05:11:57 - INFO - DWX Client stop() method called. Shutting down threads.
