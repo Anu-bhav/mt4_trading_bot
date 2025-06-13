@@ -68,12 +68,17 @@ class TradeManager:
         df = pd.DataFrame.from_dict(data, orient="index")
         df.reset_index(inplace=True)
         df.rename(columns={"index": "time"}, inplace=True)
+        df["time"] = pd.to_numeric(df["time"])
         for col in ["open", "high", "low", "close", "tick_volume"]:
             df[col] = pd.to_numeric(df[col])
         df.sort_values(by="time", inplace=True)
 
         self.market_data_df = df
         self.is_preloaded = True
+
+        # Set the last bar timestamp from the preloaded data
+        if not df.empty:
+            self.last_bar_timestamp = df["time"].iloc[-1]
 
         print(f"SUCCESS: Preloaded {len(self.market_data_df)} historical bars for {symbol}.")
         print("\n--- Performing initial analysis on preloaded data... ---")
@@ -180,6 +185,12 @@ class TradeManager:
 
     def on_bar_data(self, symbol, time_frame, time, open_p, high_p, low_p, close_p, tick_volume):
         """The main entry point for live bar data from the client."""
+        try:
+            time = int(time)
+        except (ValueError, TypeError):
+            print(f"Received invalid timestamp format, ignoring bar: {time}")
+            return
+
         if not self.is_preloaded:
             return
         if symbol != self.config.STRATEGY_SYMBOL or time_frame != self.config.STRATEGY_TIMEFRAME:

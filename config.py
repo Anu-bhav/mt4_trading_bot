@@ -1,9 +1,9 @@
 # config.py
 METATRADER_DIR_PATH = r"C:\\Users\\User\\AppData\\Roaming\\MetaQuotes\\Terminal\\B3FBDE368DD9733D40FCC49B61D1B808\\MQL4\\Files\\"
 
-BAR_DATA_SUBSCRIPTIONS = [["ETHUSD", "M1"]]
+BAR_DATA_SUBSCRIPTIONS = [["GOLD", "M1"]]
 
-STRATEGY_SYMBOL = "ETHUSD"
+STRATEGY_SYMBOL = "GOLD"
 STRATEGY_TIMEFRAME = "M1"
 
 STRATEGY_NAME = "sma_crossover"  # Options: sma_crossover, rsi_strategy, tick_counter_strategy, etc.
@@ -42,3 +42,7 @@ RISK_CONFIG = {
 }
 
 MAGIC_NUMBER = 12345
+
+# How often (in seconds) the Python script sends a heartbeat to the MT4 EA.
+# This should be less than the 'pythonHeartbeatTimeoutSeconds' in the EA's settings. default is 180 seconds in EA.
+HEARTBEAT_INTERVAL_SECONDS = 150

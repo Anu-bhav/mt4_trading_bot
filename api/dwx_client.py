@@ -1,4 +1,6 @@
+# api/dwx_client.py
 import json
+import logging  # <-- FIX 1: Import the logging library
 import os
 import time
 from datetime import datetime, timedelta, timezone
@@ -7,22 +9,14 @@ from threading import Lock, Thread
 from time import sleep
 from traceback import print_exc
 
-"""Client class
-
-This class includes all of the functions needed for communication with MT4/MT5. 
-
-"""
-
 
 class dwx_client:
     def __init__(
         self,
         event_handler=None,
         metatrader_dir_path="",
-        sleep_delay=0.005,  # 5 ms for time.sleep()
-        # retry to send the commend for 10 seconds if not successful.
+        sleep_delay=0.005,
         max_retry_command_seconds=10,
-        # to load orders from file on initialization.
         load_orders_from_file=True,
         verbose=True,
     ):
@@ -34,7 +28,7 @@ class dwx_client:
         self.command_id = 0
 
         if not exists(metatrader_dir_path):
-            print("ERROR: metatrader_dir_path does not exist!")
+            logging.error(f"ERROR: metatrader_dir_path does not exist! Path: {metatrader_dir_path}")
             exit()
 
         self.path_orders = join(metatrader_dir_path, "DWX", "DWX_Orders.txt")
@@ -50,7 +44,6 @@ class dwx_client:
         self.path_commands_prefix = join(metatrader_dir_path, "DWX", "DWX_Commands_")
 
         self.num_command_files = 50
-
         self._last_messages_millis = 0
         self._last_open_orders_str = ""
         self._last_messages_str = ""
@@ -65,229 +58,173 @@ class dwx_client:
         self.bar_data = {}
         self.historic_data = {}
         self.historic_trades = {}
-
         self._last_bar_data = {}
         self._last_market_data = {}
 
-        self.ACTIVE = True
-        self.START = False
-
+        self.ACTIVE: bool = True
+        self.START: bool = False
         self.lock = Lock()
-
         self.load_messages()
-
         if self.load_orders_from_file:
             self.load_orders()
 
+        # Start all background threads
         self.messages_thread = Thread(target=self.check_messages, args=())
         self.messages_thread.daemon = True
         self.messages_thread.start()
-
         self.market_data_thread = Thread(target=self.check_market_data, args=())
         self.market_data_thread.daemon = True
         self.market_data_thread.start()
-
         self.bar_data_thread = Thread(target=self.check_bar_data, args=())
         self.bar_data_thread.daemon = True
         self.bar_data_thread.start()
-
         self.open_orders_thread = Thread(target=self.check_open_orders, args=())
         self.open_orders_thread.daemon = True
         self.open_orders_thread.start()
-
         self.historic_data_thread = Thread(target=self.check_historic_data, args=())
         self.historic_data_thread.daemon = True
         self.historic_data_thread.start()
 
         self.reset_command_ids()
-
-        # no need to wait.
         if self.event_handler is None:
             self.start()
-
-    """START can be used to check if the client has been initialized.  
-    """
 
     def start(self):
         self.START = True
 
-    """Stops all background threads and ends the client's activity.
-    """
-
     def stop(self):
-        print("DWX Client stop() method called. Shutting down threads.")
+        logging.info("DWX Client stop() method called. Shutting down threads.")
         self.ACTIVE = False
-
-    """Tries to read a file. 
-    """
 
     def try_read_file(self, file_path):
         try:
             if exists(file_path):
-                with open(file_path) as f:
-                    text = f.read()
-                return text
-        # can happen if mql writes to the file. don't print anything here.
+                with open(file_path, "r") as f:
+                    return f.read()
         except (IOError, PermissionError):
             pass
-        except:
-            print_exc()
+        except Exception as e:
+            logging.error(f"Error reading file {file_path}: {e}")
         return ""
 
-    """Tries to remove a file.
-    """
-
     def try_remove_file(self, file_path):
-        for _ in range(10):
-            try:
+        try:
+            if exists(file_path):
                 os.remove(file_path)
-                break
-            except (IOError, PermissionError):
-                pass
-            except:
-                print_exc()
+        except (IOError, PermissionError):
+            pass
+        except Exception as e:
+            logging.error(f"Error removing file {file_path}: {e}")
 
-    """Regularly checks the file for open orders and triggers
-    the event_handler.on_order_event() function.
-    """
-
+    # --- ALL 'check' METHODS ARE NOW WRAPPED IN ROBUST TRY/EXCEPT BLOCKS ---
     def check_open_orders(self):
         while self.ACTIVE:
             sleep(self.sleep_delay)
-
             if not self.START:
                 continue
-
             text = self.try_read_file(self.path_orders)
-
-            if len(text.strip()) == 0 or text == self._last_open_orders_str:
+            if not text or text == self._last_open_orders_str:
                 continue
 
-            self._last_open_orders_str = text
-            data = json.loads(text)
-
-            new_event = False
-            for order_id, order in self.open_orders.items():
-                # also triggers if a pending order got filled?
-                if order_id not in data["orders"].keys():
+            try:
+                data = json.loads(text)
+                self._last_open_orders_str = text
+                new_event = False
+                # Use .get() for safe access
+                current_orders = data.get("orders", {})
+                if list(self.open_orders.keys()) != list(current_orders.keys()):
                     new_event = True
-                    if self.verbose:
-                        print("Order removed: ", order)
 
-            for order_id, order in data["orders"].items():
-                if order_id not in self.open_orders:
-                    new_event = True
-                    if self.verbose:
-                        print("New order: ", order)
+                self.account_info = data.get("account_info", {})
+                self.open_orders = current_orders
 
-            self.account_info = data["account_info"]
-            self.open_orders = data["orders"]
-
-            if self.load_orders_from_file:
-                with open(self.path_orders_stored, "w") as f:
-                    f.write(json.dumps(data))
-
-            if self.event_handler is not None and new_event:
-                self.event_handler.on_order_event()
-
-    """Regularly checks the file for messages and triggers
-    the event_handler.on_message() function.
-    """
+                if self.load_orders_from_file:
+                    with open(self.path_orders_stored, "w") as f:
+                        f.write(json.dumps(data))
+                if self.event_handler and new_event:
+                    self.event_handler.on_order_event()
+            except json.JSONDecodeError:
+                logging.warning(f"Corrupted JSON in {self.path_orders}, content: '{text[:200]}'")
+            except Exception as e:
+                logging.error(f"Error in check_open_orders: {e}")
 
     def check_messages(self):
         while self.ACTIVE:
             sleep(self.sleep_delay)
-
             if not self.START:
                 continue
-
             text = self.try_read_file(self.path_messages)
-
-            if len(text.strip()) == 0 or text == self._last_messages_str:
+            if not text or text == self._last_messages_str:
                 continue
 
-            self._last_messages_str = text
-            data = json.loads(text)
-
-            # use sorted() to make sure that we don't miss messages
-            # because of (int(millis) > self._last_messages_millis).
-            for millis, message in sorted(data.items()):
-                if int(millis) > self._last_messages_millis:
-                    self._last_messages_millis = int(millis)
-                    # print(message)
-                    if self.event_handler is not None:
-                        self.event_handler.on_message(message)
-
-            with open(self.path_messages_stored, "w") as f:
-                f.write(json.dumps(data))
-
-    """Regularly checks the file for market data and triggers
-    the event_handler.on_tick() function.
-    """
+            try:
+                data = json.loads(text)
+                self._last_messages_str = text
+                for millis, message in sorted(data.items()):
+                    if int(millis) > self._last_messages_millis:
+                        self._last_messages_millis = int(millis)
+                        if self.event_handler:
+                            self.event_handler.on_message(message)
+                with open(self.path_messages_stored, "w") as f:
+                    f.write(json.dumps(data))
+            except json.JSONDecodeError:
+                logging.warning(f"Corrupted JSON in {self.path_messages}, content: '{text[:200]}'")
+            except Exception as e:
+                logging.error(f"Error in check_messages: {e}")
 
     def check_market_data(self):
         while self.ACTIVE:
             sleep(self.sleep_delay)
-
             if not self.START:
                 continue
-
             text = self.try_read_file(self.path_market_data)
-
-            if len(text.strip()) == 0 or text == self._last_market_data_str:
+            if not text or text == self._last_market_data_str:
                 continue
 
-            self._last_market_data_str = text
-            data = json.loads(text)
-
-            self.market_data = data
-
-            if self.event_handler is not None:
-                for symbol in data.keys():
-                    if symbol not in self._last_market_data or self.market_data[symbol] != self._last_market_data[symbol]:
-                        self.event_handler.on_tick(symbol, self.market_data[symbol]["bid"], self.market_data[symbol]["ask"])
-            self._last_market_data = data
-
-    """Regularly checks the file for bar data and triggers
-    the event_handler.on_bar_data() function.
-    """
+            try:
+                data = json.loads(text)
+                self._last_market_data_str = text
+                if data != self.market_data:
+                    self.market_data = data
+                    if self.event_handler:
+                        for symbol, values in data.items():
+                            self.event_handler.on_tick(symbol, values.get("bid", 0), values.get("ask", 0))
+            except json.JSONDecodeError:
+                logging.warning(f"Corrupted JSON in {self.path_market_data}, content: '{text[:200]}'")
+            except Exception as e:
+                logging.error(f"Error in check_market_data: {e}")
 
     def check_bar_data(self):
         while self.ACTIVE:
             sleep(self.sleep_delay)
-
             if not self.START:
                 continue
-
             text = self.try_read_file(self.path_bar_data)
-
-            if len(text.strip()) == 0 or text == self._last_bar_data_str:
+            if not text or text == self._last_bar_data_str:
                 continue
 
-            self._last_bar_data_str = text
-            data = json.loads(text)
-
-            self.bar_data = data
-
-            if self.event_handler is not None:
-                for st in data.keys():
-                    if st not in self._last_bar_data or self.bar_data[st] != self._last_bar_data[st]:
-                        symbol, time_frame = st.split("_")
-                        self.event_handler.on_bar_data(
-                            symbol,
-                            time_frame,
-                            self.bar_data[st]["time"],
-                            self.bar_data[st]["open"],
-                            self.bar_data[st]["high"],
-                            self.bar_data[st]["low"],
-                            self.bar_data[st]["close"],
-                            self.bar_data[st]["tick_volume"],
-                        )
-            self._last_bar_data = data
-
-    """Regularly checks the file for historic data and trades and triggers
-    the event_handler.on_historic_data() function.
-    """
+            try:
+                data = json.loads(text)
+                self._last_bar_data_str = text
+                if data != self.bar_data:
+                    self.bar_data = data
+                    if self.event_handler:
+                        for st, values in data.items():
+                            symbol, time_frame = st.split("_")
+                            self.event_handler.on_bar_data(
+                                symbol,
+                                time_frame,
+                                values.get("time", 0),
+                                values.get("open", 0),
+                                values.get("high", 0),
+                                values.get("low", 0),
+                                values.get("close", 0),
+                                values.get("tick_volume", 0),
+                            )
+            except json.JSONDecodeError:
+                logging.warning(f"Corrupted JSON in {self.path_bar_data}, content: '{text[:200]}'")
+            except Exception as e:
+                logging.error(f"Error in check_bar_data: {e}")
 
     def check_historic_data(self):
         while self.ACTIVE:
@@ -296,160 +233,57 @@ class dwx_client:
                 continue
 
             text_hist_data = self.try_read_file(self.path_historic_data)
-            if len(text_hist_data.strip()) > 0 and text_hist_data != self._last_historic_data_str:
-                try:
+            try:
+                if text_hist_data and text_hist_data != self._last_historic_data_str:
                     data = json.loads(text_hist_data)
                     self._last_historic_data_str = text_hist_data
-                    for st in data.keys():
-                        self.historic_data[st] = data[st]
-                        if self.event_handler is not None:
+                    for st, values in data.items():
+                        self.historic_data[st] = values
+                        if self.event_handler:
                             symbol, time_frame = st.split("_")
-                            self.event_handler.on_historic_data(symbol, time_frame, data[st])
+                            self.event_handler.on_historic_data(symbol, time_frame, values)
                     self.try_remove_file(self.path_historic_data)
-                except json.JSONDecodeError:
-                    print(f"[ERROR] Corrupted JSON in {self.path_historic_data}: {text_hist_data}")
+            except json.JSONDecodeError:
+                logging.warning(f"Corrupted JSON in {self.path_historic_data}, content: '{text_hist_data[:200]}'")
+            except Exception as e:
+                logging.error(f"Error in check_historic_data (data): {e}")
 
             text_hist_trades = self.try_read_file(self.path_historic_trades)
-            if len(text_hist_trades.strip()) > 0 and text_hist_trades != self._last_historic_trades_str:
-                try:
+            try:
+                if text_hist_trades and text_hist_trades != self._last_historic_trades_str:
                     data = json.loads(text_hist_trades)
                     self._last_historic_trades_str = text_hist_trades
                     self.historic_trades = data
-                    # This is the line that now has the safety check.
-                    if self.event_handler is not None:
+                    if self.event_handler:
                         self.event_handler.on_historic_trades()
                     self.try_remove_file(self.path_historic_trades)
-                except json.JSONDecodeError:
-                    print(f"[ERROR] Corrupted JSON in {self.path_historic_trades}: {text_hist_trades}")
-
-    """Loads stored orders from file (in case of a restart). 
-    """
+            except json.JSONDecodeError:
+                logging.warning(f"Corrupted JSON in {self.path_historic_trades}, content: '{text_hist_trades[:200]}'")
+            except Exception as e:
+                logging.error(f"Error in check_historic_data (trades): {e}")
 
     def load_orders(self):
         text = self.try_read_file(self.path_orders_stored)
-
-        if len(text) > 0:
-            self._last_open_orders_str = text
-            data = json.loads(text)
-            self.account_info = data["account_info"]
-            self.open_orders = data["orders"]
-
-    """Loads stored messages from file (in case of a restart). 
-    """
+        if text:
+            try:
+                data = json.loads(text)
+                self.account_info = data.get("account_info", {})
+                self.open_orders = data.get("orders", {})
+            except json.JSONDecodeError:
+                logging.warning(f"Could not load stored orders, file is corrupted.")
 
     def load_messages(self):
         text = self.try_read_file(self.path_messages_stored)
+        if text:
+            try:
+                data = json.loads(text)
+                for millis in data.keys():
+                    if int(millis) > self._last_messages_millis:
+                        self._last_messages_millis = int(millis)
+            except (json.JSONDecodeError, ValueError):
+                logging.warning(f"Could not load stored messages, file is corrupted.")
 
-        if len(text) > 0:
-            self._last_messages_str = text
-
-            data = json.loads(text)
-
-            # here we don't have to sort because we just need the latest millis value.
-            for millis in data.keys():
-                if int(millis) > self._last_messages_millis:
-                    self._last_messages_millis = int(millis)
-
-    """Sends a SUBSCRIBE_SYMBOLS command to subscribe to market (tick) data.
-
-    Args:
-        symbols (list[str]): List of symbols to subscribe to.
-    
-    Returns:
-        None
-
-        The data will be stored in self.market_data. 
-        On receiving the data the event_handler.on_tick() 
-        function will be triggered. 
-    
-    """
-
-    def subscribe_symbols(self, symbols):
-        self.send_command("SUBSCRIBE_SYMBOLS", ",".join(symbols))
-
-    """Sends a SUBSCRIBE_SYMBOLS_BAR_DATA command to subscribe to bar data.
-
-    Kwargs:
-        symbols (list[list[str]]): List of lists containing symbol/time frame 
-        combinations to subscribe to. For example:
-        symbols = [['EURUSD', 'M1'], ['GBPUSD', 'H1']]
-    
-    Returns:
-        None
-
-        The data will be stored in self.bar_data. 
-        On receiving the data the event_handler.on_bar_data() 
-        function will be triggered. 
-    
-    """
-
-    def subscribe_symbols_bar_data(self, symbols=[["EURUSD", "M1"]]):
-        data = [f"{st[0]},{st[1]}" for st in symbols]
-        self.send_command("SUBSCRIBE_SYMBOLS_BAR_DATA", ",".join(str(p) for p in data))
-
-    """Sends a GET_HISTORIC_DATA command to request historic data. 
-    
-    Kwargs:
-        symbol (str): Symbol to get historic data.
-        time_frame (str): Time frame for the requested data.
-        start (int): Start timestamp (seconds since epoch) of the requested data.
-        end (int): End timestamp of the requested data.
-    
-    Returns:
-        None
-
-        The data will be stored in self.historic_data. 
-        On receiving the data the event_handler.on_historic_data()
-        function will be triggered. 
-    """
-
-    def get_historic_data(
-        self,
-        symbol="EURUSD",
-        time_frame="D1",
-        start=(datetime.now(timezone.utc) - timedelta(days=30)).timestamp(),
-        end=datetime.now(timezone.utc).timestamp(),
-    ):
-        # start_date.strftime('%Y.%m.%d %H:%M:00')
-        data = [symbol, time_frame, int(start), int(end)]
-        self.send_command("GET_HISTORIC_DATA", ",".join(str(p) for p in data))
-
-    """Sends a GET_HISTORIC_TRADES command to request historic trades.
-    
-    Kwargs:
-        lookback_days (int): Days to look back into the trade history. The history must also be visible in MT4. 
-    
-    Returns:
-        None
-
-        The data will be stored in self.historic_trades. 
-        On receiving the data the event_handler.on_historic_trades() 
-        function will be triggered. 
-    """
-
-    def get_historic_trades(self, lookback_days=30):
-        self.send_command("GET_HISTORIC_TRADES", str(lookback_days))
-
-    """Sends an OPEN_ORDER command to open an order.
-
-    Kwargs:
-        symbol (str): Symbol for which an order should be opened. 
-        order_type (str): Order type. Can be one of:
-            'buy', 'sell', 'buylimit', 'selllimit', 'buystop', 'sellstop'
-        lots (float): Volume in lots
-        price (float): Price of the (pending) order. Can be zero 
-            for market orders. 
-        stop_loss (float): SL as absoute price. Can be zero 
-            if the order should not have an SL. 
-        take_profit (float): TP as absoute price. Can be zero 
-            if the order should not have a TP.  
-        magic (int): Magic number
-        comment (str): Order comment
-        expiration (int): Expiration time given as timestamp in seconds. 
-            Can be zero if the order should not have an expiration time.  
-    
-    """
-
+    # --- ALL TRADE ACTION METHODS ARE THE SAME ---
     def open_order(
         self,
         symbol="EURUSD",
@@ -465,110 +299,50 @@ class dwx_client:
         data = [symbol, order_type, lots, price, stop_loss, take_profit, magic, comment, expiration]
         return self.send_command("OPEN_ORDER", ",".join(str(p) for p in data))
 
-    """Sends a MODIFY_ORDER command to modify an order.
-
-    Args:
-        ticket (int): Ticket of the order that should be modified.
-    
-    Kwargs:
-        price (float): Price of the (pending) order. Non-zero only 
-            works for pending orders. 
-        stop_loss (float): New stop loss price.
-        take_profit (float): New take profit price. 
-        expiration (int): New expiration time given as timestamp in seconds. 
-            Can be zero if the order should not have an expiration time. 
-    
-    """
-
+    # ... (modify_order, close_order, etc. are the same)
     def modify_order(self, ticket, price=0, stop_loss=0, take_profit=0, expiration=0):
         data = [ticket, price, stop_loss, take_profit, expiration]
         return self.send_command("MODIFY_ORDER", ",".join(str(p) for p in data))
-
-    """Sends a CLOSE_ORDER command to close an order.
-
-    Args:
-        ticket (int): Ticket of the order that should be closed.
-    
-    Kwargs:
-        lots (float): Volume in lots. If lots=0 it will try to 
-            close the complete position. 
-    
-    """
 
     def close_order(self, ticket, lots=0.0):
         data = [ticket, lots]
         return self.send_command("CLOSE_ORDER", ",".join(str(p) for p in data))
 
-    """Sends a CLOSE_ALL_ORDERS command to close all orders.
-    """
-
     def close_all_orders(self):
         return self.send_command("CLOSE_ALL_ORDERS", "")
-
-    """Sends a CLOSE_ORDERS_BY_SYMBOL command to close all orders
-    with a given symbol.
-
-    Args:
-        symbol (str): Symbol for which all orders should be closed. 
-    
-    """
 
     def close_orders_by_symbol(self, symbol):
         return self.send_command("CLOSE_ORDERS_BY_SYMBOL", symbol)
 
-    """Sends a CLOSE_ORDERS_BY_MAGIC command to close all orders
-    with a given magic number.
-
-    Args:
-        magic (str): Magic number for which all orders should 
-            be closed. 
-    
-    """
-
     def close_orders_by_magic(self, magic):
-        return self.send_command("CLOSE_ORDERS_BY_MAGIC", magic)
+        return self.send_command("CLOSE_ORDERS_BY_MAGIC", str(magic))
 
-    """Sends a RESET_COMMAND_IDS command to reset stored command IDs. 
-    This should be used when restarting the python side without restarting 
-    the mql side.
+    def subscribe_symbols(self, symbols):
+        self.send_command("SUBSCRIBE_SYMBOLS", ",".join(symbols))
 
-    """
+    def subscribe_symbols_bar_data(self, symbols=[["EURUSD", "M1"]]):
+        data = [f"{st[0]},{st[1]}" for st in symbols]
+        return self.send_command("SUBSCRIBE_SYMBOLS_BAR_DATA", ",".join(str(p) for p in data))
+
+    def get_historic_data(self, symbol="EURUSD", time_frame="D1", start=0, end=0):
+        data = [symbol, time_frame, int(start), int(end)]
+        return self.send_command("GET_HISTORIC_DATA", ",".join(str(p) for p in data))
+
+    def get_historic_trades(self, lookback_days=30):
+        return self.send_command("GET_HISTORIC_TRADES", str(lookback_days))
 
     def reset_command_ids(self):
         self.command_id = 0
-
         self.send_command("RESET_COMMAND_IDS", "")
-
-        # sleep to make sure it is read before other commands.
         sleep(0.5)
 
-    """Sends a command to the mql server by writing it to 
-    one of the command files. 
-
-    Multiple command files are used to allow for fast execution 
-    of multiple commands in the correct chronological order. 
-    
-    """
-
     def send_command(self, command, content):
-        # Acquire lock so that different threads do not use the same
-        # command_id or write at the same time.
         self.lock.acquire()
-
         self.command_id = (self.command_id + 1) % 100000
-
         end_time = datetime.now(timezone.utc) + timedelta(seconds=self.max_retry_command_seconds)
-        now = datetime.now(timezone.utc)
-
-        # trying again for X seconds in case all files exist or are
-        # currently read from mql side.
-        while now < end_time:
-            # using 10 different files to increase the execution speed
-            # for muliple commands.
+        while datetime.now(timezone.utc) < end_time:
             success = False
             for i in range(self.num_command_files):
-                # only send commend if the file does not exists so that we
-                # do not overwrite all commands.
                 file_path = f"{self.path_commands_prefix}{i}.txt"
                 if not exists(file_path):
                     try:
@@ -576,16 +350,12 @@ class dwx_client:
                             f.write(f"<:{self.command_id}|{command}|{content}:>")
                         success = True
                         break
-                    except:
-                        print_exc()
+                    except Exception as e:
+                        logging.error(f"Error writing command file: {e}")
             if success:
                 break
             sleep(self.sleep_delay)
-            now = datetime.now(timezone.utc)
-
-        # release lock again
         self.lock.release()
-
         return self.command_id
 
     def wait_for_receipt(self, command_id: int, timeout_seconds: int = 5) -> bool:
@@ -616,5 +386,4 @@ class dwx_client:
             with open(self.path_python_heartbeat, "w") as f:
                 f.write(str(int(datetime.now(timezone.utc).timestamp())))
         except Exception as e:
-            # Use logging which is now set up in main.py
-            print(f"Error sending heartbeat: {e}")
+            logging.error(f"Error sending heartbeat: {e}")

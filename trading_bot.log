@@ -1,0 +1,414 @@
+2025-06-13 03:56:42 - INFO - Initializing trading bot...
+2025-06-13 03:56:43 - INFO - Activating strategy: sma_crossover
+2025-06-13 03:56:43 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 03:56:43 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 03:56:43 - INFO - [State] Successfully loaded saved state.
+2025-06-13 03:56:43 - INFO - TradeManager initialized.
+2025-06-13 03:56:43 - INFO - MyEventHandler initialized.
+2025-06-13 03:56:43 - INFO - DWX Client started.
+2025-06-13 03:56:43 - INFO - Requesting historical data for preloading...
+2025-06-13 03:56:43 - INFO - Waiting for historical data preload to complete...
+2025-06-13 03:56:43 - INFO - Historic data received for ETHUSD_M1. Routing to TradeManager for preloading.
+2025-06-13 03:56:43 - INFO - SUCCESS: Preloaded 214 historical bars for ETHUSD.
+2025-06-13 03:56:43 - INFO - --- Performing initial analysis on preloaded data... ---
+2025-06-13 03:56:43 - INFO - [Strategy Values] Short SMA=2652.5540000 | Long SMA=2653.3010000 | Prev Position: 'HOLD'
+2025-06-13 03:56:43 - INFO - Signal Check: Received 'SELL' | In Position: False
+2025-06-13 03:56:43 - INFO - >>> EXECUTION: SELL signal received. Sending order! [Lots: 73.21]
+2025-06-13 03:56:44 - INFO - Preload confirmed.
+2025-06-13 03:56:44 - INFO - Subscribed to live bar data.
+2025-06-13 03:56:44 - INFO - Bot is running. Press Ctrl+C to stop.
+2025-06-13 03:56:44 - ERROR - Exception in thread
+2025-06-13 03:56:44 - ERROR - Thread-3 (check_bar_data)
+2025-06-13 03:56:44 - ERROR - :
+2025-06-13 03:56:44 - ERROR - Traceback (most recent call last):
+2025-06-13 03:56:44 - ERROR - 
+2025-06-13 03:56:44 - ERROR - File "C:\Users\User\AppData\Roaming\uv\python\cpython-3.13.1-windows-x86_64-none\Lib\threading.py", line 1041, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+2025-06-13 03:56:44 - ERROR - 
+2025-06-13 03:56:44 - ERROR - File "C:\Users\User\AppData\Roaming\uv\python\cpython-3.13.1-windows-x86_64-none\Lib\threading.py", line 992, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-06-13 03:56:44 - ERROR - 
+2025-06-13 03:56:44 - ERROR - File "C:\Users\User\Documents\Others\mt4_trading_bot\api\dwx_client.py", line 276, in check_bar_data
+    self.event_handler.on_bar_data(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        symbol,
+        ^^^^^^^
+    ...<6 lines>...
+        self.bar_data[st]["tick_volume"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+2025-06-13 03:56:44 - ERROR - 
+2025-06-13 03:56:44 - ERROR - File "C:\Users\User\Documents\Others\mt4_trading_bot\event_handler.py", line 16, in on_bar_data
+    self.trade_manager.on_bar_data(symbol, time_frame, time, open_p, high_p, low_p, close_p, tick_volume)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-06-13 03:56:44 - ERROR - 
+2025-06-13 03:56:44 - ERROR - File "C:\Users\User\Documents\Others\mt4_trading_bot\trade_manager.py", line 194, in on_bar_data
+    if time <= self.last_bar_timestamp:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-06-13 03:56:44 - ERROR - 
+2025-06-13 03:56:44 - ERROR - TypeError: '<=' not supported between instances of 'str' and 'int'
+2025-06-13 03:56:44 - ERROR - 
+2025-06-13 03:56:59 - INFO - Python heartbeat sent.
+2025-06-13 03:56:59 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 03:56:59 - INFO - [STATE CHANGE] Position has been closed. Resetting state.
+2025-06-13 03:56:59 - INFO - [State] Current state saved successfully.
+2025-06-13 03:56:59 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 03:57:14 - INFO - Python heartbeat sent.
+2025-06-13 03:57:29 - INFO - Python heartbeat sent.
+2025-06-13 03:57:44 - INFO - Python heartbeat sent.
+2025-06-13 03:57:59 - INFO - Python heartbeat sent.
+2025-06-13 03:57:59 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 03:58:00 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 03:58:14 - INFO - Python heartbeat sent.
+2025-06-13 03:58:21 - INFO - Stopping bot...
+2025-06-13 03:58:21 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 04:01:42 - INFO - Initializing trading bot...
+2025-06-13 04:01:43 - INFO - Activating strategy: sma_crossover
+2025-06-13 04:01:43 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:01:43 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:01:43 - INFO - [State] Successfully loaded saved state.
+2025-06-13 04:01:43 - INFO - TradeManager initialized.
+2025-06-13 04:01:43 - INFO - MyEventHandler initialized.
+2025-06-13 04:01:43 - INFO - DWX Client started.
+2025-06-13 04:01:43 - INFO - Requesting historical data for preloading...
+2025-06-13 04:01:43 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:01:43 - INFO - Historic data received for ETHUSD_M1. Routing to TradeManager for preloading.
+2025-06-13 04:01:43 - ERROR - Exception in thread
+2025-06-13 04:01:43 - ERROR - Thread-5 (check_historic_data)
+2025-06-13 04:01:43 - ERROR - :
+2025-06-13 04:01:43 - ERROR - Traceback (most recent call last):
+2025-06-13 04:01:43 - ERROR - 
+2025-06-13 04:01:43 - ERROR - File "pandas/_libs/lib.pyx", line 2407, in pandas._libs.lib.maybe_convert_numeric
+2025-06-13 04:01:43 - ERROR - 
+2025-06-13 04:01:43 - ERROR - ValueError: Unable to parse string "2025.06.12 20:22"
+2025-06-13 04:01:43 - ERROR - 
+2025-06-13 04:01:43 - ERROR - During handling of the above exception, another exception occurred:
+2025-06-13 04:01:43 - ERROR - 
+2025-06-13 04:01:43 - ERROR - Traceback (most recent call last):
+2025-06-13 04:01:43 - ERROR - 
+2025-06-13 04:01:43 - ERROR - File "C:\Users\User\AppData\Roaming\uv\python\cpython-3.13.1-windows-x86_64-none\Lib\threading.py", line 1041, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+2025-06-13 04:01:43 - ERROR - 
+2025-06-13 04:01:43 - ERROR - File "C:\Users\User\AppData\Roaming\uv\python\cpython-3.13.1-windows-x86_64-none\Lib\threading.py", line 992, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-06-13 04:01:43 - ERROR - 
+2025-06-13 04:01:43 - ERROR - File "C:\Users\User\Documents\Others\mt4_trading_bot\api\dwx_client.py", line 307, in check_historic_data
+    self.event_handler.on_historic_data(symbol, time_frame, data[st])
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-06-13 04:01:43 - ERROR - 
+2025-06-13 04:01:43 - ERROR - File "C:\Users\User\Documents\Others\mt4_trading_bot\event_handler.py", line 21, in on_historic_data
+    self.trade_manager.preload_data(symbol, time_frame, data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-06-13 04:01:43 - ERROR - 
+2025-06-13 04:01:43 - ERROR - File "C:\Users\User\Documents\Others\mt4_trading_bot\trade_manager.py", line 71, in preload_data
+    df["time"] = pd.to_numeric(df["time"])
+                 ~~~~~~~~~~~~~^^^^^^^^^^^^
+2025-06-13 04:01:43 - ERROR - 
+2025-06-13 04:01:43 - ERROR - File "C:\Users\User\Documents\Others\mt4_trading_bot\.venv\Lib\site-packages\pandas\core\tools\numeric.py", line 235, in to_numeric
+    values, new_mask = lib.maybe_convert_numeric(  # type: ignore[call-overload]
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        values,
+        ^^^^^^^
+    ...<4 lines>...
+        and values_dtype.na_value is libmissing.NA,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+2025-06-13 04:01:43 - ERROR - 
+2025-06-13 04:01:43 - ERROR - File "pandas/_libs/lib.pyx", line 2449, in pandas._libs.lib.maybe_convert_numeric
+2025-06-13 04:01:43 - ERROR - 
+2025-06-13 04:01:43 - ERROR - ValueError: Unable to parse string "2025.06.12 20:22" at position 0
+2025-06-13 04:01:43 - ERROR - 
+2025-06-13 04:02:01 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:02:01 - ERROR - Traceback (most recent call last):
+2025-06-13 04:02:01 - ERROR - 
+2025-06-13 04:02:01 - ERROR - File "C:\Users\User\Documents\Others\mt4_trading_bot\main.py", line 142, in <module>
+    main()
+    ~~~~^^
+2025-06-13 04:02:01 - ERROR - 
+2025-06-13 04:02:01 - ERROR - File "C:\Users\User\Documents\Others\mt4_trading_bot\main.py", line 108, in main
+    time.sleep(1)  # Check the flag once per second
+    ~~~~~~~~~~^^^
+2025-06-13 04:02:01 - ERROR - 
+2025-06-13 04:02:01 - ERROR - KeyboardInterrupt
+2025-06-13 04:02:01 - ERROR - 
+2025-06-13 04:04:56 - INFO - Initializing trading bot...
+2025-06-13 04:04:56 - INFO - Activating strategy: sma_crossover
+2025-06-13 04:04:56 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:04:56 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:04:56 - INFO - [State] Successfully loaded saved state.
+2025-06-13 04:04:56 - INFO - TradeManager initialized.
+2025-06-13 04:04:56 - INFO - MyEventHandler initialized.
+2025-06-13 04:04:56 - INFO - DWX Client started.
+2025-06-13 04:04:56 - INFO - Requesting historical data for preloading...
+2025-06-13 04:04:56 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:04:57 - INFO - Historic data received for ETHUSD_M1. Routing to TradeManager for preloading.
+2025-06-13 04:04:57 - INFO - SUCCESS: Preloaded 214 historical bars for ETHUSD.
+2025-06-13 04:04:57 - INFO - --- Performing initial analysis on preloaded data... ---
+2025-06-13 04:04:57 - INFO - [Strategy Values] Short SMA=2638.9000000 | Long SMA=2646.4000000 | Prev Position: 'HOLD'
+2025-06-13 04:04:57 - INFO - Signal Check: Received 'SELL' | In Position: False
+2025-06-13 04:04:57 - INFO - >>> EXECUTION: SELL signal received. Sending order! [Lots: 56.47]
+2025-06-13 04:04:57 - INFO - Preload confirmed.
+2025-06-13 04:04:57 - INFO - Subscribed to live bar data.
+2025-06-13 04:04:57 - INFO - Bot is running. Press Ctrl+C to stop.
+2025-06-13 04:04:58 - INFO - Received invalid timestamp format, ignoring bar: 2025.06.13 00:02
+2025-06-13 04:04:58 - INFO - [STATE CHANGE] Position has been closed. Resetting state.
+2025-06-13 04:04:58 - INFO - [State] Current state saved successfully.
+2025-06-13 04:05:12 - INFO - Python heartbeat sent.
+2025-06-13 04:05:21 - INFO - Received invalid timestamp format, ignoring bar: 2025.06.13 00:03
+2025-06-13 04:05:27 - INFO - Python heartbeat sent.
+2025-06-13 04:05:33 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:05:41 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:05:42 - INFO - Python heartbeat sent.
+2025-06-13 04:05:57 - INFO - Python heartbeat sent.
+2025-06-13 04:06:13 - INFO - Python heartbeat sent.
+2025-06-13 04:06:19 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:06:19 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:06:28 - INFO - Python heartbeat sent.
+2025-06-13 04:06:43 - INFO - Python heartbeat sent.
+2025-06-13 04:06:58 - INFO - Python heartbeat sent.
+2025-06-13 04:07:13 - INFO - Python heartbeat sent.
+2025-06-13 04:07:19 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:07:20 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:07:28 - INFO - Python heartbeat sent.
+2025-06-13 04:07:43 - INFO - Python heartbeat sent.
+2025-06-13 04:07:58 - INFO - Python heartbeat sent.
+2025-06-13 04:08:13 - INFO - Python heartbeat sent.
+2025-06-13 04:08:20 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:08:20 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:08:28 - INFO - Python heartbeat sent.
+2025-06-13 04:08:43 - INFO - Python heartbeat sent.
+2025-06-13 04:08:58 - INFO - Python heartbeat sent.
+2025-06-13 04:09:13 - INFO - Python heartbeat sent.
+2025-06-13 04:09:19 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:09:19 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:09:25 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:09:28 - INFO - Python heartbeat sent.
+2025-06-13 04:09:30 - INFO - Stopping bot...
+2025-06-13 04:09:30 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 04:09:34 - INFO - Initializing trading bot...
+2025-06-13 04:09:34 - INFO - Activating strategy: sma_crossover
+2025-06-13 04:09:34 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:09:34 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:09:34 - INFO - [State] Successfully loaded saved state.
+2025-06-13 04:09:34 - INFO - TradeManager initialized.
+2025-06-13 04:09:34 - INFO - MyEventHandler initialized.
+2025-06-13 04:09:34 - INFO - DWX Client started.
+2025-06-13 04:09:34 - INFO - Requesting historical data for preloading...
+2025-06-13 04:09:34 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:09:35 - INFO - Historic data received for ETHUSD_M1. Routing to TradeManager for preloading.
+2025-06-13 04:09:35 - INFO - SUCCESS: Preloaded 214 historical bars for ETHUSD.
+2025-06-13 04:09:35 - INFO - --- Performing initial analysis on preloaded data... ---
+2025-06-13 04:09:35 - INFO - [Strategy Values] Short SMA=2615.2990000 | Long SMA=2633.4455000 | Prev Position: 'HOLD'
+2025-06-13 04:09:35 - INFO - Signal Check: Received 'SELL' | In Position: False
+2025-06-13 04:09:35 - INFO - >>> EXECUTION: SELL signal received. Sending order! [Lots: 25.13]
+2025-06-13 04:09:35 - INFO - Preload confirmed.
+2025-06-13 04:09:35 - INFO - Subscribed to live bar data.
+2025-06-13 04:09:35 - INFO - Bot is running. Press Ctrl+C to stop.
+2025-06-13 04:09:37 - INFO - [STATE CHANGE] Position has been closed. Resetting state.
+2025-06-13 04:09:37 - INFO - [State] Current state saved successfully.
+2025-06-13 04:09:50 - INFO - Python heartbeat sent.
+2025-06-13 04:10:05 - INFO - Python heartbeat sent.
+2025-06-13 04:10:19 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:10:20 - INFO - Python heartbeat sent.
+2025-06-13 04:10:25 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:10:35 - INFO - Python heartbeat sent.
+2025-06-13 04:10:50 - INFO - Python heartbeat sent.
+2025-06-13 04:11:05 - INFO - Python heartbeat sent.
+2025-06-13 04:11:19 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:11:20 - INFO - --- New Live Bar Received: ETHUSD M1 at 1749773340 ---
+2025-06-13 04:11:20 - INFO - [Strategy Values] Short SMA=2610.2320000 | Long SMA=2630.2580000 | Prev Position: 'SELL'
+2025-06-13 04:11:20 - INFO - Signal Check: Received 'HOLD' | In Position: False
+2025-06-13 04:11:20 - INFO - Decision: No action taken.
+2025-06-13 04:11:20 - INFO - Python heartbeat sent.
+2025-06-13 04:11:25 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:11:35 - INFO - Python heartbeat sent.
+2025-06-13 04:11:50 - INFO - Python heartbeat sent.
+2025-06-13 04:12:05 - INFO - Python heartbeat sent.
+2025-06-13 04:12:15 - INFO - Stopping bot...
+2025-06-13 04:12:15 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 04:12:21 - INFO - Initializing trading bot...
+2025-06-13 04:12:22 - INFO - Activating strategy: sma_crossover
+2025-06-13 04:12:22 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:12:22 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:12:22 - INFO - [State] Successfully loaded saved state.
+2025-06-13 04:12:22 - INFO - TradeManager initialized.
+2025-06-13 04:12:22 - INFO - MyEventHandler initialized.
+2025-06-13 04:12:22 - INFO - DWX Client started.
+2025-06-13 04:12:22 - INFO - Requesting historical data for preloading...
+2025-06-13 04:12:22 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:12:52 - INFO - [FATAL ERROR] Timed out waiting for historical data.
+2025-06-13 04:12:52 - INFO - Please check the 'Experts' tab in your MT4 terminal for errors.
+2025-06-13 04:12:52 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 04:14:22 - INFO - Initializing trading bot...
+2025-06-13 04:14:23 - INFO - Activating strategy: sma_crossover
+2025-06-13 04:14:23 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:14:23 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:14:23 - INFO - [State] Successfully loaded saved state.
+2025-06-13 04:14:23 - INFO - TradeManager initialized.
+2025-06-13 04:14:23 - INFO - MyEventHandler initialized.
+2025-06-13 04:14:23 - INFO - DWX Client started.
+2025-06-13 04:14:23 - INFO - Requesting historical data for preloading...
+2025-06-13 04:14:23 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:14:23 - INFO - Historic data received for GOLD_M1. Routing to TradeManager for preloading.
+2025-06-13 04:14:23 - INFO - SUCCESS: Preloaded 156 historical bars for GOLD.
+2025-06-13 04:14:23 - INFO - --- Performing initial analysis on preloaded data... ---
+2025-06-13 04:14:23 - INFO - [Strategy Values] Short SMA=3405.1380000 | Long SMA=3398.9650000 | Prev Position: 'HOLD'
+2025-06-13 04:14:23 - INFO - Signal Check: Received 'BUY' | In Position: False
+2025-06-13 04:14:23 - INFO - >>> EXECUTION: BUY signal received. Sending order! [Lots: 2.92]
+2025-06-13 04:14:24 - INFO - Preload confirmed.
+2025-06-13 04:14:24 - INFO - Subscribed to live bar data.
+2025-06-13 04:14:24 - INFO - Bot is running. Press Ctrl+C to stop.
+2025-06-13 04:14:25 - INFO - [STATE CHANGE] Position has been closed. Resetting state.
+2025-06-13 04:14:25 - INFO - [State] Current state saved successfully.
+2025-06-13 04:14:39 - INFO - Python heartbeat sent.
+2025-06-13 04:14:54 - INFO - Python heartbeat sent.
+2025-06-13 04:15:09 - INFO - Python heartbeat sent.
+2025-06-13 04:15:14 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:15:24 - INFO - Python heartbeat sent.
+2025-06-13 04:15:39 - INFO - Python heartbeat sent.
+2025-06-13 04:15:40 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:15:54 - INFO - Python heartbeat sent.
+2025-06-13 04:16:09 - INFO - Python heartbeat sent.
+2025-06-13 04:16:24 - INFO - Python heartbeat sent.
+2025-06-13 04:16:39 - INFO - Python heartbeat sent.
+2025-06-13 04:16:40 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:16:54 - INFO - Python heartbeat sent.
+2025-06-13 04:17:09 - INFO - Python heartbeat sent.
+2025-06-13 04:17:24 - INFO - Python heartbeat sent.
+2025-06-13 04:17:39 - INFO - Python heartbeat sent.
+2025-06-13 04:17:40 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:17:54 - INFO - Python heartbeat sent.
+2025-06-13 04:18:01 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:18:09 - INFO - Python heartbeat sent.
+2025-06-13 04:18:20 - INFO - Stopping bot...
+2025-06-13 04:18:20 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 04:19:55 - INFO - Initializing trading bot...
+2025-06-13 04:19:55 - INFO - Activating strategy: sma_crossover
+2025-06-13 04:19:55 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:19:55 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:19:55 - INFO - [State] No state file found. Starting with a fresh state.
+2025-06-13 04:19:55 - INFO - TradeManager initialized.
+2025-06-13 04:19:55 - INFO - MyEventHandler initialized.
+2025-06-13 04:19:55 - INFO - DWX Client started.
+2025-06-13 04:19:55 - INFO - Requesting historical data for preloading...
+2025-06-13 04:19:55 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:19:56 - INFO - Historic data received for GOLD_M1. Routing to TradeManager for preloading.
+2025-06-13 04:19:56 - INFO - SUCCESS: Preloaded 158 historical bars for GOLD.
+2025-06-13 04:19:56 - INFO - --- Performing initial analysis on preloaded data... ---
+2025-06-13 04:19:56 - INFO - [Strategy Values] Short SMA=3407.3230000 | Long SMA=3404.0980000 | Prev Position: 'HOLD'
+2025-06-13 04:19:56 - INFO - Signal Check: Received 'BUY' | In Position: False
+2025-06-13 04:19:56 - INFO - >>> EXECUTION: BUY signal received. Sending order! [Lots: 2.88]
+2025-06-13 04:19:56 - INFO - Preload confirmed.
+2025-06-13 04:19:56 - INFO - Subscribed to live bar data.
+2025-06-13 04:19:56 - INFO - Bot is running. Press Ctrl+C to stop.
+2025-06-13 04:19:57 - INFO - [STATE CHANGE] Position has been closed. Resetting state.
+2025-06-13 04:19:57 - INFO - [State] Current state saved successfully.
+2025-06-13 04:20:11 - INFO - Python heartbeat sent.
+2025-06-13 04:20:12 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:20:26 - INFO - Python heartbeat sent.
+2025-06-13 04:20:30 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:20:41 - INFO - Python heartbeat sent.
+2025-06-13 04:20:56 - INFO - Python heartbeat sent.
+2025-06-13 04:21:11 - INFO - Python heartbeat sent.
+2025-06-13 04:21:12 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:21:21 - INFO - --- New Live Bar Received: GOLD M1 at 1749773940 ---
+2025-06-13 04:21:21 - INFO - [Strategy Values] Short SMA=3407.3360000 | Long SMA=3404.8330000 | Prev Position: 'BUY'
+2025-06-13 04:21:21 - INFO - Signal Check: Received 'HOLD' | In Position: False
+2025-06-13 04:21:21 - INFO - Decision: No action taken.
+2025-06-13 04:21:26 - INFO - Python heartbeat sent.
+2025-06-13 04:21:30 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:21:41 - INFO - Python heartbeat sent.
+2025-06-13 04:21:56 - INFO - Python heartbeat sent.
+2025-06-13 04:22:11 - INFO - Python heartbeat sent.
+2025-06-13 04:22:13 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:22:21 - INFO - --- New Live Bar Received: GOLD M1 at 1749774000 ---
+2025-06-13 04:22:21 - INFO - [Strategy Values] Short SMA=3406.9870000 | Long SMA=3405.6165000 | Prev Position: 'BUY'
+2025-06-13 04:22:21 - INFO - Signal Check: Received 'HOLD' | In Position: False
+2025-06-13 04:22:21 - INFO - Decision: No action taken.
+2025-06-13 04:22:26 - INFO - Python heartbeat sent.
+2025-06-13 04:22:30 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:22:41 - INFO - Python heartbeat sent.
+2025-06-13 04:22:56 - INFO - Python heartbeat sent.
+2025-06-13 04:22:58 - INFO - Stopping bot...
+2025-06-13 04:22:58 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 04:33:05 - INFO - Initializing trading bot...
+2025-06-13 04:33:06 - INFO - Activating strategy: sma_crossover
+2025-06-13 04:33:06 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:33:06 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:33:06 - INFO - [State] Successfully loaded saved state.
+2025-06-13 04:33:06 - INFO - TradeManager initialized.
+2025-06-13 04:33:06 - INFO - MyEventHandler initialized.
+2025-06-13 04:33:06 - INFO - DWX Client started.
+2025-06-13 04:33:06 - INFO - Requesting historical data for preloading...
+2025-06-13 04:33:06 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:33:16 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:33:33 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:33:36 - INFO - [FATAL ERROR] Timed out waiting for historical data.
+2025-06-13 04:33:36 - INFO - Please check the 'Experts' tab in your MT4 terminal for errors.
+2025-06-13 04:33:36 - INFO - DWX Client stop() method called. Shutting down threads.
+2025-06-13 04:38:59 - INFO - Initializing trading bot...
+2025-06-13 04:38:59 - INFO - Activating strategy: sma_crossover
+2025-06-13 04:38:59 - INFO - SmaCrossover Strategy initialized with periods: 10/20
+2025-06-13 04:38:59 - INFO - [Strategy State] SmaCrossover state has been reset.
+2025-06-13 04:38:59 - INFO - [State] No state file found. Starting with a fresh state.
+2025-06-13 04:38:59 - INFO - TradeManager initialized.
+2025-06-13 04:38:59 - INFO - MyEventHandler initialized.
+2025-06-13 04:38:59 - INFO - DWX Client started.
+2025-06-13 04:38:59 - INFO - Requesting historical data for preloading...
+2025-06-13 04:38:59 - INFO - Waiting for historical data preload to complete...
+2025-06-13 04:39:00 - INFO - MT4 ERROR: HEARTBEAT_TIMEOUT | Python client heartbeat timed out. Closing all open trades for safety.
+2025-06-13 04:39:00 - INFO - Historic data received for GOLD_M1. Routing to TradeManager for preloading.
+2025-06-13 04:39:00 - INFO - SUCCESS: Preloaded 158 historical bars for GOLD.
+2025-06-13 04:39:00 - INFO - --- Performing initial analysis on preloaded data... ---
+2025-06-13 04:39:00 - INFO - [Strategy Values] Short SMA=3413.7710000 | Long SMA=3411.4295000 | Prev Position: 'HOLD'
+2025-06-13 04:39:00 - INFO - Signal Check: Received 'BUY' | In Position: False
+2025-06-13 04:39:00 - INFO - >>> EXECUTION: BUY signal received. Sending order! [Lots: 2.85]
+2025-06-13 04:39:00 - INFO - Preload confirmed.
+2025-06-13 04:39:00 - INFO - Subscribed to live bar data.
+2025-06-13 04:39:00 - INFO - Bot is running. Press Ctrl+C to stop.
+2025-06-13 04:39:07 - INFO - [STATE CHANGE] Position has been closed. Resetting state.
+2025-06-13 04:39:07 - INFO - [State] Current state saved successfully.
+2025-06-13 04:39:15 - INFO - Python heartbeat sent.
+2025-06-13 04:39:30 - INFO - Python heartbeat sent.
+2025-06-13 04:39:45 - INFO - Python heartbeat sent.
+2025-06-13 04:40:00 - INFO - Python heartbeat sent.
+2025-06-13 04:40:15 - INFO - Python heartbeat sent.
+2025-06-13 04:40:21 - INFO - --- New Live Bar Received: GOLD M1 at 1749775080 ---
+2025-06-13 04:40:21 - INFO - [Strategy Values] Short SMA=3413.6420000 | Long SMA=3411.4570000 | Prev Position: 'BUY'
+2025-06-13 04:40:21 - INFO - Signal Check: Received 'HOLD' | In Position: False
+2025-06-13 04:40:21 - INFO - Decision: No action taken.
+2025-06-13 04:40:30 - INFO - Python heartbeat sent.
+2025-06-13 04:40:45 - INFO - Python heartbeat sent.
+2025-06-13 04:41:00 - INFO - Python heartbeat sent.
+2025-06-13 04:41:15 - INFO - Python heartbeat sent.
+2025-06-13 04:41:21 - INFO - --- New Live Bar Received: GOLD M1 at 1749775140 ---
+2025-06-13 04:41:21 - INFO - [Strategy Values] Short SMA=3413.2970000 | Long SMA=3411.4445000 | Prev Position: 'BUY'
+2025-06-13 04:41:21 - INFO - Signal Check: Received 'HOLD' | In Position: False
+2025-06-13 04:41:21 - INFO - Decision: No action taken.
+2025-06-13 04:41:30 - INFO - Python heartbeat sent.
+2025-06-13 04:41:45 - INFO - Python heartbeat sent.
+2025-06-13 04:42:00 - INFO - Python heartbeat sent.
+2025-06-13 04:42:15 - INFO - Python heartbeat sent.
+2025-06-13 04:42:21 - INFO - --- New Live Bar Received: GOLD M1 at 1749775200 ---
+2025-06-13 04:42:21 - INFO - [Strategy Values] Short SMA=3412.7730000 | Long SMA=3411.4890000 | Prev Position: 'BUY'
+2025-06-13 04:42:21 - INFO - Signal Check: Received 'HOLD' | In Position: False
+2025-06-13 04:42:21 - INFO - Decision: No action taken.
+2025-06-13 04:42:30 - INFO - Python heartbeat sent.
+2025-06-13 04:42:45 - INFO - Python heartbeat sent.
+2025-06-13 04:43:00 - INFO - Python heartbeat sent.
+2025-06-13 04:43:15 - INFO - Python heartbeat sent.
+2025-06-13 04:43:21 - INFO - --- New Live Bar Received: GOLD M1 at 1749775260 ---
+2025-06-13 04:43:21 - INFO - [Strategy Values] Short SMA=3412.5270000 | Long SMA=3411.5140000 | Prev Position: 'BUY'
+2025-06-13 04:43:21 - INFO - Signal Check: Received 'HOLD' | In Position: False
+2025-06-13 04:43:21 - INFO - Decision: No action taken.
+2025-06-13 04:43:30 - INFO - Python heartbeat sent.
+2025-06-13 04:43:45 - INFO - Python heartbeat sent.
+2025-06-13 04:44:00 - INFO - Python heartbeat sent.
+2025-06-13 04:44:01 - INFO - Stopping bot...
+2025-06-13 04:44:01 - INFO - DWX Client stop() method called. Shutting down threads.

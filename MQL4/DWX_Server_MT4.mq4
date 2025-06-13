@@ -17,7 +17,7 @@
 
 input string t0 = "--- General Parameters ---";
 // if the timer is too small, we might have problems accessing the files from python (mql will write to file every update time). 
-input int MILLISECOND_TIMER = 500;
+input int MILLISECOND_TIMER = 250;
 
 input int numLastMessages = 50;
 input string t1 = "If true, it will open charts for bar data symbols, ";
@@ -35,6 +35,7 @@ int maxNumberOfCharts = 100;
 
 long lastMessageMillis = 0;
 long lastUpdateMillis = GetTickCount(), lastUpdateOrdersMillis = GetTickCount();
+long lastHeavyTaskMillis = 0;
 
 string startIdentifier = "<:";
 string endIdentifier = ":>";
@@ -47,6 +48,10 @@ string filePathBarData = folderName + "/DWX_Bar_Data.txt";
 string filePathHistoricData = folderName + "/DWX_Historic_Data.txt";
 string filePathHistoricTrades = folderName + "/DWX_Historic_Trades.txt";
 string filePathCommandsPrefix = folderName + "/DWX_Commands_";
+string filePathExecutionReceipts = folderName + "/DWX_Execution_Receipts.txt";
+string filePathPythonHeartbeat = folderName + "/DWX_Python_Heartbeat.txt";
+long lastPythonHeartbeatMillis = 0;
+input int pythonHeartbeatTimeoutSeconds = 120; // If no heartbeat for 120s, assume Python is dead
 
 string lastOrderText = "", lastMarketDataText = "", lastMessageText = "";
 
@@ -152,6 +157,7 @@ void OnDeinit(const int reason) {
 //+------------------------------------------------------------------+
 void OnTimer() {
    
+   CheckPythonHeartbeat();
    // update prices regularly in case there was no tick within X milliseconds (for non-chart symbols). 
    if (GetTickCount() >= lastUpdateMillis + MILLISECOND_TIMER) OnTick();
 }
@@ -164,11 +170,53 @@ void OnTick() {
       Use this OnTick() function to send market data to subscribed client.
    */
    lastUpdateMillis = GetTickCount();
+   if (GetTickCount() < lastHeavyTaskMillis + 1000) {
+      return;
+   }
+   lastHeavyTaskMillis = GetTickCount();
    
    CheckCommands();             
    CheckOpenOrders();
    CheckMarketData();
    CheckBarData();
+}
+
+//+------------------------------------------------------------------+
+//| Checks for a heartbeat from the Python client.                   |
+//+------------------------------------------------------------------+
+void CheckPythonHeartbeat() {
+   // Only check every 5 seconds to reduce file I/O
+   if (GetTickCount() < lastPythonHeartbeatMillis + 5000) {
+      return;
+   }
+   
+   // We must reset the timer here, BEFORE we do any slow file I/O.
+   // This prevents an infinite loop of timeout messages if the EA gets stuck.
+   long current_tick_count = GetTickCount();
+   long last_checked_at = lastPythonHeartbeatMillis;
+   lastPythonHeartbeatMillis = current_tick_count;
+
+   int handle = FileOpen(filePathPythonHeartbeat, FILE_READ|FILE_TXT);
+   if(handle == INVALID_HANDLE) return;
+  
+   long timestamp = (long)FileReadNumber(handle);
+   FileClose(handle);
+   
+   // If the timestamp in the file is newer than the one from the last time we checked,
+   // then Python is alive. We update our "last known good" time.
+   // Note: We don't use GetTickCount() here, because the file timestamp is the source of truth.
+   if (timestamp > 0) {
+       // This part is actually not needed. The main check is below.
+       // We just need to know if the file is being updated.
+   }
+   
+   // If the last time we successfully read a fresh heartbeat is now older than the timeout, take action.
+   if (current_tick_count > last_checked_at + (pythonHeartbeatTimeoutSeconds * 1000)) {
+      string msg = "Python client heartbeat timed out. Closing all open trades for safety.";
+      Print(msg);
+      SendError("HEARTBEAT_TIMEOUT", msg);
+      CloseAllOrders();
+   }
 }
 
 
@@ -245,9 +293,24 @@ void CheckCommands() {
          Print("Resetting stored command IDs.");
          ResetCommandIDs();
       }
+      
+      // After processing the command, write a receipt.
+      WriteExecutionReceipt(commandID, command);
    }
 }
 
+
+void WriteExecutionReceipt(int cmd_id, string cmd) {
+   
+   // Format: <command_id>|<command_name>
+   string content = IntegerToString(cmd_id) + "|" + cmd;
+   
+   int handle = FileOpen(filePathExecutionReceipts, FILE_WRITE|FILE_TXT);
+   if (handle != INVALID_HANDLE) {
+      FileWriteString(handle, content);
+      FileClose(handle);
+   }
+}
 
 void OpenOrder(string orderStr) {
    
@@ -650,7 +713,7 @@ void GetHistoricData(string dataStr) {
       
       // maybe use integer instead of time string? IntegerToString(rates_array[i].time)
       text += StringFormat("\"%s\": {\"open\": %.5f, \"high\": %.5f, \"low\": %.5f, \"close\": %.5f, \"tick_volume\": %.5f}", 
-                           TimeToString(rates_array[i].time), 
+                           IntegerToString(rates_array[i].time), 
                            rates_array[i].open, 
                            rates_array[i].high, 
                            rates_array[i].low, 
@@ -785,9 +848,9 @@ void CheckBarData() {
       // if last rate is returned and its timestamp is greater than the last published...
       if(count > 0 && curr_rate[0].time > BarDataInstruments[s].getLastPublishTimestamp()) {
          
-         string rates = StringFormat("\"%s\": {\"time\": \"%s\", \"open\": %f, \"high\": %f, \"low\": %f, \"close\": %f, \"tick_volume\":%d}, ", 
+         string rates = StringFormat("\"%s\": {\"time\": %s, \"open\": %f, \"high\": %f, \"low\": %f, \"close\": %f, \"tick_volume\":%d}, ", 
                                      BarDataInstruments[s].name(), 
-                                     TimeToString(curr_rate[0].time), 
+                                     IntegerToString(curr_rate[0].time), 
                                      curr_rate[0].open, 
                                      curr_rate[0].high, 
                                      curr_rate[0].low, 

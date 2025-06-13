@@ -89,18 +89,32 @@ def main():
         time.sleep(1)
     print("DWX Client started.")
 
-    print("Requesting historical data for preloading...")
-    num_bars_to_fetch = required_history_bars + 200  # Use the same value for the fetch request
-    timeframe_minutes = cfg.STRATEGY_TIMEFRAME.replace("M", "")
-    timeframe_minutes = int(timeframe_minutes)
-    minutes_to_fetch = num_bars_to_fetch * timeframe_minutes
-    end_time = datetime.now(timezone.utc)
-    start_time = end_time - timedelta(minutes=minutes_to_fetch)
-    dwx.get_historic_data(cfg.STRATEGY_SYMBOL, cfg.STRATEGY_TIMEFRAME, start_time.timestamp(), end_time.timestamp())
+    if required_history_bars > 0:
+        logging.info("Requesting historical data for preloading...")
+        num_bars_to_fetch = required_history_bars + 200
+        try:
+            timeframe_str = cfg.STRATEGY_TIMEFRAME
+            if "M" in timeframe_str:
+                timeframe_minutes = int(timeframe_str.replace("M", ""))
+            elif "H" in timeframe_str:
+                timeframe_minutes = int(timeframe_str.replace("H", "")) * 60
+            elif "D" in timeframe_str:
+                timeframe_minutes = int(timeframe_str.replace("D", "")) * 1440
+            else:
+                timeframe_minutes = 5
+        except Exception:
+            timeframe_minutes = 5
 
-    # --- THIS IS THE NEW ROBUST WAITING LOOP ---
-    # It replaces the unreliable time.sleep(5)
-    print("Waiting for historical data preload to complete...")
+        minutes_to_fetch = num_bars_to_fetch * timeframe_minutes
+        end_time = datetime.now(timezone.utc)
+        start_time = end_time - timedelta(minutes=minutes_to_fetch)
+
+        # --- THIS IS THE FIX ---
+        # Explicitly cast the float timestamps to integers before passing.
+        dwx.get_historic_data(cfg.STRATEGY_SYMBOL, cfg.STRATEGY_TIMEFRAME, int(start_time.timestamp()), int(end_time.timestamp()))
+
+        logging.info("Waiting for historical data preload to complete...")
+
     start_wait_time = time.time()
     timeout_seconds = 30  # Set a timeout to prevent an infinite loop
 
@@ -125,14 +139,14 @@ def main():
         while dwx.ACTIVE:
             time.sleep(1)  # Main loop sleeps for 1 second
 
-            # Send a heartbeat every 15 seconds
-            if time.time() - last_heartbeat_time > 15:
+            # Send a heartbeat based on the interval set in the config file.
+            if time.time() - last_heartbeat_time > cfg.HEARTBEAT_INTERVAL_SECONDS:
                 dwx._send_heartbeat()
                 last_heartbeat_time = time.time()
                 logging.info("Python heartbeat sent.")
 
     except KeyboardInterrupt:
-        print("\nStopping bot...")
+        logging.info("Stopping bot...")
         dwx.close_orders_by_magic(cfg.MAGIC_NUMBER)
         dwx.stop()
         time.sleep(2)
