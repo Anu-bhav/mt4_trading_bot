@@ -4,4 +4,12 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "backtesting>=0.6.4",
+    "pandas>=2.3.0",
+    "ta-lib",
+    "yfinance>=0.2.63",
+]
+
+[tool.uv.sources]
+ta-lib = { path = "scripts/ta_lib-0.6.3-cp313-cp313-win_amd64.whl" }

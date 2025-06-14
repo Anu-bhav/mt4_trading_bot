@@ -5,15 +5,10 @@ import pandas as pd
 
 
 class BaseStrategy(ABC):
-    """
-    Abstract Base Class for all trading strategies.
-    It defines the structure that the TradeManager expects.
-    """
+    """Abstract Base Class for all trading strategies."""
 
     def __init__(self, **params):
-        """
-        Strategies can accept parameters for tuning.
-        """
+        """Strategies can accept parameters for tuning."""
         self.params = params
 
     @abstractmethod
@@ -31,6 +26,6 @@ class BaseStrategy(ABC):
     def reset(self):
         """
         Resets the internal state of the strategy to its initial condition.
-        This is crucial for handling events like data gaps.
+        This is crucial for handling events like data gaps or starting a new backtest.
         """
         pass

@@ -1,64 +1,51 @@
-# main.py
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import importlib
 import logging
 import time
-from calendar import c
 from datetime import datetime, timedelta, timezone
 
-import config as cfg
-from api.dwx_client import dwx_client
-from event_handler import MyEventHandler
-from logger_setup import setup_logger
-
-# Import your strategies
-from trade_manager import TradeManager
+from trading_bot import config as cfg  #
+from trading_bot.api.dwx_client import dwx_client
+from trading_bot.core.event_handler import EventHandler
+from trading_bot.core.logger_setup import setup_logger
+from trading_bot.core.trade_manager import TradeManager
 
 
-# --- THIS IS THE NEW STRATEGY FACTORY FUNCTION ---
 def strategy_factory(strategy_name: str, config_params: dict):
-    """
-    Dynamically imports and instantiates a strategy class based on its name.
-
-    Args:
-        strategy_name (str): The name of the strategy (e.g., 'sma_crossover').
-        config_params (dict): The dictionary of parameters for this strategy from config.py.
-
-    Returns:
-        An instantiated strategy object.
-
-    """
-    # Convert snake_case name to PascalCase for the class name.
-    # e.g., 'sma_crossover' -> 'SmaCrossover'
+    """Dynamically imports and instantiates a strategy class based on its name."""
     class_name = "".join(word.capitalize() for word in strategy_name.split("_"))
-
+    module_path = f"trading_bot.strategies.{strategy_name}"
     try:
-        # Dynamically import the module from the 'strategies' folder.
-        # e.g., from strategies.sma_crossover import SmaCrossover
-        module = importlib.import_module(f"strategies.{strategy_name}")
+        # --- THE FIX: Use the full, absolute package path ---
+        module = importlib.import_module(module_path)
 
-        # Get the class from the imported module.
         StrategyClass = getattr(module, class_name)
-
-        # Instantiate the class with its parameters.
-        # The ** operator unpacks the dictionary into keyword arguments.
+        logging.info(f"Successfully loaded StrategyClass: {class_name} from module: {module.__name__}")
         return StrategyClass(**config_params)
-
     except (ImportError, AttributeError) as e:
-        print(f"[FATAL ERROR] Could not load strategy '{strategy_name}'.")
-        print(f"Please ensure 'strategies/{strategy_name}.py' exists and contains a class named '{class_name}'.")
-        print(f"Error details: {e}")
+        logging.error(f"[FATAL ERROR] Could not load strategy '{strategy_name}'.")
+        logging.error(f"Please ensure the module path '{module_path}.py' and class '{class_name}' are correct.")
+        logging.error(f"Details: {e}")
         return None
 
 
 def main():
+    """
+    Main entry point for the trading bot.
+    """
     setup_logger()
+    logging.info("========================================================")
     logging.info("Initializing trading bot...")
 
     dwx = dwx_client(event_handler=None, metatrader_dir_path=cfg.METATRADER_DIR_PATH, verbose=False)
 
     strategy_name = cfg.STRATEGY_NAME
     if strategy_name not in cfg.STRATEGY_PARAMS:
-        logging.error(f"Strategy '{strategy_name}' is not defined in the configuration.")
+        logging.error(f"[FATAL ERROR] Strategy '{strategy_name}' is not defined in the configuration.")
         return
 
     logging.info(f"Activating strategy: {strategy_name} for {cfg.STRATEGY_SYMBOL} on {cfg.STRATEGY_TIMEFRAME}")
@@ -68,10 +55,11 @@ def main():
 
     my_strategy_logic = strategy_factory(strategy_name, strategy_params)
     if not my_strategy_logic:
+        logging.error("Halting due to strategy loading failure.")
         return
 
     my_trade_manager = TradeManager(dwx, my_strategy_logic, cfg, required_history_bars)
-    my_event_handler = MyEventHandler(dwx, my_trade_manager)
+    my_event_handler = EventHandler(dwx, my_trade_manager)
     dwx.event_handler = my_event_handler
 
     dwx.start()
@@ -91,61 +79,53 @@ def main():
             elif "D" in timeframe_str:
                 timeframe_minutes = int(timeframe_str.replace("D", "")) * 1440
             else:
-                timeframe_minutes = 5
-        except Exception:
+                timeframe_minutes = 5  # Default fallback
+        except Exception as e:
+            logging.warning(f"Could not parse timeframe '{cfg.STRATEGY_TIMEFRAME}'. Defaulting to 15 mins. Error: {e}")
             timeframe_minutes = 5
 
         minutes_to_fetch = num_bars_to_fetch * timeframe_minutes
         end_time = datetime.now(timezone.utc)
         start_time = end_time - timedelta(minutes=minutes_to_fetch)
 
-        # --- THIS IS THE FIX ---
-        # Explicitly cast the float timestamps to integers before passing.
         dwx.get_historic_data(cfg.STRATEGY_SYMBOL, cfg.STRATEGY_TIMEFRAME, int(start_time.timestamp()), int(end_time.timestamp()))
 
         logging.info("Waiting for historical data preload to complete...")
+        start_wait_time = time.time()
+        timeout_seconds = 30
+        while not my_trade_manager.is_preloaded:
+            time.sleep(1)
+            if time.time() - start_wait_time > timeout_seconds:
+                logging.error(
+                    "[FATAL ERROR] Timed out waiting for historical data. Please check the 'Experts' tab in your MT4 terminal for errors."
+                )
+                dwx.stop()
+                return
+        logging.info("Preload confirmed.")
     else:
         my_trade_manager.is_preloaded = True
         logging.info("Strategy requires no historical data. Skipping preload.")
 
-    start_wait_time = time.time()
-    timeout_seconds = 30  # Set a timeout to prevent an infinite loop
-
-    while not my_trade_manager.is_preloaded:
-        time.sleep(1)  # Check the flag once per second
-        if time.time() - start_wait_time > timeout_seconds:
-            print("[FATAL ERROR] Timed out waiting for historical data.")
-            print("Please check the 'Experts' tab in your MT4 terminal for errors.")
-            dwx.stop()  # Shut down the bot
-            return
-
-    print("Preload confirmed.")
-
-    # NOW, it is safe to subscribe to live data.
-    # The structure is a list of lists, e.g., [['ETHUSD', 'M1']]
     bar_data_subscriptions = [[cfg.STRATEGY_SYMBOL, cfg.STRATEGY_TIMEFRAME]]
-
     dwx.subscribe_symbols_bar_data(bar_data_subscriptions)
     logging.info(f"Subscribed to live bar data for: {bar_data_subscriptions}")
 
-    # --- Main Loop ---
     logging.info("Bot is running. Press Ctrl+C to stop.")
     try:
         last_heartbeat_time = time.time()
         while dwx.ACTIVE:
-            time.sleep(1)  # Main loop sleeps for 1 second
-
-            # Send a heartbeat based on the interval set in the config file.
+            time.sleep(1)
             if time.time() - last_heartbeat_time > cfg.HEARTBEAT_INTERVAL_SECONDS:
                 dwx._send_heartbeat()
                 last_heartbeat_time = time.time()
-                logging.info("Python heartbeat sent.")
-
     except KeyboardInterrupt:
-        logging.info("Stopping bot...")
+        logging.info("\nStopping bot...")
         dwx.close_orders_by_magic(cfg.MAGIC_NUMBER)
         dwx.stop()
         time.sleep(2)
+    except Exception as e:
+        logging.critical(f"An unhandled exception occurred in the main loop: {e}")
+        dwx.stop()
 
 
 if __name__ == "__main__":

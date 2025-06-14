@@ -1,7 +1,7 @@
 # event_handler.py
 
 
-class MyEventHandler:
+class EventHandler:
     # --- MODIFICATION HERE ---
     def __init__(self, dwx_client_instance, trade_manager):
         self.dwx = dwx_client_instance  # Store the reference to the dwx client

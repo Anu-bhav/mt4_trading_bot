@@ -5,7 +5,7 @@ from os.path import join
 
 import pandas as pd
 
-from utils import risk_manager
+from ..utils import risk_manager
 
 
 class TradeManager:
@@ -70,6 +70,7 @@ class TradeManager:
         df.reset_index(inplace=True)
         df.rename(columns={"index": "time"}, inplace=True)
         df["time"] = pd.to_numeric(df["time"])
+        df.columns = [col.lower() for col in df.columns]
         for col in ["open", "high", "low", "close", "tick_volume"]:
             df[col] = pd.to_numeric(df[col])
         df.sort_values(by="time", inplace=True)
