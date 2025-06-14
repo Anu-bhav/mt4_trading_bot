@@ -4,12 +4,12 @@ METATRADER_DIR_PATH = r"C:\\Users\\User\\AppData\\Roaming\\MetaQuotes\\Terminal\
 STRATEGY_SYMBOL = "BTCUSD"  # The symbol to trade, e.g., BTCUSD, EURUSD, etc.
 STRATEGY_TIMEFRAME = "M1"
 
-STRATEGY_NAME = "sma_crossover"  # Options: sma_crossover, rsi_strategy, tick_counter_strategy, etc.
+STRATEGY_NAME = "rsi_strategy"  # Options: sma_crossover, rsi_strategy, tick_counter_strategy, etc.
 
 STRATEGY_PARAMS = {
     "sma_crossover": {"short_period": 10, "long_period": 20},
     # --- NEW STRATEGY CONFIGURATION ---
-    "rsi_strategy": {"rsi_period": 14, "oversold_threshold": 30, "overbought_threshold": 70},
+    "rsi_strategy": {"rsi_period": 14, "oversold_threshold": 40, "overbought_threshold": 60},
     # --- NEW DUMMY STRATEGY CONFIG ---
     "tick_counter_strategy": {},  # This strategy has no parameters
 }

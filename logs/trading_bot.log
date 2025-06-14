@@ -61,3 +61,189 @@ Stopping bot...
 2025-06-14 17:02:22 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749906000 ---
 2025-06-14 17:02:22 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
 2025-06-14 17:02:22 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:03:22 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749906060 ---
+2025-06-14 17:03:22 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:03:22 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:04:23 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749906120 ---
+2025-06-14 17:04:23 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:04:23 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:04:42 - INFO - [run_live.py:122 - main()] - 
+Stopping bot...
+2025-06-14 17:04:42 - INFO - [dwx_client.py:96 - stop()] - DWX Client stop() method called. Shutting down threads.
+2025-06-14 17:04:46 - INFO - [logger_setup.py:57 - setup_logger()] - Logger has been set up.
+2025-06-14 17:04:46 - INFO - [run_live.py:41 - main()] - ========================================================
+2025-06-14 17:04:46 - INFO - [run_live.py:42 - main()] - Initializing trading bot...
+2025-06-14 17:04:47 - INFO - [run_live.py:51 - main()] - Activating strategy: sma_crossover for BTCUSD on M1
+2025-06-14 17:04:47 - INFO - [run_live.py:27 - strategy_factory()] - Successfully loaded StrategyClass: SmaCrossover from module: trading_bot.strategies.sma_crossover
+2025-06-14 17:04:47 - INFO - [sma_crossover.py:22 - reset()] - [Strategy State] SmaCrossover state has been reset.
+2025-06-14 17:04:47 - INFO - [logger_setup.py:48 - write()] - [State] Successfully loaded saved state.
+2025-06-14 17:04:47 - INFO - [logger_setup.py:48 - write()] - TradeManager initialized.
+2025-06-14 17:04:47 - INFO - [logger_setup.py:48 - write()] - MyEventHandler initialized.
+2025-06-14 17:04:47 - INFO - [run_live.py:68 - main()] - DWX Client started.
+2025-06-14 17:04:47 - INFO - [run_live.py:71 - main()] - Requesting historical data for preloading...
+2025-06-14 17:04:47 - INFO - [run_live.py:93 - main()] - Waiting for historical data preload to complete...
+2025-06-14 17:04:47 - INFO - [logger_setup.py:48 - write()] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-14 17:04:47 - INFO - [logger_setup.py:48 - write()] - SUCCESS: Preloaded 219 historical bars for BTCUSD.
+2025-06-14 17:04:47 - INFO - [logger_setup.py:48 - write()] - --- Performing initial analysis on preloaded data... ---
+2025-06-14 17:04:47 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'BUY' | In Position: False
+2025-06-14 17:04:47 - INFO - [trade_manager.py:329 - _get_stop_loss()] - [SL CALC] Strategy Desired SL: 104976.08, Broker Boundary: 104986.45
+2025-06-14 17:04:47 - INFO - [trade_manager.py:332 - _get_stop_loss()] - [SL CALC] Final Compliant Stop Loss: 104976.08
+2025-06-14 17:04:47 - INFO - [trade_manager.py:379 - _get_lot_size()] - [Risk Calc] Inputs: Equity=18806.46, Risk=1.0%, SL Dist=210.37290000000212, Lot Size: 0.89
+2025-06-14 17:04:47 - INFO - [trade_manager.py:153 - _execute_new_trade()] - >>> EXECUTION: BUY signal received. Sending order! [Lots: 0.89, SL: 104976.08, TP: 105607.2]
+2025-06-14 17:04:48 - INFO - [run_live.py:104 - main()] - Preload confirmed.
+2025-06-14 17:04:48 - INFO - [run_live.py:111 - main()] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-14 17:04:48 - INFO - [run_live.py:113 - main()] - Bot is running. Press Ctrl+C to stop.
+2025-06-14 17:04:48 - INFO - [logger_setup.py:48 - write()] - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-14 17:06:23 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749906240 ---
+2025-06-14 17:06:23 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:06:23 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:07:24 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749906300 ---
+2025-06-14 17:07:24 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:07:24 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:08:23 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749906360 ---
+2025-06-14 17:08:23 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:08:23 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:08:53 - INFO - [run_live.py:122 - main()] - 
+Stopping bot...
+2025-06-14 17:08:53 - INFO - [dwx_client.py:96 - stop()] - DWX Client stop() method called. Shutting down threads.
+2025-06-14 17:18:19 - INFO - [logger_setup.py:57 - setup_logger()] - Logger has been set up.
+2025-06-14 17:18:19 - INFO - [run_live.py:41 - main()] - ========================================================
+2025-06-14 17:18:19 - INFO - [run_live.py:42 - main()] - Initializing trading bot...
+2025-06-14 17:18:20 - INFO - [run_live.py:51 - main()] - Activating strategy: sma_crossover for BTCUSD on M1
+2025-06-14 17:18:20 - INFO - [run_live.py:27 - strategy_factory()] - Successfully loaded StrategyClass: SmaCrossover from module: trading_bot.strategies.sma_crossover
+2025-06-14 17:18:20 - INFO - [sma_crossover.py:22 - reset()] - [Strategy State] SmaCrossover state has been reset.
+2025-06-14 17:18:20 - INFO - [logger_setup.py:48 - write()] - [State] Successfully loaded saved state.
+2025-06-14 17:18:20 - INFO - [logger_setup.py:48 - write()] - TradeManager initialized.
+2025-06-14 17:18:20 - INFO - [logger_setup.py:48 - write()] - MyEventHandler initialized.
+2025-06-14 17:18:20 - INFO - [run_live.py:68 - main()] - DWX Client started.
+2025-06-14 17:18:20 - INFO - [run_live.py:71 - main()] - Requesting historical data for preloading...
+2025-06-14 17:18:20 - INFO - [run_live.py:93 - main()] - Waiting for historical data preload to complete...
+2025-06-14 17:18:20 - INFO - [logger_setup.py:48 - write()] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-14 17:18:20 - INFO - [logger_setup.py:48 - write()] - SUCCESS: Preloaded 218 historical bars for BTCUSD.
+2025-06-14 17:18:20 - INFO - [logger_setup.py:48 - write()] - --- Performing initial analysis on preloaded data... ---
+2025-06-14 17:18:20 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'SELL' | In Position: False
+2025-06-14 17:18:20 - INFO - [trade_manager.py:329 - _get_stop_loss()] - [SL CALC] Strategy Desired SL: 105226.43, Broker Boundary: 105216.40
+2025-06-14 17:18:20 - INFO - [trade_manager.py:332 - _get_stop_loss()] - [SL CALC] Final Compliant Stop Loss: 105226.43
+2025-06-14 17:18:20 - INFO - [trade_manager.py:379 - _get_lot_size()] - [Risk Calc] Inputs: Equity=18806.46, Risk=1.0%, SL Dist=210.03280000000086, Lot Size: 0.89
+2025-06-14 17:18:20 - INFO - [trade_manager.py:153 - _execute_new_trade()] - >>> EXECUTION: SELL signal received. Sending order! [Lots: 0.89, SL: 105226.43, TP: 104596.33]
+2025-06-14 17:18:21 - INFO - [run_live.py:104 - main()] - Preload confirmed.
+2025-06-14 17:18:21 - INFO - [run_live.py:111 - main()] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-14 17:18:21 - INFO - [run_live.py:113 - main()] - Bot is running. Press Ctrl+C to stop.
+2025-06-14 17:18:22 - INFO - [logger_setup.py:48 - write()] - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-14 17:19:22 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749907020 ---
+2025-06-14 17:19:22 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:19:22 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:20:24 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749907080 ---
+2025-06-14 17:20:24 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:20:24 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:21:23 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749907140 ---
+2025-06-14 17:21:23 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:21:23 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:22:22 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749907200 ---
+2025-06-14 17:22:22 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:22:22 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:23:24 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749907260 ---
+2025-06-14 17:23:24 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:23:24 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:23:32 - INFO - [run_live.py:122 - main()] - 
+Stopping bot...
+2025-06-14 17:23:32 - INFO - [dwx_client.py:96 - stop()] - DWX Client stop() method called. Shutting down threads.
+2025-06-14 17:23:35 - INFO - [logger_setup.py:57 - setup_logger()] - Logger has been set up.
+2025-06-14 17:23:35 - INFO - [run_live.py:41 - main()] - ========================================================
+2025-06-14 17:23:35 - INFO - [run_live.py:42 - main()] - Initializing trading bot...
+2025-06-14 17:23:35 - INFO - [run_live.py:51 - main()] - Activating strategy: sma_crossover for BTCUSD on M1
+2025-06-14 17:23:35 - INFO - [run_live.py:27 - strategy_factory()] - Successfully loaded StrategyClass: SmaCrossover from module: trading_bot.strategies.sma_crossover
+2025-06-14 17:23:35 - INFO - [sma_crossover.py:22 - reset()] - [Strategy State] SmaCrossover state has been reset.
+2025-06-14 17:23:35 - INFO - [logger_setup.py:48 - write()] - [State] Successfully loaded saved state.
+2025-06-14 17:23:35 - INFO - [logger_setup.py:48 - write()] - TradeManager initialized.
+2025-06-14 17:23:35 - INFO - [logger_setup.py:48 - write()] - MyEventHandler initialized.
+2025-06-14 17:23:35 - INFO - [run_live.py:68 - main()] - DWX Client started.
+2025-06-14 17:23:35 - INFO - [run_live.py:71 - main()] - Requesting historical data for preloading...
+2025-06-14 17:23:35 - INFO - [run_live.py:93 - main()] - Waiting for historical data preload to complete...
+2025-06-14 17:23:36 - INFO - [logger_setup.py:48 - write()] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-14 17:23:36 - INFO - [logger_setup.py:48 - write()] - SUCCESS: Preloaded 219 historical bars for BTCUSD.
+2025-06-14 17:23:36 - INFO - [logger_setup.py:48 - write()] - --- Performing initial analysis on preloaded data... ---
+2025-06-14 17:23:36 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'SELL' | In Position: False
+2025-06-14 17:23:36 - INFO - [trade_manager.py:329 - _get_stop_loss()] - [SL CALC] Strategy Desired SL: 105146.97, Broker Boundary: 105137.10
+2025-06-14 17:23:36 - INFO - [trade_manager.py:332 - _get_stop_loss()] - [SL CALC] Final Compliant Stop Loss: 105146.97
+2025-06-14 17:23:36 - INFO - [trade_manager.py:379 - _get_lot_size()] - [Risk Calc] Inputs: Equity=18806.46, Risk=1.0%, SL Dist=209.87420000000566, Lot Size: 0.89
+2025-06-14 17:23:36 - INFO - [trade_manager.py:153 - _execute_new_trade()] - >>> EXECUTION: SELL signal received. Sending order! [Lots: 0.89, SL: 105146.97, TP: 104517.35]
+2025-06-14 17:23:36 - INFO - [run_live.py:104 - main()] - Preload confirmed.
+2025-06-14 17:23:36 - INFO - [run_live.py:111 - main()] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-14 17:23:36 - INFO - [run_live.py:113 - main()] - Bot is running. Press Ctrl+C to stop.
+2025-06-14 17:23:38 - INFO - [logger_setup.py:48 - write()] - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-14 17:24:33 - INFO - [run_live.py:122 - main()] - 
+Stopping bot...
+2025-06-14 17:24:33 - INFO - [dwx_client.py:96 - stop()] - DWX Client stop() method called. Shutting down threads.
+2025-06-14 17:26:44 - INFO - [logger_setup.py:57 - setup_logger()] - Logger has been set up.
+2025-06-14 17:26:44 - INFO - [run_live.py:41 - main()] - ========================================================
+2025-06-14 17:26:44 - INFO - [run_live.py:42 - main()] - Initializing trading bot...
+2025-06-14 17:26:45 - INFO - [run_live.py:51 - main()] - Activating strategy: sma_crossover for BTCUSD on M1
+2025-06-14 17:26:45 - INFO - [run_live.py:27 - strategy_factory()] - Successfully loaded StrategyClass: SmaCrossover from module: trading_bot.strategies.sma_crossover
+2025-06-14 17:26:45 - INFO - [sma_crossover.py:22 - reset()] - [Strategy State] SmaCrossover state has been reset.
+2025-06-14 17:26:45 - INFO - [logger_setup.py:48 - write()] - [State] Successfully loaded saved state.
+2025-06-14 17:26:45 - INFO - [logger_setup.py:48 - write()] - TradeManager initialized.
+2025-06-14 17:26:45 - INFO - [logger_setup.py:48 - write()] - MyEventHandler initialized.
+2025-06-14 17:26:45 - INFO - [run_live.py:68 - main()] - DWX Client started.
+2025-06-14 17:26:45 - INFO - [run_live.py:71 - main()] - Requesting historical data for preloading...
+2025-06-14 17:26:45 - INFO - [run_live.py:93 - main()] - Waiting for historical data preload to complete...
+2025-06-14 17:26:46 - INFO - [logger_setup.py:48 - write()] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-14 17:26:46 - INFO - [logger_setup.py:48 - write()] - SUCCESS: Preloaded 219 historical bars for BTCUSD.
+2025-06-14 17:26:46 - INFO - [logger_setup.py:48 - write()] - --- Performing initial analysis on preloaded data... ---
+2025-06-14 17:26:46 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'SELL' | In Position: False
+2025-06-14 17:26:46 - INFO - [trade_manager.py:329 - _get_stop_loss()] - [SL CALC] Strategy Desired SL: 105123.78, Broker Boundary: 105113.95
+2025-06-14 17:26:46 - INFO - [trade_manager.py:332 - _get_stop_loss()] - [SL CALC] Final Compliant Stop Loss: 105123.78
+2025-06-14 17:26:46 - INFO - [trade_manager.py:379 - _get_lot_size()] - [Risk Calc] Inputs: Equity=18806.46, Risk=1.0%, SL Dist=209.82790000000386, Lot Size: 0.89
+2025-06-14 17:26:46 - INFO - [trade_manager.py:153 - _execute_new_trade()] - >>> EXECUTION: SELL signal received. Sending order! [Lots: 0.89, SL: 105123.78, TP: 104494.29]
+2025-06-14 17:26:46 - INFO - [run_live.py:104 - main()] - Preload confirmed.
+2025-06-14 17:26:46 - INFO - [run_live.py:111 - main()] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-14 17:26:46 - INFO - [run_live.py:113 - main()] - Bot is running. Press Ctrl+C to stop.
+2025-06-14 17:26:47 - INFO - [logger_setup.py:48 - write()] - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-14 17:27:03 - INFO - [run_live.py:122 - main()] - 
+Stopping bot...
+2025-06-14 17:27:03 - INFO - [dwx_client.py:96 - stop()] - DWX Client stop() method called. Shutting down threads.
+2025-06-14 17:27:40 - INFO - [logger_setup.py:57 - setup_logger()] - Logger has been set up.
+2025-06-14 17:27:40 - INFO - [run_live.py:41 - main()] - ========================================================
+2025-06-14 17:27:40 - INFO - [run_live.py:42 - main()] - Initializing trading bot...
+2025-06-14 17:27:41 - ERROR - [run_live.py:48 - main()] - [FATAL ERROR] Strategy 'rsi_period' is not defined in the configuration.
+2025-06-14 17:27:58 - INFO - [logger_setup.py:57 - setup_logger()] - Logger has been set up.
+2025-06-14 17:27:58 - INFO - [run_live.py:41 - main()] - ========================================================
+2025-06-14 17:27:58 - INFO - [run_live.py:42 - main()] - Initializing trading bot...
+2025-06-14 17:27:58 - INFO - [run_live.py:51 - main()] - Activating strategy: rsi_strategy for BTCUSD on M1
+2025-06-14 17:27:58 - INFO - [run_live.py:27 - strategy_factory()] - Successfully loaded StrategyClass: RsiStrategy from module: trading_bot.strategies.rsi_strategy
+2025-06-14 17:27:58 - INFO - [rsi_strategy.py:25 - reset()] - [Strategy State] RsiStrategy state has been reset.
+2025-06-14 17:27:58 - INFO - [logger_setup.py:48 - write()] - [State] Successfully loaded saved state.
+2025-06-14 17:27:58 - INFO - [logger_setup.py:48 - write()] - TradeManager initialized.
+2025-06-14 17:27:58 - INFO - [logger_setup.py:48 - write()] - MyEventHandler initialized.
+2025-06-14 17:27:58 - INFO - [run_live.py:68 - main()] - DWX Client started.
+2025-06-14 17:27:58 - INFO - [run_live.py:71 - main()] - Requesting historical data for preloading...
+2025-06-14 17:27:58 - INFO - [run_live.py:93 - main()] - Waiting for historical data preload to complete...
+2025-06-14 17:27:59 - INFO - [logger_setup.py:48 - write()] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-14 17:27:59 - INFO - [logger_setup.py:48 - write()] - SUCCESS: Preloaded 259 historical bars for BTCUSD.
+2025-06-14 17:27:59 - INFO - [logger_setup.py:48 - write()] - --- Performing initial analysis on preloaded data... ---
+2025-06-14 17:27:59 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:27:59 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:27:59 - INFO - [run_live.py:104 - main()] - Preload confirmed.
+2025-06-14 17:27:59 - INFO - [run_live.py:111 - main()] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-14 17:27:59 - INFO - [run_live.py:113 - main()] - Bot is running. Press Ctrl+C to stop.
+2025-06-14 17:29:24 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749907620 ---
+2025-06-14 17:29:24 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'BUY' | In Position: False
+2025-06-14 17:29:24 - INFO - [trade_manager.py:329 - _get_stop_loss()] - [SL CALC] Strategy Desired SL: 104814.90, Broker Boundary: 104824.95
+2025-06-14 17:29:24 - INFO - [trade_manager.py:332 - _get_stop_loss()] - [SL CALC] Final Compliant Stop Loss: 104814.90
+2025-06-14 17:29:24 - INFO - [trade_manager.py:379 - _get_lot_size()] - [Risk Calc] Inputs: Equity=18806.46, Risk=1.0%, SL Dist=210.04989999999816, Lot Size: 0.89
+2025-06-14 17:29:24 - INFO - [trade_manager.py:153 - _execute_new_trade()] - >>> EXECUTION: BUY signal received. Sending order! [Lots: 0.89, SL: 104814.9, TP: 105445.05]
+2025-06-14 17:30:23 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749907680 ---
+2025-06-14 17:30:23 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-14 17:31:25 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749907740 ---
+2025-06-14 17:31:25 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-14 17:32:22 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749907800 ---
+2025-06-14 17:32:22 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-14 17:33:22 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749907860 ---
+2025-06-14 17:33:22 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-14 17:34:23 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749907920 ---
+2025-06-14 17:34:23 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-14 17:35:22 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749907980 ---
+2025-06-14 17:35:22 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-14 17:36:02 - INFO - [run_live.py:122 - main()] - 
+Stopping bot...
+2025-06-14 17:36:02 - INFO - [dwx_client.py:96 - stop()] - DWX Client stop() method called. Shutting down threads.

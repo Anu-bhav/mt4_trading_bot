@@ -117,11 +117,12 @@ class TradeManager:
 
     def _execute_new_trade(self, signal: str):
         """
-        Orchestrates the process of opening a new trade with correct, non-redundant logic
-        and final price normalization.
+        Orchestrates the process of opening a new trade with correct logic,
+        price normalization, and proper context for MT4.
         """
         signal = signal.lower()
 
+        # 1. Check for readiness.
         account_equity = self.dwx.account_info.get("equity", 0)
         symbol_data = self.dwx.market_data.get(self.config.STRATEGY_SYMBOL, {})
         required_keys = ["ask", "bid", "digits", "stoplevel", "spread", "lot_min", "lot_max", "lot_step", "tick_value"]
@@ -129,26 +130,26 @@ class TradeManager:
             logging.error("[EXECUTION ABORTED] Prerequisite data (account or market) is not available.")
             return
 
-        # 1. Determine the final, compliant Stop Loss price ONCE.
+        # 2. Get all necessary calculated values ONCE.
         stop_loss_price = self._get_stop_loss(signal, symbol_data)
         if stop_loss_price == 0.0:
             return
 
-        # 2. Calculate Lot Size using the final SL price.
         lot_size = self._get_lot_size(signal, stop_loss_price, account_equity, symbol_data)
         if lot_size <= 0:
             return
 
-        # 3. Calculate Take Profit.
         take_profit_price = self._get_take_profit(signal, symbol_data)
 
-        # 4. --- THE DEFINITIVE FIX: NORMALIZE/ROUND THE PRICES ---
-        # This prevents "invalid stops" errors due to floating point precision.
+        # 3. Normalize prices for MT4.
         digits = symbol_data["digits"]
         final_sl = round(stop_loss_price, digits)
         final_tp = round(take_profit_price, digits) if take_profit_price > 0 else 0.0
 
-        # 5. Send the order with the verified and finalized parameters.
+        # 4. --- THE CRUCIAL FIX: Provide the entry price for validation ---
+        entry_price = symbol_data.get("ask") if signal == "buy" else symbol_data.get("bid")
+
+        # 5. Send the final, correct order.
         logging.info(
             f">>> EXECUTION: {signal.upper()} signal received. Sending order! [Lots: {lot_size}, SL: {final_sl}, TP: {final_tp}]"
         )
@@ -156,7 +157,7 @@ class TradeManager:
             symbol=self.config.STRATEGY_SYMBOL,
             order_type=signal,
             lots=lot_size,
-            price=0,
+            price=entry_price,  # This is the key to solving the 'invalid stops' error.
             stop_loss=final_sl,
             take_profit=final_tp,
             magic=self.config.MAGIC_NUMBER,
@@ -277,34 +278,59 @@ class TradeManager:
 
     # --- HELPER FUNCTIONS FOR CLEANER LOGIC ---
     def _get_stop_loss(self, signal: str, symbol_data: dict) -> float:
-        """Calculates and validates the stop loss price."""
+        """
+        Calculates the stop loss price, correctly enforcing the broker's minimum
+        stop level as a boundary.
+        """
+        signal = signal.lower()
         entry_price = symbol_data.get("ask") if signal == "buy" else symbol_data.get("bid")
 
-        # --- THE FIX: Add a guard clause to ensure entry_price is valid ---
-        if entry_price is None or entry_price == 0:
-            logging.error("Cannot calculate SL: Entry price is missing or zero.")
+        if not entry_price:
+            logging.error("Cannot calculate SL: Entry price is missing.")
             return 0.0
 
+        # 1. Calculate the stop loss defined by the STRATEGY (e.g., 0.2% away)
         sl_percent = self.risk_config["STOP_LOSS_PERCENT"] / 100.0
         strategy_sl_price = entry_price * (1 - sl_percent) if signal == "buy" else entry_price * (1 + sl_percent)
 
+        # 2. Calculate the absolute price that represents the BROKER's required boundary
         point_size = 1 / (10 ** symbol_data["digits"])
+        # The minimum distance from the current LIVE price
         broker_min_stop_distance = (symbol_data["stoplevel"] + symbol_data["spread"]) * point_size
-        broker_sl_price = (
+
+        # For a BUY, the SL must be below the current BID by at least the min distance.
+        # For a SELL, the SL must be above the current ASK by at least the min distance.
+        broker_boundary_price = (
             (symbol_data["bid"] - broker_min_stop_distance)
             if signal == "buy"
             else (symbol_data["ask"] + broker_min_stop_distance)
         )
 
+        # 3. --- THE CORRECT "WIDEST STOP WINS" LOGIC ---
+        final_sl_price = 0.0
         if signal == "buy":
-            final_sl_price = min(strategy_sl_price, broker_sl_price)
-        else:
-            final_sl_price = max(strategy_sl_price, broker_sl_price)
+            # Is our strategy's stop a valid one? (Is it below the boundary?)
+            if strategy_sl_price < broker_boundary_price:
+                # Yes, our strategy stop is wider than the minimum required. Use it.
+                final_sl_price = strategy_sl_price
+            else:
+                # No, our strategy stop is too tight. We MUST use the broker's boundary price.
+                final_sl_price = broker_boundary_price
+
+        elif signal == "sell":
+            # Is our strategy's stop a valid one? (Is it above the boundary?)
+            if strategy_sl_price > broker_boundary_price:
+                # Yes, our strategy stop is wider than the minimum required. Use it.
+                final_sl_price = strategy_sl_price
+            else:
+                # No, our strategy stop is too tight. We MUST use the broker's boundary price.
+                final_sl_price = broker_boundary_price
 
         logging.info(
-            f"[SL CALC] Strategy SL: {strategy_sl_price:.{symbol_data['digits']}f}, Broker Min SL: {broker_sl_price:.{symbol_data['digits']}f}"
+            f"[SL CALC] Strategy Desired SL: {strategy_sl_price:.{symbol_data['digits']}f}, Broker Boundary: {broker_boundary_price:.{symbol_data['digits']}f}"
         )
         logging.info(f"[SL CALC] Final Compliant Stop Loss: {final_sl_price:.{symbol_data['digits']}f}")
+
         return final_sl_price
 
     def _get_take_profit(self, signal: str, symbol_data: dict) -> float:
