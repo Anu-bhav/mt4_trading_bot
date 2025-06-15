@@ -1,6 +1,7 @@
 # trade_manager.py
 import json
 import logging
+from datetime import datetime, timezone
 from os.path import join
 
 import pandas as pd
@@ -35,7 +36,25 @@ class TradeManager:
 
         self._load_state()
 
-        print("TradeManager initialized.")
+        logging.info("TradeManager initialized.")
+
+        # --- NEW METHOD: update_config ---
+
+    def update_config(self, new_config):
+        """
+        Updates internal settings from a newly reloaded config module.
+        """
+        logging.info("TradeManager is updating its configuration...")
+        self.config = new_config
+        self.risk_config = new_config.RISK_CONFIG
+
+        # Propagate changes to the strategy object if its params have changed.
+        # This is an advanced feature. A simple way is to just update its params.
+        strategy_params = new_config.STRATEGY_PARAMS.get(new_config.STRATEGY_NAME, {})
+        for key, value in strategy_params.items():
+            if hasattr(self.strategy, key):
+                setattr(self.strategy, key, value)
+                logging.info(f"Updated strategy parameter '{key}' to '{value}'")
 
     def _load_state(self):
         """Loads the manager's state from a JSON file."""
@@ -43,27 +62,27 @@ class TradeManager:
             with open(self.state_file_path, "r") as f:
                 state = json.load(f)
                 self.partials_taken = {int(k): v for k, v in state.get("partials_taken", {}).items()}
-                print("[State] Successfully loaded saved state.")
+                logging.info("[State] Successfully loaded saved state.")
         except FileNotFoundError:
-            print("[State] No state file found. Starting with a fresh state.")
+            logging.info("[State] No state file found. Starting with a fresh state.")
         except Exception as e:
-            print(f"[State] ERROR: Could not load state file. Starting fresh. Reason: {e}")
+            logging.info(f"[State] ERROR: Could not load state file. Starting fresh. Reason: {e}")
 
     def _save_state(self):
         """Saves the manager's current state to a JSON file."""
         try:
             with open(self.state_file_path, "w") as f:
                 json.dump({"partials_taken": self.partials_taken}, f, indent=4)
-            print("[State] Current state saved successfully.")
+            logging.info("[State] Current state saved successfully.")
         except Exception as e:
-            print(f"[State] ERROR: Could not save state file. Reason: {e}")
+            logging.info(f"[State] ERROR: Could not save state file. Reason: {e}")
 
     def preload_data(self, symbol, time_frame, data):
         """Processes historical data to populate the initial DataFrame."""
         if symbol != self.config.STRATEGY_SYMBOL or time_frame != self.config.STRATEGY_TIMEFRAME:
             return
         if not data:
-            print("[ERROR] Preload failed: Received empty historical data.")
+            logging.info("[ERROR] Preload failed: Received empty historical data.")
             return
 
         df = pd.DataFrame.from_dict(data, orient="index")
@@ -82,8 +101,8 @@ class TradeManager:
         if not df.empty:
             self.last_bar_timestamp = df["time"].iloc[-1]
 
-        print(f"SUCCESS: Preloaded {len(self.market_data_df)} historical bars for {symbol}.")
-        print("\n--- Performing initial analysis on preloaded data... ---")
+        logging.info(f"SUCCESS: Preloaded {len(self.market_data_df)} historical bars for {symbol}.")
+        logging.info("\n--- Performing initial analysis on preloaded data... ---")
         self.analyze_and_trade()
 
     def analyze_and_trade(self):
@@ -100,7 +119,7 @@ class TradeManager:
         # 3. Get a signal from the strategy.
         signal = self.strategy.get_signal(self.market_data_df.copy())
 
-        print(f"Signal Check: Received '{signal}' | In Position: {self.in_position}")
+        logging.info(f"Signal Check: Received '{signal}' | In Position: {self.in_position}")
 
         # 4. Execute the decision tree.
         open_positions = self._get_open_positions()  # Get a fresh copy for this logic block
@@ -110,10 +129,10 @@ class TradeManager:
         elif self.in_position:
             current_trade_type = list(open_positions.values())[0]["type"]
             if (signal == "BUY" and current_trade_type == "sell") or (signal == "SELL" and current_trade_type == "buy"):
-                print(f">>> EXECUTION: Reversing signal '{signal}' received. Closing all trades!")
+                logging.info(f">>> EXECUTION: Reversing signal '{signal}' received. Closing all trades!")
                 self.dwx.close_orders_by_magic(self.config.MAGIC_NUMBER)
         else:
-            print("Decision: No action taken.")
+            logging.info("Decision: No action taken.")
 
     def _execute_new_trade(self, signal: str):
         """
@@ -130,26 +149,31 @@ class TradeManager:
             logging.error("[EXECUTION ABORTED] Prerequisite data (account or market) is not available.")
             return
 
-        # 2. Get all necessary calculated values ONCE.
-        stop_loss_price = self._get_stop_loss(signal, symbol_data)
+        # 2. Determine the STRATEGY'S desired stop loss price.
+        stop_loss_price = self._get_strategy_stop_loss(signal, symbol_data)
         if stop_loss_price == 0.0:
+            logging.error("[EXECUTION ABORTED] Strategy did not provide a valid stop loss.")
             return
 
+        # 3. CHECK FOR COMPLIANCE: Will the broker accept this stop?
+        if not self._is_stop_loss_compliant(signal, stop_loss_price, symbol_data):
+            logging.warning(
+                "[EXECUTION ABORTED] Strategy's desired Stop Loss is too tight and violates broker rules. No trade will be placed."
+            )
+            return  # This is the key: we abort instead of adjusting.
+
+        # 4. If compliant, proceed with lot size and TP calculation.
         lot_size = self._get_lot_size(signal, stop_loss_price, account_equity, symbol_data)
         if lot_size <= 0:
             return
 
         take_profit_price = self._get_take_profit(signal, symbol_data)
 
-        # 3. Normalize prices for MT4.
+        # 5. Normalize and Execute
         digits = symbol_data["digits"]
         final_sl = round(stop_loss_price, digits)
         final_tp = round(take_profit_price, digits) if take_profit_price > 0 else 0.0
 
-        # 4. --- THE CRUCIAL FIX: Provide the entry price for validation ---
-        entry_price = symbol_data.get("ask") if signal == "buy" else symbol_data.get("bid")
-
-        # 5. Send the final, correct order.
         logging.info(
             f">>> EXECUTION: {signal.upper()} signal received. Sending order! [Lots: {lot_size}, SL: {final_sl}, TP: {final_tp}]"
         )
@@ -157,7 +181,7 @@ class TradeManager:
             symbol=self.config.STRATEGY_SYMBOL,
             order_type=signal,
             lots=lot_size,
-            price=entry_price,  # This is the key to solving the 'invalid stops' error.
+            price=0,
             stop_loss=final_sl,
             take_profit=final_tp,
             magic=self.config.MAGIC_NUMBER,
@@ -184,14 +208,14 @@ class TradeManager:
                 if (order_type == "buy" and new_sl > current_sl) or (
                     order_type == "sell" and (new_sl < current_sl or current_sl == 0)
                 ):
-                    print(f"[Trailing Stop] Modifying order {ticket} SL to {new_sl:.5f}")
+                    logging.info(f"[Trailing Stop] Modifying order {ticket} SL to {new_sl:.5f}")
                     self.dwx.modify_order(ticket, stop_loss=new_sl)
 
             for i, rule in enumerate(self.risk_config["PARTIAL_CLOSE_RULES"]):
                 vol_pct, profit_pct = rule
                 if profit_percent >= profit_pct and self.partials_taken.get(ticket, {}).get(i) is None:
                     close_vol = round(order["lots"] * (vol_pct / 100.0), 2)
-                    print(f"[Partial Close] Closing {close_vol:.2f} lots for order {ticket}")
+                    logging.info(f"[Partial Close] Closing {close_vol:.2f} lots for order {ticket}")
                     self.dwx.close_order(ticket, lots=close_vol)
                     if ticket not in self.partials_taken:
                         self.partials_taken[ticket] = {}
@@ -206,7 +230,7 @@ class TradeManager:
         try:
             time = int(time)
         except (ValueError, TypeError):
-            print(f"Received invalid timestamp format, ignoring bar: {time}")
+            logging.info(f"Received invalid timestamp format, ignoring bar: {time}")
             return
 
         if not self.is_preloaded:
@@ -216,7 +240,7 @@ class TradeManager:
 
         # --- [Gotcha 2.2] Bad Candle / Corrupted Data Check ---
         if not (open_p > 0 and high_p > 0 and low_p > 0 and close_p > 0 and high_p >= low_p):
-            print(f"[DATA WARNING] Received a bad/corrupted candle, ignoring: {symbol} {time}")
+            logging.info(f"[DATA WARNING] Received a bad/corrupted candle, ignoring: {symbol} {time}")
             return
 
         # Prevent processing duplicate bars
@@ -241,16 +265,19 @@ class TradeManager:
 
             # --- THE NEW, ROBUST GAP HANDLING LOGIC ---
             if time_diff_seconds > (interval_seconds * 1.9):
-                print(
+                logging.info(
                     f"[DATA WARNING] Data gap detected. Time since last bar: {time_diff_seconds}s. Expected ~{interval_seconds}s."
                 )
-                print("[ACTION] Resetting strategy state to prevent decisions based on stale data.")
+                logging.info("[ACTION] Resetting strategy state to prevent decisions based on stale data.")
                 self.strategy.reset()  # Reset the strategy's internal memory
 
         # Update the timestamp of the last processed bar
         self.last_bar_timestamp = time
 
-        print(f"\n--- New Live Bar Received: {symbol} {time_frame} at {time} ---")
+        utc_datetime = datetime.fromtimestamp(time, tz=timezone.utc)
+        readable_date = utc_datetime.strftime("%Y-%m-%d %H:%M:%S %Z")
+
+        logging.info(f"\n--- New Live Bar Received: {symbol} {time_frame} at {readable_date} ---")
         self.market_data_df.loc[len(self.market_data_df)] = [time, open_p, high_p, low_p, close_p, tick_volume]
         max_rows = self.required_history_bars + 200
         if len(self.market_data_df) > max_rows:
@@ -263,7 +290,7 @@ class TradeManager:
         open_positions = self._get_open_positions()
         is_now_in_position = len(open_positions) > 0
         if self.in_position and not is_now_in_position:
-            print("[STATE CHANGE] Position has been closed. Resetting state.")
+            logging.info("[STATE CHANGE] Position has been closed. Resetting state.")
             self.partials_taken = {}
             self._save_state()
         self.in_position = is_now_in_position
@@ -279,55 +306,44 @@ class TradeManager:
     # --- HELPER FUNCTIONS FOR CLEANER LOGIC ---
     def _get_stop_loss(self, signal: str, symbol_data: dict) -> float:
         """
-        Calculates the stop loss price, correctly enforcing the broker's minimum
-        stop level as a boundary.
+        Calculates the stop loss price, applying a dynamic, multiplied safety
+        buffer to the broker's minimum stop level.
         """
-        signal = signal.lower()
         entry_price = symbol_data.get("ask") if signal == "buy" else symbol_data.get("bid")
-
         if not entry_price:
-            logging.error("Cannot calculate SL: Entry price is missing.")
             return 0.0
 
-        # 1. Calculate the stop loss defined by the STRATEGY (e.g., 0.2% away)
+        # 1. Calculate the strategy's desired stop loss
         sl_percent = self.risk_config["STOP_LOSS_PERCENT"] / 100.0
         strategy_sl_price = entry_price * (1 - sl_percent) if signal == "buy" else entry_price * (1 + sl_percent)
 
-        # 2. Calculate the absolute price that represents the BROKER's required boundary
+        # 2. Calculate the broker's boundary with our new multiplier for safety
         point_size = 1 / (10 ** symbol_data["digits"])
-        # The minimum distance from the current LIVE price
-        broker_min_stop_distance = (symbol_data["stoplevel"] + symbol_data["spread"]) * point_size
+        buffer_multiplier = self.risk_config.get("STOP_LEVEL_BUFFER_MULTIPLIER", 1.5)  # Default to 1.5
 
-        # For a BUY, the SL must be below the current BID by at least the min distance.
-        # For a SELL, the SL must be above the current ASK by at least the min distance.
+        # The total safe distance is the broker's rule * our safety multiplier
+        min_stop_distance_points = (symbol_data["stoplevel"] + symbol_data["spread"]) * buffer_multiplier
+        min_stop_distance_price = min_stop_distance_points * point_size
+
         broker_boundary_price = (
-            (symbol_data["bid"] - broker_min_stop_distance)
-            if signal == "buy"
-            else (symbol_data["ask"] + broker_min_stop_distance)
+            (symbol_data["bid"] - min_stop_distance_price) if signal == "buy" else (symbol_data["ask"] + min_stop_distance_price)
         )
 
-        # 3. --- THE CORRECT "WIDEST STOP WINS" LOGIC ---
+        # 3. The "Widest Stop Wins" logic
         final_sl_price = 0.0
         if signal == "buy":
-            # Is our strategy's stop a valid one? (Is it below the boundary?)
             if strategy_sl_price < broker_boundary_price:
-                # Yes, our strategy stop is wider than the minimum required. Use it.
                 final_sl_price = strategy_sl_price
             else:
-                # No, our strategy stop is too tight. We MUST use the broker's boundary price.
                 final_sl_price = broker_boundary_price
-
         elif signal == "sell":
-            # Is our strategy's stop a valid one? (Is it above the boundary?)
             if strategy_sl_price > broker_boundary_price:
-                # Yes, our strategy stop is wider than the minimum required. Use it.
                 final_sl_price = strategy_sl_price
             else:
-                # No, our strategy stop is too tight. We MUST use the broker's boundary price.
                 final_sl_price = broker_boundary_price
 
         logging.info(
-            f"[SL CALC] Strategy Desired SL: {strategy_sl_price:.{symbol_data['digits']}f}, Broker Boundary: {broker_boundary_price:.{symbol_data['digits']}f}"
+            f"[SL CALC] Strategy Desired SL: {strategy_sl_price:.{symbol_data['digits']}f}, Broker Boundary (w/ Buffer): {broker_boundary_price:.{symbol_data['digits']}f}"
         )
         logging.info(f"[SL CALC] Final Compliant Stop Loss: {final_sl_price:.{symbol_data['digits']}f}")
 
@@ -385,3 +401,36 @@ class TradeManager:
         """Calculates the new trailing stop loss price."""
         trailing_sl_percent = self.risk_config["TRAILING_STOP_PERCENT"] / 100.0
         return current_price * (1 - trailing_sl_percent) if order_type == "buy" else current_price * (1 + trailing_sl_percent)
+
+    def _get_strategy_stop_loss(self, signal: str, symbol_data: dict) -> float:
+        """Calculates ONLY the strategy's desired stop loss based on percentage."""
+        entry_price = symbol_data.get("ask") if signal == "buy" else symbol_data.get("bid")
+        if not entry_price:
+            return 0.0
+
+        sl_percent = self.risk_config["STOP_LOSS_PERCENT"] / 100.0
+        strategy_sl_price = entry_price * (1 - sl_percent) if signal == "buy" else entry_price * (1 + sl_percent)
+
+        logging.info(f"[SL CALC] Strategy Desired SL: {strategy_sl_price:.{symbol_data['digits']}f}")
+        return strategy_sl_price
+
+    def _is_stop_loss_compliant(self, signal: str, strategy_sl_price: float, symbol_data: dict) -> bool:
+        """Checks if the strategy's desired SL is valid according to broker rules."""
+        point_size = 1 / (10 ** symbol_data["digits"])
+        buffer_multiplier = self.risk_config.get("STOP_LEVEL_BUFFER_MULTIPLIER", 1.1)
+
+        min_stop_distance_points = (symbol_data["stoplevel"] + symbol_data["spread"]) * buffer_multiplier
+        min_stop_distance_price = min_stop_distance_points * point_size
+
+        broker_boundary_price = (
+            (symbol_data["bid"] - min_stop_distance_price) if signal == "buy" else (symbol_data["ask"] + min_stop_distance_price)
+        )
+
+        logging.info(f"[SL CHECK] Broker required boundary: {broker_boundary_price:.{symbol_data['digits']}f}")
+
+        if signal == "buy":
+            # For a BUY, the SL must be at or below the boundary.
+            return strategy_sl_price <= broker_boundary_price
+        else:  # signal == 'sell'
+            # For a SELL, the SL must be at or above the boundary.
+            return strategy_sl_price >= broker_boundary_price

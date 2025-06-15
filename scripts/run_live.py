@@ -7,8 +7,9 @@ import importlib
 import logging
 import time
 from datetime import datetime, timedelta, timezone
+from threading import Thread
 
-from trading_bot import config as cfg  #
+from trading_bot import config as cfg
 from trading_bot.api.dwx_client import dwx_client
 from trading_bot.core.event_handler import EventHandler
 from trading_bot.core.logger_setup import setup_logger
@@ -31,6 +32,53 @@ def strategy_factory(strategy_name: str, config_params: dict):
         logging.error(f"Please ensure the module path '{module_path}.py' and class '{class_name}' are correct.")
         logging.error(f"Details: {e}")
         return None
+
+
+# --- NEW: Global variable to track config modification time ---
+config_last_modified = os.path.getmtime(cfg.__file__)
+
+
+def reload_config_and_update_bot(trade_manager):
+    """
+    Handles the logic of reloading the config and propagating changes.
+    """
+    global config_last_modified
+
+    try:
+        logging.info("Change detected in config.py. Attempting to reload...")
+
+        # Force a reload of the config module
+        importlib.reload(cfg)
+
+        # Update the modification time tracker
+        config_last_modified = os.path.getmtime(cfg.__file__)
+
+        # Call the TradeManager's method to update itself with the new config
+        trade_manager.update_config(cfg)
+
+        logging.info("Configuration successfully reloaded and applied.")
+
+    except Exception as e:
+        logging.error(f"Failed to reload configuration. Error: {e}")
+        # Restore the old modification time to prevent constant reload attempts on a broken config
+        config_last_modified = time.time()
+
+
+def watch_config_changes(trade_manager):
+    """
+    A function to be run in a background thread that polls the config file.
+    """
+    global config_last_modified
+
+    while True:  # This loop will run for the lifetime of the bot
+        try:
+            current_modified = os.path.getmtime(cfg.__file__)
+            if current_modified > config_last_modified:
+                reload_config_and_update_bot(trade_manager)
+        except FileNotFoundError:
+            logging.warning("config.py not found. Cannot check for live updates.")
+
+        time.sleep(5)  # Check for changes every 5 seconds
 
 
 def main():
@@ -109,6 +157,11 @@ def main():
     bar_data_subscriptions = [[cfg.STRATEGY_SYMBOL, cfg.STRATEGY_TIMEFRAME]]
     dwx.subscribe_symbols_bar_data(bar_data_subscriptions)
     logging.info(f"Subscribed to live bar data for: {bar_data_subscriptions}")
+
+    # --- NEW: Start the config watcher thread ---
+    config_watcher_thread = Thread(target=watch_config_changes, args=(my_trade_manager,), daemon=True)
+    config_watcher_thread.start()
+    logging.info("Live config watcher has started.")
 
     logging.info("Bot is running. Press Ctrl+C to stop.")
     try:

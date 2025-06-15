@@ -16,12 +16,12 @@ class TickCounterStrategy(BaseStrategy):
         super().__init__()
         # This counter will track how many bars we have processed.
         self.bar_counter = 0
-        print("TickCounterStrategy initialized: A dummy strategy for testing.")
+        logging.info("TickCounterStrategy initialized: A dummy strategy for testing.")
         self.reset()  # Call reset on initialization for clean startup
 
     def reset(self):
         """Resets the state of the strategy."""
-        print("[Strategy State] TickCounterStrategy state has been reset.")
+        logging.info("[Strategy State] TickCounterStrategy state has been reset.")
         self.bar_counter = 0
 
     def get_signal(self, market_data: pd.DataFrame) -> str:
@@ -31,18 +31,18 @@ class TickCounterStrategy(BaseStrategy):
         # We don't need to analyze the data, just increment our counter.
         self.bar_counter += 1
 
-        print(f"[Dummy Strategy] Bar Count: {self.bar_counter}")
+        logging.info(f"[Dummy Strategy] Bar Count: {self.bar_counter}")
 
         final_signal = "HOLD"
 
         # Generate a SELL signal every 10 bars to close any open position.
         if self.bar_counter % 10 == 0:
             final_signal = "SELL"
-            print("[Dummy Strategy] --- SELL Signal Triggered ---")
+            logging.info("[Dummy Strategy] --- SELL Signal Triggered ---")
 
         # Generate a BUY signal every 5 bars (but not on the 10th bar)
         elif self.bar_counter % 5 == 0:
             final_signal = "BUY"
-            print("[Dummy Strategy] --- BUY Signal Triggered ---")
+            logging.info("[Dummy Strategy] --- BUY Signal Triggered ---")
 
         return final_signal

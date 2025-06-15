@@ -247,3 +247,867 @@ Stopping bot...
 2025-06-14 17:36:02 - INFO - [run_live.py:122 - main()] - 
 Stopping bot...
 2025-06-14 17:36:02 - INFO - [dwx_client.py:96 - stop()] - DWX Client stop() method called. Shutting down threads.
+2025-06-14 17:36:07 - INFO - [logger_setup.py:57 - setup_logger()] - Logger has been set up.
+2025-06-14 17:36:07 - INFO - [run_live.py:41 - main()] - ========================================================
+2025-06-14 17:36:07 - INFO - [run_live.py:42 - main()] - Initializing trading bot...
+2025-06-14 17:36:08 - INFO - [run_live.py:51 - main()] - Activating strategy: rsi_strategy for BTCUSD on M1
+2025-06-14 17:36:08 - INFO - [run_live.py:27 - strategy_factory()] - Successfully loaded StrategyClass: RsiStrategy from module: trading_bot.strategies.rsi_strategy
+2025-06-14 17:36:08 - INFO - [rsi_strategy.py:25 - reset()] - [Strategy State] RsiStrategy state has been reset.
+2025-06-14 17:36:08 - INFO - [logger_setup.py:48 - write()] - [State] Successfully loaded saved state.
+2025-06-14 17:36:08 - INFO - [logger_setup.py:48 - write()] - TradeManager initialized.
+2025-06-14 17:36:08 - INFO - [logger_setup.py:48 - write()] - MyEventHandler initialized.
+2025-06-14 17:36:08 - INFO - [run_live.py:68 - main()] - DWX Client started.
+2025-06-14 17:36:08 - INFO - [run_live.py:71 - main()] - Requesting historical data for preloading...
+2025-06-14 17:36:08 - INFO - [run_live.py:93 - main()] - Waiting for historical data preload to complete...
+2025-06-14 17:36:08 - INFO - [logger_setup.py:48 - write()] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-14 17:36:08 - INFO - [logger_setup.py:48 - write()] - SUCCESS: Preloaded 258 historical bars for BTCUSD.
+2025-06-14 17:36:08 - INFO - [logger_setup.py:48 - write()] - --- Performing initial analysis on preloaded data... ---
+2025-06-14 17:36:08 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:36:08 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:36:09 - INFO - [run_live.py:104 - main()] - Preload confirmed.
+2025-06-14 17:36:09 - INFO - [run_live.py:111 - main()] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-14 17:36:09 - INFO - [run_live.py:113 - main()] - Bot is running. Press Ctrl+C to stop.
+2025-06-14 17:37:23 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749908100 ---
+2025-06-14 17:37:23 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:37:23 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:38:23 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749908160 ---
+2025-06-14 17:38:23 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:38:23 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:39:23 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749908220 ---
+2025-06-14 17:39:23 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:39:23 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:39:28 - INFO - [run_live.py:122 - main()] - 
+Stopping bot...
+2025-06-14 17:39:28 - INFO - [dwx_client.py:96 - stop()] - DWX Client stop() method called. Shutting down threads.
+2025-06-14 17:39:35 - INFO - [logger_setup.py:57 - setup_logger()] - Logger has been set up.
+2025-06-14 17:39:35 - INFO - [run_live.py:41 - main()] - ========================================================
+2025-06-14 17:39:35 - INFO - [run_live.py:42 - main()] - Initializing trading bot...
+2025-06-14 17:39:36 - INFO - [run_live.py:51 - main()] - Activating strategy: rsi_strategy for BTCUSD on M1
+2025-06-14 17:39:36 - INFO - [run_live.py:27 - strategy_factory()] - Successfully loaded StrategyClass: RsiStrategy from module: trading_bot.strategies.rsi_strategy
+2025-06-14 17:39:36 - INFO - [rsi_strategy.py:25 - reset()] - [Strategy State] RsiStrategy state has been reset.
+2025-06-14 17:39:36 - INFO - [logger_setup.py:48 - write()] - [State] Successfully loaded saved state.
+2025-06-14 17:39:36 - INFO - [logger_setup.py:48 - write()] - TradeManager initialized.
+2025-06-14 17:39:36 - INFO - [logger_setup.py:48 - write()] - MyEventHandler initialized.
+2025-06-14 17:39:36 - INFO - [run_live.py:68 - main()] - DWX Client started.
+2025-06-14 17:39:36 - INFO - [run_live.py:71 - main()] - Requesting historical data for preloading...
+2025-06-14 17:39:36 - INFO - [run_live.py:93 - main()] - Waiting for historical data preload to complete...
+2025-06-14 17:39:37 - INFO - [logger_setup.py:48 - write()] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-14 17:39:37 - INFO - [logger_setup.py:48 - write()] - SUCCESS: Preloaded 259 historical bars for BTCUSD.
+2025-06-14 17:39:37 - INFO - [logger_setup.py:48 - write()] - --- Performing initial analysis on preloaded data... ---
+2025-06-14 17:39:37 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:39:37 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:39:37 - INFO - [run_live.py:104 - main()] - Preload confirmed.
+2025-06-14 17:39:37 - INFO - [run_live.py:111 - main()] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-14 17:39:37 - INFO - [run_live.py:113 - main()] - Bot is running. Press Ctrl+C to stop.
+2025-06-14 17:41:23 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749908340 ---
+2025-06-14 17:41:23 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:41:23 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:42:22 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749908400 ---
+2025-06-14 17:42:22 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:42:22 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:43:26 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749908460 ---
+2025-06-14 17:43:26 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'SELL' | In Position: False
+2025-06-14 17:43:26 - INFO - [trade_manager.py:330 - _get_stop_loss()] - [SL CALC] Strategy Desired SL: 105232.60, Broker Boundary: 105222.55
+2025-06-14 17:43:26 - INFO - [trade_manager.py:333 - _get_stop_loss()] - [SL CALC] Final Compliant Stop Loss: 105232.60
+2025-06-14 17:43:26 - INFO - [trade_manager.py:380 - _get_lot_size()] - [Risk Calc] Inputs: Equity=18745.98, Risk=1.0%, SL Dist=210.045100000003, Lot Size: 0.89
+2025-06-14 17:43:26 - INFO - [trade_manager.py:153 - _execute_new_trade()] - >>> EXECUTION: SELL signal received. Sending order! [Lots: 0.89, SL: 105232.6, TP: 104602.46]
+2025-06-14 17:43:27 - INFO - [logger_setup.py:48 - write()] - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-14 17:44:05 - INFO - [run_live.py:122 - main()] - 
+Stopping bot...
+2025-06-14 17:44:05 - INFO - [dwx_client.py:96 - stop()] - DWX Client stop() method called. Shutting down threads.
+2025-06-14 17:44:10 - INFO - [logger_setup.py:57 - setup_logger()] - Logger has been set up.
+2025-06-14 17:44:10 - INFO - [run_live.py:41 - main()] - ========================================================
+2025-06-14 17:44:10 - INFO - [run_live.py:42 - main()] - Initializing trading bot...
+2025-06-14 17:44:11 - INFO - [run_live.py:51 - main()] - Activating strategy: rsi_strategy for BTCUSD on M1
+2025-06-14 17:44:11 - INFO - [run_live.py:27 - strategy_factory()] - Successfully loaded StrategyClass: RsiStrategy from module: trading_bot.strategies.rsi_strategy
+2025-06-14 17:44:11 - INFO - [rsi_strategy.py:25 - reset()] - [Strategy State] RsiStrategy state has been reset.
+2025-06-14 17:44:11 - INFO - [logger_setup.py:48 - write()] - [State] Successfully loaded saved state.
+2025-06-14 17:44:11 - INFO - [logger_setup.py:48 - write()] - TradeManager initialized.
+2025-06-14 17:44:11 - INFO - [logger_setup.py:48 - write()] - MyEventHandler initialized.
+2025-06-14 17:44:11 - INFO - [run_live.py:68 - main()] - DWX Client started.
+2025-06-14 17:44:11 - INFO - [run_live.py:71 - main()] - Requesting historical data for preloading...
+2025-06-14 17:44:11 - INFO - [run_live.py:93 - main()] - Waiting for historical data preload to complete...
+2025-06-14 17:44:11 - INFO - [logger_setup.py:48 - write()] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-14 17:44:11 - INFO - [logger_setup.py:48 - write()] - SUCCESS: Preloaded 258 historical bars for BTCUSD.
+2025-06-14 17:44:11 - INFO - [logger_setup.py:48 - write()] - --- Performing initial analysis on preloaded data... ---
+2025-06-14 17:44:11 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:44:11 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:44:12 - INFO - [run_live.py:104 - main()] - Preload confirmed.
+2025-06-14 17:44:12 - INFO - [run_live.py:111 - main()] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-14 17:44:12 - INFO - [run_live.py:113 - main()] - Bot is running. Press Ctrl+C to stop.
+2025-06-14 17:45:23 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749908580 ---
+2025-06-14 17:45:23 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'SELL' | In Position: False
+2025-06-14 17:45:23 - INFO - [trade_manager.py:330 - _get_stop_loss()] - [SL CALC] Strategy Desired SL: 105203.09, Broker Boundary: 105193.10
+2025-06-14 17:45:23 - INFO - [trade_manager.py:333 - _get_stop_loss()] - [SL CALC] Final Compliant Stop Loss: 105203.09
+2025-06-14 17:45:23 - INFO - [trade_manager.py:380 - _get_lot_size()] - [Risk Calc] Inputs: Equity=18745.98, Risk=1.0%, SL Dist=209.98619999999937, Lot Size: 0.89
+2025-06-14 17:45:23 - INFO - [trade_manager.py:153 - _execute_new_trade()] - >>> EXECUTION: SELL signal received. Sending order! [Lots: 0.89, SL: 105203.09, TP: 104573.13]
+2025-06-14 17:45:24 - INFO - [logger_setup.py:48 - write()] - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-14 17:46:28 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749908640 ---
+2025-06-14 17:46:28 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:46:28 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:47:23 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749908700 ---
+2025-06-14 17:47:23 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:47:23 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:48:26 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749908760 ---
+2025-06-14 17:48:26 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:48:26 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:49:23 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749908820 ---
+2025-06-14 17:49:23 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:49:23 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:50:25 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749908880 ---
+2025-06-14 17:50:25 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:50:25 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:51:22 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749908940 ---
+2025-06-14 17:51:22 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:51:22 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:51:38 - INFO - [run_live.py:122 - main()] - 
+Stopping bot...
+2025-06-14 17:51:38 - INFO - [dwx_client.py:96 - stop()] - DWX Client stop() method called. Shutting down threads.
+2025-06-14 17:53:58 - INFO - [logger_setup.py:57 - setup_logger()] - Logger has been set up.
+2025-06-14 17:53:58 - INFO - [run_live.py:41 - main()] - ========================================================
+2025-06-14 17:53:58 - INFO - [run_live.py:42 - main()] - Initializing trading bot...
+2025-06-14 17:53:59 - INFO - [run_live.py:51 - main()] - Activating strategy: rsi_strategy for BTCUSD on M1
+2025-06-14 17:53:59 - INFO - [run_live.py:27 - strategy_factory()] - Successfully loaded StrategyClass: RsiStrategy from module: trading_bot.strategies.rsi_strategy
+2025-06-14 17:53:59 - INFO - [rsi_strategy.py:25 - reset()] - [Strategy State] RsiStrategy state has been reset.
+2025-06-14 17:53:59 - INFO - [logger_setup.py:48 - write()] - [State] Successfully loaded saved state.
+2025-06-14 17:53:59 - INFO - [logger_setup.py:48 - write()] - TradeManager initialized.
+2025-06-14 17:53:59 - INFO - [logger_setup.py:48 - write()] - MyEventHandler initialized.
+2025-06-14 17:53:59 - INFO - [run_live.py:68 - main()] - DWX Client started.
+2025-06-14 17:53:59 - INFO - [run_live.py:71 - main()] - Requesting historical data for preloading...
+2025-06-14 17:53:59 - INFO - [run_live.py:93 - main()] - Waiting for historical data preload to complete...
+2025-06-14 17:53:59 - INFO - [logger_setup.py:48 - write()] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-14 17:53:59 - INFO - [logger_setup.py:48 - write()] - SUCCESS: Preloaded 259 historical bars for BTCUSD.
+2025-06-14 17:53:59 - INFO - [logger_setup.py:48 - write()] - --- Performing initial analysis on preloaded data... ---
+2025-06-14 17:53:59 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:53:59 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:54:00 - INFO - [run_live.py:104 - main()] - Preload confirmed.
+2025-06-14 17:54:00 - INFO - [run_live.py:111 - main()] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-14 17:54:00 - INFO - [run_live.py:113 - main()] - Bot is running. Press Ctrl+C to stop.
+2025-06-14 17:55:22 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749909180 ---
+2025-06-14 17:55:22 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:55:22 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:56:24 - INFO - [logger_setup.py:48 - write()] - --- New Live Bar Received: BTCUSD M1 at 1749909240 ---
+2025-06-14 17:56:24 - INFO - [logger_setup.py:48 - write()] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 17:56:24 - INFO - [logger_setup.py:48 - write()] - Decision: No action taken.
+2025-06-14 17:57:20 - INFO - [run_live.py:122 - main()] - 
+Stopping bot...
+2025-06-14 17:57:20 - INFO - [dwx_client.py:96 - stop()] - DWX Client stop() method called. Shutting down threads.
+2025-06-14 17:59:18 - INFO - [run_live.py:41] - ========================================================
+2025-06-14 17:59:18 - INFO - [run_live.py:42] - Initializing trading bot...
+2025-06-14 17:59:19 - INFO - [run_live.py:51] - Activating strategy: rsi_strategy for BTCUSD on M1
+2025-06-14 17:59:19 - INFO - [run_live.py:27] - Successfully loaded StrategyClass: RsiStrategy from module: trading_bot.strategies.rsi_strategy
+2025-06-14 17:59:19 - INFO - [rsi_strategy.py:25] - [Strategy State] RsiStrategy state has been reset.
+2025-06-14 17:59:19 - INFO - [trade_manager.py:46] - [State] Successfully loaded saved state.
+2025-06-14 17:59:19 - INFO - [trade_manager.py:38] - TradeManager initialized.
+2025-06-14 18:02:56 - INFO - [run_live.py:41] - ========================================================
+2025-06-14 18:02:56 - INFO - [run_live.py:42] - Initializing trading bot...
+2025-06-14 18:02:57 - INFO - [run_live.py:51] - Activating strategy: rsi_strategy for BTCUSD on M1
+2025-06-14 18:02:57 - INFO - [run_live.py:27] - Successfully loaded StrategyClass: RsiStrategy from module: trading_bot.strategies.rsi_strategy
+2025-06-14 18:02:57 - INFO - [rsi_strategy.py:25] - [Strategy State] RsiStrategy state has been reset.
+2025-06-14 18:02:57 - INFO - [trade_manager.py:46] - [State] Successfully loaded saved state.
+2025-06-14 18:02:57 - INFO - [trade_manager.py:38] - TradeManager initialized.
+2025-06-14 18:02:57 - INFO - [event_handler.py:10] - MyEventHandler initialized.
+2025-06-14 18:02:57 - INFO - [run_live.py:68] - DWX Client started.
+2025-06-14 18:02:57 - INFO - [run_live.py:71] - Requesting historical data for preloading...
+2025-06-14 18:02:57 - INFO - [run_live.py:93] - Waiting for historical data preload to complete...
+2025-06-14 18:02:57 - INFO - [event_handler.py:21] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-14 18:02:57 - INFO - [trade_manager.py:85] - SUCCESS: Preloaded 259 historical bars for BTCUSD.
+2025-06-14 18:02:57 - INFO - [trade_manager.py:86] - 
+--- Performing initial analysis on preloaded data... ---
+2025-06-14 18:02:57 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 18:02:57 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-14 18:02:58 - INFO - [run_live.py:104] - Preload confirmed.
+2025-06-14 18:02:58 - INFO - [run_live.py:111] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-14 18:02:58 - INFO - [run_live.py:113] - Bot is running. Press Ctrl+C to stop.
+2025-06-14 18:04:22 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749909720 ---
+2025-06-14 18:04:22 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 18:04:22 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-14 18:05:22 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749909780 ---
+2025-06-14 18:05:22 - INFO - [trade_manager.py:103] - Signal Check: Received 'SELL' | In Position: False
+2025-06-14 18:05:22 - INFO - [trade_manager.py:319] - [SL CALC] Strategy Desired SL: 105215.96, Broker Boundary (w/ Buffer): 105215.95
+2025-06-14 18:05:22 - INFO - [trade_manager.py:322] - [SL CALC] Final Compliant Stop Loss: 105215.96
+2025-06-14 18:05:22 - INFO - [trade_manager.py:369] - [Risk Calc] Inputs: Equity=18745.98, Risk=1.0%, SL Dist=210.0118999999977, Lot Size: 0.89
+2025-06-14 18:05:22 - INFO - [trade_manager.py:153] - >>> EXECUTION: SELL signal received. Sending order! [Lots: 0.89, SL: 105215.96, TP: 104585.93]
+2025-06-14 18:05:23 - INFO - [event_handler.py:35] - MT4 ERROR: OPEN_ORDER | Could not open order: invalid stops
+2025-06-14 18:05:33 - INFO - [run_live.py:122] - 
+Stopping bot...
+2025-06-14 18:05:33 - INFO - [dwx_client.py:96] - DWX Client stop() method called. Shutting down threads.
+2025-06-14 18:05:52 - INFO - [run_live.py:41] - ========================================================
+2025-06-14 18:05:52 - INFO - [run_live.py:42] - Initializing trading bot...
+2025-06-14 18:05:53 - INFO - [run_live.py:51] - Activating strategy: rsi_strategy for BTCUSD on M1
+2025-06-14 18:05:53 - INFO - [run_live.py:27] - Successfully loaded StrategyClass: RsiStrategy from module: trading_bot.strategies.rsi_strategy
+2025-06-14 18:05:53 - INFO - [rsi_strategy.py:25] - [Strategy State] RsiStrategy state has been reset.
+2025-06-14 18:05:53 - INFO - [trade_manager.py:46] - [State] Successfully loaded saved state.
+2025-06-14 18:05:53 - INFO - [trade_manager.py:38] - TradeManager initialized.
+2025-06-14 18:05:53 - INFO - [event_handler.py:10] - MyEventHandler initialized.
+2025-06-14 18:05:53 - INFO - [run_live.py:68] - DWX Client started.
+2025-06-14 18:05:53 - INFO - [run_live.py:71] - Requesting historical data for preloading...
+2025-06-14 18:05:53 - INFO - [run_live.py:93] - Waiting for historical data preload to complete...
+2025-06-14 18:05:53 - INFO - [event_handler.py:21] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-14 18:05:53 - INFO - [trade_manager.py:85] - SUCCESS: Preloaded 259 historical bars for BTCUSD.
+2025-06-14 18:05:53 - INFO - [trade_manager.py:86] - 
+--- Performing initial analysis on preloaded data... ---
+2025-06-14 18:05:53 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 18:05:53 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-14 18:05:54 - INFO - [run_live.py:104] - Preload confirmed.
+2025-06-14 18:05:54 - INFO - [run_live.py:111] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-14 18:05:54 - INFO - [run_live.py:113] - Bot is running. Press Ctrl+C to stop.
+2025-06-14 18:07:25 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749909900 ---
+2025-06-14 18:07:25 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 18:07:25 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-14 18:08:25 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749909960 ---
+2025-06-14 18:08:25 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 18:08:25 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-14 18:09:23 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910020 ---
+2025-06-14 18:09:23 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 18:09:23 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-14 18:10:27 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910080 ---
+2025-06-14 18:10:27 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 18:10:27 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-14 18:11:23 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910140 ---
+2025-06-14 18:11:23 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 18:11:23 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-14 18:12:28 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910200 ---
+2025-06-14 18:12:28 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 18:12:28 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-14 18:13:22 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910260 ---
+2025-06-14 18:13:22 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 18:13:22 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-14 18:14:22 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910320 ---
+2025-06-14 18:14:22 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 18:14:22 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-14 18:15:24 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910380 ---
+2025-06-14 18:15:24 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 18:15:24 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-14 18:16:23 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910440 ---
+2025-06-14 18:16:23 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-14 18:16:23 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-14 18:17:23 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910500 ---
+2025-06-14 18:17:23 - INFO - [trade_manager.py:103] - Signal Check: Received 'SELL' | In Position: False
+2025-06-14 18:17:23 - INFO - [trade_manager.py:319] - [SL CALC] Strategy Desired SL: 105221.77, Broker Boundary (w/ Buffer): 105261.75
+2025-06-14 18:17:23 - INFO - [trade_manager.py:322] - [SL CALC] Final Compliant Stop Loss: 105261.75
+2025-06-14 18:17:23 - INFO - [trade_manager.py:369] - [Risk Calc] Inputs: Equity=18745.98, Risk=1.0%, SL Dist=250.0, Lot Size: 0.74
+2025-06-14 18:17:23 - INFO - [trade_manager.py:153] - >>> EXECUTION: SELL signal received. Sending order! [Lots: 0.74, SL: 105261.75, TP: 104591.7]
+2025-06-14 18:18:22 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910560 ---
+2025-06-14 18:18:22 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-14 18:19:25 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910620 ---
+2025-06-14 18:19:25 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-14 18:20:22 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910680 ---
+2025-06-14 18:20:22 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-14 18:21:25 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910740 ---
+2025-06-14 18:21:25 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-14 18:22:25 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749910800 ---
+2025-06-14 18:22:25 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-14 18:22:47 - INFO - [run_live.py:122] - 
+Stopping bot...
+2025-06-14 18:22:47 - INFO - [dwx_client.py:96] - DWX Client stop() method called. Shutting down threads.
+2025-06-15 15:09:19 - INFO - [run_live.py:41] - ========================================================
+2025-06-15 15:09:19 - INFO - [run_live.py:42] - Initializing trading bot...
+2025-06-15 15:09:19 - INFO - [run_live.py:51] - Activating strategy: rsi_strategy for BTCUSD on M1
+2025-06-15 15:09:19 - INFO - [run_live.py:27] - Successfully loaded StrategyClass: RsiStrategy from module: trading_bot.strategies.rsi_strategy
+2025-06-15 15:09:19 - INFO - [rsi_strategy.py:25] - [Strategy State] RsiStrategy state has been reset.
+2025-06-15 15:09:19 - INFO - [trade_manager.py:46] - [State] Successfully loaded saved state.
+2025-06-15 15:09:19 - INFO - [trade_manager.py:38] - TradeManager initialized.
+2025-06-15 15:09:19 - INFO - [event_handler.py:10] - MyEventHandler initialized.
+2025-06-15 15:09:19 - INFO - [run_live.py:68] - DWX Client started.
+2025-06-15 15:09:19 - INFO - [run_live.py:71] - Requesting historical data for preloading...
+2025-06-15 15:09:19 - INFO - [run_live.py:93] - Waiting for historical data preload to complete...
+2025-06-15 15:09:20 - INFO - [event_handler.py:21] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-15 15:09:20 - INFO - [trade_manager.py:85] - SUCCESS: Preloaded 258 historical bars for BTCUSD.
+2025-06-15 15:09:20 - INFO - [trade_manager.py:86] - 
+--- Performing initial analysis on preloaded data... ---
+2025-06-15 15:09:20 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:09:20 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-15 15:09:20 - INFO - [run_live.py:104] - Preload confirmed.
+2025-06-15 15:09:20 - INFO - [run_live.py:111] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-15 15:09:20 - INFO - [run_live.py:113] - Bot is running. Press Ctrl+C to stop.
+2025-06-15 15:10:23 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749985680 ---
+2025-06-15 15:10:23 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:10:23 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-15 15:11:24 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749985740 ---
+2025-06-15 15:11:24 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:11:24 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-15 15:12:23 - INFO - [trade_manager.py:254] - 
+--- New Live Bar Received: BTCUSD M1 at 1749985800 ---
+2025-06-15 15:12:23 - INFO - [trade_manager.py:103] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:12:23 - INFO - [trade_manager.py:116] - Decision: No action taken.
+2025-06-15 15:12:28 - INFO - [run_live.py:122] - 
+Stopping bot...
+2025-06-15 15:12:28 - INFO - [dwx_client.py:96] - DWX Client stop() method called. Shutting down threads.
+2025-06-15 15:15:42 - INFO - [run_live.py:89] - ========================================================
+2025-06-15 15:15:42 - INFO - [run_live.py:90] - Initializing trading bot...
+2025-06-15 15:15:42 - INFO - [run_live.py:99] - Activating strategy: rsi_strategy for BTCUSD on M1
+2025-06-15 15:15:42 - INFO - [run_live.py:28] - Successfully loaded StrategyClass: RsiStrategy from module: trading_bot.strategies.rsi_strategy
+2025-06-15 15:15:42 - INFO - [rsi_strategy.py:25] - [Strategy State] RsiStrategy state has been reset.
+2025-06-15 15:15:42 - INFO - [trade_manager.py:64] - [State] Successfully loaded saved state.
+2025-06-15 15:15:42 - INFO - [trade_manager.py:38] - TradeManager initialized.
+2025-06-15 15:15:42 - INFO - [event_handler.py:10] - MyEventHandler initialized.
+2025-06-15 15:15:42 - INFO - [run_live.py:116] - DWX Client started.
+2025-06-15 15:15:42 - INFO - [run_live.py:119] - Requesting historical data for preloading...
+2025-06-15 15:15:42 - INFO - [run_live.py:141] - Waiting for historical data preload to complete...
+2025-06-15 15:15:43 - INFO - [event_handler.py:21] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-15 15:15:43 - INFO - [trade_manager.py:103] - SUCCESS: Preloaded 259 historical bars for BTCUSD.
+2025-06-15 15:15:43 - INFO - [trade_manager.py:104] - 
+--- Performing initial analysis on preloaded data... ---
+2025-06-15 15:15:43 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:15:43 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:15:43 - INFO - [run_live.py:152] - Preload confirmed.
+2025-06-15 15:15:43 - INFO - [run_live.py:159] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-15 15:15:43 - INFO - [run_live.py:164] - Live config watcher has started.
+2025-06-15 15:15:43 - INFO - [run_live.py:166] - Bot is running. Press Ctrl+C to stop.
+2025-06-15 15:16:18 - INFO - [run_live.py:48] - Change detected in config.py. Attempting to reload...
+2025-06-15 15:16:19 - INFO - [trade_manager.py:46] - TradeManager is updating its configuration...
+2025-06-15 15:16:19 - INFO - [trade_manager.py:56] - Updated strategy parameter 'rsi_period' to '14'
+2025-06-15 15:16:19 - INFO - [trade_manager.py:56] - Updated strategy parameter 'oversold_threshold' to '40'
+2025-06-15 15:16:19 - INFO - [trade_manager.py:56] - Updated strategy parameter 'overbought_threshold' to '60'
+2025-06-15 15:16:19 - INFO - [run_live.py:59] - Configuration successfully reloaded and applied.
+2025-06-15 15:16:24 - INFO - [run_live.py:48] - Change detected in config.py. Attempting to reload...
+2025-06-15 15:16:24 - INFO - [trade_manager.py:46] - TradeManager is updating its configuration...
+2025-06-15 15:16:24 - INFO - [trade_manager.py:56] - Updated strategy parameter 'rsi_period' to '14'
+2025-06-15 15:16:24 - INFO - [trade_manager.py:56] - Updated strategy parameter 'oversold_threshold' to '40'
+2025-06-15 15:16:24 - INFO - [trade_manager.py:56] - Updated strategy parameter 'overbought_threshold' to '60'
+2025-06-15 15:16:24 - INFO - [run_live.py:59] - Configuration successfully reloaded and applied.
+2025-06-15 15:17:23 - INFO - [trade_manager.py:272] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986100 ---
+2025-06-15 15:17:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:17:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:18:23 - INFO - [trade_manager.py:272] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986160 ---
+2025-06-15 15:18:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:18:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:19:22 - INFO - [trade_manager.py:272] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986220 ---
+2025-06-15 15:19:22 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:19:22 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:20:24 - INFO - [trade_manager.py:272] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986280 ---
+2025-06-15 15:20:24 - INFO - [trade_manager.py:121] - Signal Check: Received 'BUY' | In Position: False
+2025-06-15 15:20:24 - INFO - [trade_manager.py:337] - [SL CALC] Strategy Desired SL: 105098.37, Broker Boundary (w/ Buffer): 104940.95
+2025-06-15 15:20:24 - INFO - [trade_manager.py:340] - [SL CALC] Final Compliant Stop Loss: 104940.95
+2025-06-15 15:20:24 - INFO - [trade_manager.py:387] - [Risk Calc] Inputs: Equity=18644.41, Risk=1.0%, SL Dist=210.0, Lot Size: 0.88
+2025-06-15 15:20:24 - INFO - [trade_manager.py:171] - >>> EXECUTION: BUY signal received. Sending order! [Lots: 0.88, SL: 104940.95, TP: 105361.25]
+2025-06-15 15:21:22 - INFO - [trade_manager.py:272] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986340 ---
+2025-06-15 15:21:22 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-15 15:22:22 - INFO - [trade_manager.py:272] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986400 ---
+2025-06-15 15:22:22 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-15 15:23:23 - INFO - [trade_manager.py:272] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986460 ---
+2025-06-15 15:23:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-15 15:24:23 - INFO - [trade_manager.py:272] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986520 ---
+2025-06-15 15:24:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-15 15:25:22 - INFO - [trade_manager.py:272] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986580 ---
+2025-06-15 15:25:22 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-15 15:26:23 - INFO - [trade_manager.py:272] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986640 ---
+2025-06-15 15:26:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-15 15:27:23 - INFO - [trade_manager.py:272] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986700 ---
+2025-06-15 15:27:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: True
+2025-06-15 15:27:33 - INFO - [run_live.py:175] - 
+Stopping bot...
+2025-06-15 15:27:33 - INFO - [dwx_client.py:96] - DWX Client stop() method called. Shutting down threads.
+2025-06-15 15:27:37 - INFO - [run_live.py:89] - ========================================================
+2025-06-15 15:27:37 - INFO - [run_live.py:90] - Initializing trading bot...
+2025-06-15 15:27:37 - INFO - [run_live.py:99] - Activating strategy: rsi_strategy for BTCUSD on M1
+2025-06-15 15:27:37 - INFO - [run_live.py:28] - Successfully loaded StrategyClass: RsiStrategy from module: trading_bot.strategies.rsi_strategy
+2025-06-15 15:27:37 - INFO - [rsi_strategy.py:25] - [Strategy State] RsiStrategy state has been reset.
+2025-06-15 15:27:37 - INFO - [trade_manager.py:64] - [State] Successfully loaded saved state.
+2025-06-15 15:27:37 - INFO - [trade_manager.py:38] - TradeManager initialized.
+2025-06-15 15:27:37 - INFO - [event_handler.py:10] - MyEventHandler initialized.
+2025-06-15 15:27:37 - INFO - [run_live.py:116] - DWX Client started.
+2025-06-15 15:27:37 - INFO - [run_live.py:119] - Requesting historical data for preloading...
+2025-06-15 15:27:37 - INFO - [run_live.py:141] - Waiting for historical data preload to complete...
+2025-06-15 15:27:38 - INFO - [event_handler.py:21] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-15 15:27:38 - INFO - [trade_manager.py:103] - SUCCESS: Preloaded 259 historical bars for BTCUSD.
+2025-06-15 15:27:38 - INFO - [trade_manager.py:104] - 
+--- Performing initial analysis on preloaded data... ---
+2025-06-15 15:27:38 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:27:38 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:27:38 - INFO - [run_live.py:152] - Preload confirmed.
+2025-06-15 15:27:38 - INFO - [run_live.py:159] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-15 15:27:38 - INFO - [run_live.py:164] - Live config watcher has started.
+2025-06-15 15:27:38 - INFO - [run_live.py:166] - Bot is running. Press Ctrl+C to stop.
+2025-06-15 15:29:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986820 ---
+2025-06-15 15:29:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:29:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:30:24 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986880 ---
+2025-06-15 15:30:24 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:30:24 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:30:33 - INFO - [run_live.py:48] - Change detected in config.py. Attempting to reload...
+2025-06-15 15:30:33 - INFO - [trade_manager.py:46] - TradeManager is updating its configuration...
+2025-06-15 15:30:33 - INFO - [trade_manager.py:56] - Updated strategy parameter 'rsi_period' to '14'
+2025-06-15 15:30:33 - INFO - [trade_manager.py:56] - Updated strategy parameter 'oversold_threshold' to '48'
+2025-06-15 15:30:33 - INFO - [trade_manager.py:56] - Updated strategy parameter 'overbought_threshold' to '51'
+2025-06-15 15:30:33 - INFO - [run_live.py:59] - Configuration successfully reloaded and applied.
+2025-06-15 15:31:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749986940 ---
+2025-06-15 15:31:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:31:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:32:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749987000 ---
+2025-06-15 15:32:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:32:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:33:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749987060 ---
+2025-06-15 15:33:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:33:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:34:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749987120 ---
+2025-06-15 15:34:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:34:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:35:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749987180 ---
+2025-06-15 15:35:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:35:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:36:18 - INFO - [run_live.py:48] - Change detected in config.py. Attempting to reload...
+2025-06-15 15:36:18 - INFO - [trade_manager.py:46] - TradeManager is updating its configuration...
+2025-06-15 15:36:18 - INFO - [trade_manager.py:56] - Updated strategy parameter 'rsi_period' to '14'
+2025-06-15 15:36:18 - INFO - [trade_manager.py:56] - Updated strategy parameter 'oversold_threshold' to '48'
+2025-06-15 15:36:18 - INFO - [trade_manager.py:56] - Updated strategy parameter 'overbought_threshold' to '51'
+2025-06-15 15:36:18 - INFO - [run_live.py:59] - Configuration successfully reloaded and applied.
+2025-06-15 15:36:22 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749987240 ---
+2025-06-15 15:36:22 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:36:22 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:37:01 - INFO - [run_live.py:175] - 
+Stopping bot...
+2025-06-15 15:37:01 - INFO - [dwx_client.py:96] - DWX Client stop() method called. Shutting down threads.
+2025-06-15 15:38:35 - INFO - [run_live.py:89] - ========================================================
+2025-06-15 15:38:35 - INFO - [run_live.py:90] - Initializing trading bot...
+2025-06-15 15:38:35 - INFO - [run_live.py:99] - Activating strategy: rord_strategy for BTCUSD on M1
+2025-06-15 15:38:35 - INFO - [run_live.py:28] - Successfully loaded StrategyClass: RordStrategy from module: trading_bot.strategies.rord_strategy
+2025-06-15 15:38:35 - INFO - [rord_strategy.py:48] - [Strategy State] RoRD Strategy state has been reset.
+2025-06-15 15:38:35 - INFO - [rord_strategy.py:45] - RordStrategy initialized.
+2025-06-15 15:38:35 - INFO - [trade_manager.py:64] - [State] Successfully loaded saved state.
+2025-06-15 15:38:35 - INFO - [trade_manager.py:38] - TradeManager initialized.
+2025-06-15 15:38:35 - INFO - [event_handler.py:10] - MyEventHandler initialized.
+2025-06-15 15:38:35 - INFO - [run_live.py:116] - DWX Client started.
+2025-06-15 15:38:35 - INFO - [run_live.py:119] - Requesting historical data for preloading...
+2025-06-15 15:38:35 - INFO - [run_live.py:141] - Waiting for historical data preload to complete...
+2025-06-15 15:38:36 - INFO - [event_handler.py:21] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-15 15:38:36 - INFO - [trade_manager.py:103] - SUCCESS: Preloaded 219 historical bars for BTCUSD.
+2025-06-15 15:38:36 - INFO - [trade_manager.py:104] - 
+--- Performing initial analysis on preloaded data... ---
+2025-06-15 15:38:36 - ERROR - [dwx_client.py:249] - Error in check_historic_data (data): 'RordStrategy' object has no attribute 'rsi1_len'
+2025-06-15 15:38:36 - INFO - [run_live.py:152] - Preload confirmed.
+2025-06-15 15:38:36 - INFO - [run_live.py:159] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-15 15:38:36 - INFO - [run_live.py:164] - Live config watcher has started.
+2025-06-15 15:38:36 - INFO - [run_live.py:166] - Bot is running. Press Ctrl+C to stop.
+2025-06-15 15:38:53 - INFO - [run_live.py:175] - 
+Stopping bot...
+2025-06-15 15:38:53 - INFO - [dwx_client.py:96] - DWX Client stop() method called. Shutting down threads.
+2025-06-15 15:38:59 - INFO - [run_live.py:89] - ========================================================
+2025-06-15 15:38:59 - INFO - [run_live.py:90] - Initializing trading bot...
+2025-06-15 15:39:00 - INFO - [run_live.py:99] - Activating strategy: rord_strategy for BTCUSD on M1
+2025-06-15 15:39:00 - INFO - [run_live.py:28] - Successfully loaded StrategyClass: RordStrategy from module: trading_bot.strategies.rord_strategy
+2025-06-15 15:39:00 - INFO - [rord_strategy.py:48] - [Strategy State] RoRD Strategy state has been reset.
+2025-06-15 15:39:00 - INFO - [rord_strategy.py:45] - RordStrategy initialized.
+2025-06-15 15:39:00 - INFO - [trade_manager.py:64] - [State] Successfully loaded saved state.
+2025-06-15 15:39:00 - INFO - [trade_manager.py:38] - TradeManager initialized.
+2025-06-15 15:39:00 - INFO - [event_handler.py:10] - MyEventHandler initialized.
+2025-06-15 15:39:00 - INFO - [run_live.py:116] - DWX Client started.
+2025-06-15 15:39:00 - INFO - [run_live.py:119] - Requesting historical data for preloading...
+2025-06-15 15:39:00 - INFO - [run_live.py:141] - Waiting for historical data preload to complete...
+2025-06-15 15:39:00 - INFO - [event_handler.py:21] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-15 15:39:00 - INFO - [trade_manager.py:103] - SUCCESS: Preloaded 219 historical bars for BTCUSD.
+2025-06-15 15:39:00 - INFO - [trade_manager.py:104] - 
+--- Performing initial analysis on preloaded data... ---
+2025-06-15 15:39:00 - ERROR - [dwx_client.py:249] - Error in check_historic_data (data): Unalignable boolean Series provided as indexer (index of the boolean Series and of the indexed object do not match).
+2025-06-15 15:39:01 - INFO - [run_live.py:152] - Preload confirmed.
+2025-06-15 15:39:01 - INFO - [run_live.py:159] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-15 15:39:01 - INFO - [run_live.py:164] - Live config watcher has started.
+2025-06-15 15:39:01 - INFO - [run_live.py:166] - Bot is running. Press Ctrl+C to stop.
+2025-06-15 15:40:05 - INFO - [run_live.py:175] - 
+Stopping bot...
+2025-06-15 15:40:05 - INFO - [dwx_client.py:96] - DWX Client stop() method called. Shutting down threads.
+2025-06-15 15:40:09 - INFO - [run_live.py:89] - ========================================================
+2025-06-15 15:40:09 - INFO - [run_live.py:90] - Initializing trading bot...
+2025-06-15 15:40:10 - INFO - [run_live.py:99] - Activating strategy: rord_strategy for BTCUSD on M1
+2025-06-15 15:40:10 - INFO - [run_live.py:28] - Successfully loaded StrategyClass: RordStrategy from module: trading_bot.strategies.rord_strategy
+2025-06-15 15:40:10 - INFO - [rord_strategy.py:48] - [Strategy State] RoRD Strategy state has been reset.
+2025-06-15 15:40:10 - INFO - [rord_strategy.py:45] - RordStrategy initialized.
+2025-06-15 15:40:10 - INFO - [trade_manager.py:64] - [State] Successfully loaded saved state.
+2025-06-15 15:40:10 - INFO - [trade_manager.py:38] - TradeManager initialized.
+2025-06-15 15:40:10 - INFO - [event_handler.py:10] - MyEventHandler initialized.
+2025-06-15 15:40:10 - INFO - [run_live.py:116] - DWX Client started.
+2025-06-15 15:40:10 - INFO - [run_live.py:119] - Requesting historical data for preloading...
+2025-06-15 15:40:10 - INFO - [run_live.py:141] - Waiting for historical data preload to complete...
+2025-06-15 15:40:11 - INFO - [event_handler.py:21] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-15 15:40:11 - INFO - [trade_manager.py:103] - SUCCESS: Preloaded 218 historical bars for BTCUSD.
+2025-06-15 15:40:11 - INFO - [trade_manager.py:104] - 
+--- Performing initial analysis on preloaded data... ---
+2025-06-15 15:40:11 - ERROR - [dwx_client.py:249] - Error in check_historic_data (data): 'z_dev'
+2025-06-15 15:40:11 - INFO - [run_live.py:152] - Preload confirmed.
+2025-06-15 15:40:11 - INFO - [run_live.py:159] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-15 15:40:11 - INFO - [run_live.py:164] - Live config watcher has started.
+2025-06-15 15:40:11 - INFO - [run_live.py:166] - Bot is running. Press Ctrl+C to stop.
+2025-06-15 15:41:03 - INFO - [run_live.py:175] - 
+Stopping bot...
+2025-06-15 15:41:03 - INFO - [dwx_client.py:96] - DWX Client stop() method called. Shutting down threads.
+2025-06-15 15:42:26 - INFO - [run_live.py:89] - ========================================================
+2025-06-15 15:42:26 - INFO - [run_live.py:90] - Initializing trading bot...
+2025-06-15 15:42:26 - INFO - [run_live.py:99] - Activating strategy: rord_strategy for BTCUSD on M1
+2025-06-15 15:42:26 - INFO - [run_live.py:28] - Successfully loaded StrategyClass: RordStrategy from module: trading_bot.strategies.rord_strategy
+2025-06-15 15:42:26 - INFO - [rord_strategy.py:39] - [Strategy State] RoRD Strategy state has been reset.
+2025-06-15 15:42:26 - INFO - [rord_strategy.py:36] - RordStrategy initialized.
+2025-06-15 15:42:26 - INFO - [trade_manager.py:64] - [State] Successfully loaded saved state.
+2025-06-15 15:42:26 - INFO - [trade_manager.py:38] - TradeManager initialized.
+2025-06-15 15:42:26 - INFO - [event_handler.py:10] - MyEventHandler initialized.
+2025-06-15 15:42:26 - INFO - [run_live.py:116] - DWX Client started.
+2025-06-15 15:42:26 - INFO - [run_live.py:119] - Requesting historical data for preloading...
+2025-06-15 15:42:26 - INFO - [run_live.py:141] - Waiting for historical data preload to complete...
+2025-06-15 15:42:26 - INFO - [event_handler.py:21] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-15 15:42:26 - INFO - [trade_manager.py:103] - SUCCESS: Preloaded 219 historical bars for BTCUSD.
+2025-06-15 15:42:26 - INFO - [trade_manager.py:104] - 
+--- Performing initial analysis on preloaded data... ---
+2025-06-15 15:42:26 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.56 | BullDiv: False | BearDiv: False
+2025-06-15 15:42:26 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:42:26 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:42:27 - INFO - [run_live.py:152] - Preload confirmed.
+2025-06-15 15:42:27 - INFO - [run_live.py:159] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-15 15:42:27 - INFO - [run_live.py:164] - Live config watcher has started.
+2025-06-15 15:42:27 - INFO - [run_live.py:166] - Bot is running. Press Ctrl+C to stop.
+2025-06-15 15:44:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749987720 ---
+2025-06-15 15:44:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.18 | BullDiv: False | BearDiv: False
+2025-06-15 15:44:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:44:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:45:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749987780 ---
+2025-06-15 15:45:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.95 | BullDiv: False | BearDiv: False
+2025-06-15 15:45:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:45:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:46:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749987840 ---
+2025-06-15 15:46:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.92 | BullDiv: False | BearDiv: False
+2025-06-15 15:46:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:46:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:47:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749987900 ---
+2025-06-15 15:47:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.84 | BullDiv: False | BearDiv: False
+2025-06-15 15:47:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:47:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:48:22 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749987960 ---
+2025-06-15 15:48:22 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.91 | BullDiv: False | BearDiv: False
+2025-06-15 15:48:22 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:48:22 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:49:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988020 ---
+2025-06-15 15:49:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.98 | BullDiv: False | BearDiv: False
+2025-06-15 15:49:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:49:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:50:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988080 ---
+2025-06-15 15:50:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.00 | BullDiv: False | BearDiv: False
+2025-06-15 15:50:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:50:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:51:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988140 ---
+2025-06-15 15:51:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.99 | BullDiv: False | BearDiv: False
+2025-06-15 15:51:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:51:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:52:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988200 ---
+2025-06-15 15:52:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.99 | BullDiv: False | BearDiv: False
+2025-06-15 15:52:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:52:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:53:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988260 ---
+2025-06-15 15:53:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.01 | BullDiv: False | BearDiv: False
+2025-06-15 15:53:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:53:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:54:22 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988320 ---
+2025-06-15 15:54:22 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.04 | BullDiv: False | BearDiv: False
+2025-06-15 15:54:22 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:54:22 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:55:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988380 ---
+2025-06-15 15:55:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.08 | BullDiv: False | BearDiv: False
+2025-06-15 15:55:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:55:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:56:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988440 ---
+2025-06-15 15:56:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.05 | BullDiv: False | BearDiv: False
+2025-06-15 15:56:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:56:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:57:33 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988500 ---
+2025-06-15 15:57:33 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.05 | BullDiv: False | BearDiv: False
+2025-06-15 15:57:33 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:57:33 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:58:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988560 ---
+2025-06-15 15:58:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.94 | BullDiv: False | BearDiv: False
+2025-06-15 15:58:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:58:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 15:59:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988620 ---
+2025-06-15 15:59:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.90 | BullDiv: False | BearDiv: False
+2025-06-15 15:59:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 15:59:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:00:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988680 ---
+2025-06-15 16:00:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.94 | BullDiv: False | BearDiv: False
+2025-06-15 16:00:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:00:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:01:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988740 ---
+2025-06-15 16:01:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.97 | BullDiv: False | BearDiv: False
+2025-06-15 16:01:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:01:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:02:24 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988800 ---
+2025-06-15 16:02:24 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.99 | BullDiv: False | BearDiv: False
+2025-06-15 16:02:24 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:02:24 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:03:22 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988860 ---
+2025-06-15 16:03:22 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.99 | BullDiv: False | BearDiv: False
+2025-06-15 16:03:22 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:03:22 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:04:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988920 ---
+2025-06-15 16:04:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.00 | BullDiv: False | BearDiv: False
+2025-06-15 16:04:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:04:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:05:22 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749988980 ---
+2025-06-15 16:05:22 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.99 | BullDiv: False | BearDiv: False
+2025-06-15 16:05:22 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:05:22 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:06:22 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989040 ---
+2025-06-15 16:06:22 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.01 | BullDiv: False | BearDiv: False
+2025-06-15 16:06:22 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:06:22 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:07:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989100 ---
+2025-06-15 16:07:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.99 | BullDiv: False | BearDiv: False
+2025-06-15 16:07:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:07:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:08:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989160 ---
+2025-06-15 16:08:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.96 | BullDiv: False | BearDiv: False
+2025-06-15 16:08:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:08:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:09:22 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989220 ---
+2025-06-15 16:09:22 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 0.96 | BullDiv: False | BearDiv: False
+2025-06-15 16:09:22 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:09:22 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:10:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989280 ---
+2025-06-15 16:10:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.03 | BullDiv: False | BearDiv: False
+2025-06-15 16:10:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:10:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:11:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989340 ---
+2025-06-15 16:11:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.10 | BullDiv: False | BearDiv: False
+2025-06-15 16:11:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:11:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:12:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989400 ---
+2025-06-15 16:12:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.11 | BullDiv: False | BearDiv: False
+2025-06-15 16:12:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:12:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:13:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989460 ---
+2025-06-15 16:13:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.11 | BullDiv: False | BearDiv: False
+2025-06-15 16:13:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:13:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:14:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989520 ---
+2025-06-15 16:14:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.11 | BullDiv: False | BearDiv: False
+2025-06-15 16:14:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:14:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:15:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989580 ---
+2025-06-15 16:15:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.11 | BullDiv: False | BearDiv: False
+2025-06-15 16:15:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:15:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:16:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989640 ---
+2025-06-15 16:16:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.11 | BullDiv: False | BearDiv: False
+2025-06-15 16:16:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:16:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:17:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989700 ---
+2025-06-15 16:17:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.11 | BullDiv: False | BearDiv: False
+2025-06-15 16:17:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:17:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:18:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989760 ---
+2025-06-15 16:18:23 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.11 | BullDiv: False | BearDiv: False
+2025-06-15 16:18:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:18:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:19:22 - INFO - [run_live.py:48] - Change detected in config.py. Attempting to reload...
+2025-06-15 16:19:22 - INFO - [trade_manager.py:46] - TradeManager is updating its configuration...
+2025-06-15 16:19:22 - INFO - [trade_manager.py:56] - Updated strategy parameter 'rsi1_len' to '14'
+2025-06-15 16:19:22 - INFO - [trade_manager.py:56] - Updated strategy parameter 'rsi2_len' to '14'
+2025-06-15 16:19:22 - INFO - [trade_manager.py:56] - Updated strategy parameter 't3_len' to '5'
+2025-06-15 16:19:22 - INFO - [trade_manager.py:56] - Updated strategy parameter 't3_vf' to '0.7'
+2025-06-15 16:19:22 - INFO - [trade_manager.py:56] - Updated strategy parameter 'dev_len' to '20'
+2025-06-15 16:19:22 - INFO - [trade_manager.py:56] - Updated strategy parameter 'z_len' to '20'
+2025-06-15 16:19:22 - INFO - [trade_manager.py:56] - Updated strategy parameter 'z_thresh_hi' to '2.0'
+2025-06-15 16:19:22 - INFO - [trade_manager.py:56] - Updated strategy parameter 'z_thresh_lo' to '-2.0'
+2025-06-15 16:19:22 - INFO - [trade_manager.py:56] - Updated strategy parameter 'divergence_lookback' to '15'
+2025-06-15 16:19:22 - INFO - [run_live.py:59] - Configuration successfully reloaded and applied.
+2025-06-15 16:19:25 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749989820 ---
+2025-06-15 16:19:25 - INFO - [rord_strategy.py:108] - [RoRD Values] Z-score: 1.11 | BullDiv: False | BearDiv: False
+2025-06-15 16:19:25 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:19:25 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:19:26 - INFO - [run_live.py:175] - 
+Stopping bot...
+2025-06-15 16:19:26 - INFO - [dwx_client.py:96] - DWX Client stop() method called. Shutting down threads.
+2025-06-15 16:20:20 - INFO - [run_live.py:89] - ========================================================
+2025-06-15 16:20:20 - INFO - [run_live.py:90] - Initializing trading bot...
+2025-06-15 16:20:21 - INFO - [run_live.py:99] - Activating strategy: fractal_momentum_strategy for BTCUSD on M1
+2025-06-15 16:20:21 - INFO - [run_live.py:28] - Successfully loaded StrategyClass: FractalMomentumStrategy from module: trading_bot.strategies.fractal_momentum_strategy
+2025-06-15 16:20:21 - INFO - [fractal_momentum_strategy.py:44] - [Strategy State] Fractal Momentum state has been reset.
+2025-06-15 16:20:21 - INFO - [fractal_momentum_strategy.py:41] - FractalMomentumStrategy initialized.
+2025-06-15 16:20:21 - INFO - [trade_manager.py:64] - [State] Successfully loaded saved state.
+2025-06-15 16:20:21 - INFO - [trade_manager.py:38] - TradeManager initialized.
+2025-06-15 16:20:21 - INFO - [event_handler.py:10] - MyEventHandler initialized.
+2025-06-15 16:20:21 - INFO - [run_live.py:116] - DWX Client started.
+2025-06-15 16:20:21 - INFO - [run_live.py:119] - Requesting historical data for preloading...
+2025-06-15 16:20:21 - INFO - [run_live.py:141] - Waiting for historical data preload to complete...
+2025-06-15 16:20:21 - INFO - [event_handler.py:21] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-15 16:20:21 - INFO - [trade_manager.py:103] - SUCCESS: Preloaded 298 historical bars for BTCUSD.
+2025-06-15 16:20:21 - INFO - [trade_manager.py:104] - 
+--- Performing initial analysis on preloaded data... ---
+2025-06-15 16:20:21 - INFO - [fractal_momentum_strategy.py:113] - [FMV Values] Hurst=nan | Z-score=0.65 | BullDiv=False | BearDiv=False
+2025-06-15 16:20:21 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:20:21 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:20:22 - INFO - [run_live.py:152] - Preload confirmed.
+2025-06-15 16:20:22 - INFO - [run_live.py:159] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-15 16:20:22 - INFO - [run_live.py:164] - Live config watcher has started.
+2025-06-15 16:20:22 - INFO - [run_live.py:166] - Bot is running. Press Ctrl+C to stop.
+2025-06-15 16:20:32 - INFO - [run_live.py:175] - 
+Stopping bot...
+2025-06-15 16:20:32 - INFO - [dwx_client.py:96] - DWX Client stop() method called. Shutting down threads.
+2025-06-15 16:34:19 - INFO - [run_live.py:89] - ========================================================
+2025-06-15 16:34:19 - INFO - [run_live.py:90] - Initializing trading bot...
+2025-06-15 16:34:19 - INFO - [run_live.py:99] - Activating strategy: fractal_momentum_strategy for BTCUSD on M1
+2025-06-15 16:34:19 - INFO - [run_live.py:28] - Successfully loaded StrategyClass: FractalMomentumStrategy from module: trading_bot.strategies.fractal_momentum_strategy
+2025-06-15 16:34:19 - INFO - [fractal_momentum_strategy.py:44] - [Strategy State] Fractal Momentum state has been reset.
+2025-06-15 16:34:19 - INFO - [fractal_momentum_strategy.py:41] - FractalMomentumStrategy initialized.
+2025-06-15 16:34:19 - INFO - [trade_manager.py:64] - [State] Successfully loaded saved state.
+2025-06-15 16:34:19 - INFO - [trade_manager.py:38] - TradeManager initialized.
+2025-06-15 16:34:19 - INFO - [event_handler.py:10] - MyEventHandler initialized.
+2025-06-15 16:34:19 - INFO - [run_live.py:116] - DWX Client started.
+2025-06-15 16:34:19 - INFO - [run_live.py:119] - Requesting historical data for preloading...
+2025-06-15 16:34:19 - INFO - [run_live.py:141] - Waiting for historical data preload to complete...
+2025-06-15 16:34:20 - INFO - [event_handler.py:21] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-15 16:34:20 - INFO - [trade_manager.py:103] - SUCCESS: Preloaded 298 historical bars for BTCUSD.
+2025-06-15 16:34:20 - INFO - [trade_manager.py:104] - 
+--- Performing initial analysis on preloaded data... ---
+2025-06-15 16:34:20 - INFO - [fractal_momentum_strategy.py:113] - [FMV Values] Hurst=0.500 | Z-score=-0.61 | BullDiv=False | BearDiv=False
+2025-06-15 16:34:20 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:34:20 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:34:20 - INFO - [run_live.py:152] - Preload confirmed.
+2025-06-15 16:34:20 - INFO - [run_live.py:159] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-15 16:34:20 - INFO - [run_live.py:164] - Live config watcher has started.
+2025-06-15 16:34:20 - INFO - [run_live.py:166] - Bot is running. Press Ctrl+C to stop.
+2025-06-15 16:35:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749990780 ---
+2025-06-15 16:35:23 - INFO - [fractal_momentum_strategy.py:113] - [FMV Values] Hurst=0.500 | Z-score=-0.42 | BullDiv=False | BearDiv=False
+2025-06-15 16:35:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:35:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:36:22 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749990840 ---
+2025-06-15 16:36:22 - INFO - [fractal_momentum_strategy.py:113] - [FMV Values] Hurst=0.500 | Z-score=-0.17 | BullDiv=False | BearDiv=False
+2025-06-15 16:36:22 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:36:22 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:37:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749990900 ---
+2025-06-15 16:37:23 - INFO - [fractal_momentum_strategy.py:113] - [FMV Values] Hurst=0.500 | Z-score=0.14 | BullDiv=False | BearDiv=False
+2025-06-15 16:37:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:37:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:38:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749990960 ---
+2025-06-15 16:38:23 - INFO - [fractal_momentum_strategy.py:113] - [FMV Values] Hurst=0.500 | Z-score=0.21 | BullDiv=False | BearDiv=False
+2025-06-15 16:38:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:38:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:39:22 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749991020 ---
+2025-06-15 16:39:22 - INFO - [fractal_momentum_strategy.py:113] - [FMV Values] Hurst=0.500 | Z-score=0.21 | BullDiv=False | BearDiv=False
+2025-06-15 16:39:22 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:39:22 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:40:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749991080 ---
+2025-06-15 16:40:23 - INFO - [fractal_momentum_strategy.py:113] - [FMV Values] Hurst=0.500 | Z-score=0.19 | BullDiv=False | BearDiv=False
+2025-06-15 16:40:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:40:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:41:24 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749991140 ---
+2025-06-15 16:41:24 - INFO - [fractal_momentum_strategy.py:113] - [FMV Values] Hurst=0.500 | Z-score=0.16 | BullDiv=False | BearDiv=False
+2025-06-15 16:41:24 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:41:24 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:42:23 - INFO - [trade_manager.py:276] - 
+--- New Live Bar Received: BTCUSD M1 at 1749991200 ---
+2025-06-15 16:42:23 - INFO - [fractal_momentum_strategy.py:113] - [FMV Values] Hurst=0.500 | Z-score=0.21 | BullDiv=False | BearDiv=False
+2025-06-15 16:42:23 - INFO - [trade_manager.py:121] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:42:23 - INFO - [trade_manager.py:134] - Decision: No action taken.
+2025-06-15 16:42:31 - INFO - [run_live.py:175] - 
+Stopping bot...
+2025-06-15 16:42:31 - INFO - [dwx_client.py:96] - DWX Client stop() method called. Shutting down threads.
+2025-06-15 16:42:42 - INFO - [run_live.py:89] - ========================================================
+2025-06-15 16:42:42 - INFO - [run_live.py:90] - Initializing trading bot...
+2025-06-15 16:42:42 - INFO - [run_live.py:99] - Activating strategy: fractal_momentum_strategy for BTCUSD on M1
+2025-06-15 16:42:42 - INFO - [run_live.py:28] - Successfully loaded StrategyClass: FractalMomentumStrategy from module: trading_bot.strategies.fractal_momentum_strategy
+2025-06-15 16:42:42 - INFO - [fractal_momentum_strategy.py:44] - [Strategy State] Fractal Momentum state has been reset.
+2025-06-15 16:42:42 - INFO - [fractal_momentum_strategy.py:41] - FractalMomentumStrategy initialized.
+2025-06-15 16:42:42 - INFO - [trade_manager.py:65] - [State] Successfully loaded saved state.
+2025-06-15 16:42:42 - INFO - [trade_manager.py:39] - TradeManager initialized.
+2025-06-15 16:42:42 - INFO - [event_handler.py:10] - MyEventHandler initialized.
+2025-06-15 16:42:42 - INFO - [run_live.py:116] - DWX Client started.
+2025-06-15 16:42:42 - INFO - [run_live.py:119] - Requesting historical data for preloading...
+2025-06-15 16:42:42 - INFO - [run_live.py:141] - Waiting for historical data preload to complete...
+2025-06-15 16:42:43 - INFO - [event_handler.py:21] - Historic data received for BTCUSD_M1. Routing to TradeManager for preloading.
+2025-06-15 16:42:43 - INFO - [trade_manager.py:104] - SUCCESS: Preloaded 299 historical bars for BTCUSD.
+2025-06-15 16:42:43 - INFO - [trade_manager.py:105] - 
+--- Performing initial analysis on preloaded data... ---
+2025-06-15 16:42:43 - INFO - [fractal_momentum_strategy.py:113] - [FMV Values] Hurst=0.500 | Z-score=1.94 | BullDiv=False | BearDiv=False
+2025-06-15 16:42:43 - INFO - [trade_manager.py:122] - Signal Check: Received 'HOLD' | In Position: False
+2025-06-15 16:42:43 - INFO - [trade_manager.py:135] - Decision: No action taken.
+2025-06-15 16:42:43 - INFO - [run_live.py:152] - Preload confirmed.
+2025-06-15 16:42:43 - INFO - [run_live.py:159] - Subscribed to live bar data for: [['BTCUSD', 'M1']]
+2025-06-15 16:42:43 - INFO - [run_live.py:164] - Live config watcher has started.
+2025-06-15 16:42:43 - INFO - [run_live.py:166] - Bot is running. Press Ctrl+C to stop.
+2025-06-15 16:43:21 - INFO - [run_backtest.py:31] - --- Starting Backtest for strategy: sma_crossover ---
+2025-06-15 16:43:21 - INFO - [data_handler.py:69] - No cached data found. Downloading BTC-USD=X at 1m interval from Yahoo Finance...
+2025-06-15 16:43:26 - ERROR - [quote.py:592] - HTTP Error 404: 
+2025-06-15 16:43:27 - ERROR - [multi.py:184] - 
+1 Failed download:
+2025-06-15 16:43:27 - ERROR - [multi.py:197] - ['BTC-USD=X']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+2025-06-15 16:43:27 - ERROR - [data_handler.py:86] - FATAL ERROR: Could not download data for BTC-USD=X. Reason: No data returned from Yahoo Finance for ticker BTC-USD=X.
+2025-06-15 16:43:27 - ERROR - [run_backtest.py:37] - Aborting backtest due to data download failure.

@@ -68,10 +68,10 @@ def run_backtest():
 
     # --- 6. Print and Plot Results ---
     logging.info("\n--- Backtest Results ---")
-    print(stats)
+    logging.info(stats)
 
     logging.info("\n--- Trade Log ---")
-    print(stats["_trades"])
+    logging.info(stats["_trades"])
 
     logging.info("\nGenerating interactive plot... A new tab should open in your web browser.")
     bt.plot(plot_volume=True, plot_equity=True, plot_return=True, resample=False, open_browser=True)
