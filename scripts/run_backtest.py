@@ -1,17 +1,18 @@
-# run_backtest.py
-import logging
+# scripts/run_backtest.py
 import os
 import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+import logging
+from datetime import datetime
+
 import pandas as pd
 from backtesting import Backtest
 
-import trading_bot.config as cfg
-
-# We can reuse the factory from our live main.py!
+# Import the same strategy factory used by the live trading script
 from scripts.run_live import strategy_factory
+from trading_bot import config as cfg
 from trading_bot.backtesting.strategy_adapter import StrategyAdapter
 from trading_bot.core.data_handler import download_and_get_data
 from trading_bot.core.logger_setup import setup_logger
@@ -19,14 +20,13 @@ from trading_bot.core.logger_setup import setup_logger
 
 def run_backtest():
     """
-    Main entry point for running a backtest with automated data download
-    and interactive plotting.
+    Main entry point for running a backtest with automated data download,
+    dynamic strategy loading, and interactive plotting.
     """
-    setup_logger()  # Setup logging to capture output
+    setup_logger()
 
-    # --- 1. Choose the strategy to backtest ---
-    # This is the same single line of code you use to control your live bot.
-    strategy_name_to_run = "sma_crossover"
+    # --- 1. DYNAMICALLY CHOOSE THE STRATEGY FROM CONFIG ---
+    strategy_name_to_run = cfg.STRATEGY_NAME
 
     logging.info(f"--- Starting Backtest for strategy: {strategy_name_to_run} ---")
 
@@ -37,44 +37,48 @@ def run_backtest():
         logging.error("Aborting backtest due to data download failure.")
         return
 
-    # The backtesting.py library needs specific column names.
-    # We rename them to ensure compatibility.
-    # Note: yfinance auto_adjust=True removes 'Adj Close' and adjusts OHLC.
-    data.rename(columns={"Open": "Open", "High": "High", "Low": "Low", "Close": "Close", "Volume": "Volume"}, inplace=True)
-    data.columns = [col.lower().replace(" ", "_") for col in data.columns]
+    # Standardize column names for processing, then rename for the backtesting library
+    new_columns = []
+    for col in data.columns:
+        if isinstance(col, tuple):
+            col = col[0]
+        new_columns.append(str(col).lower().replace(" ", "_"))
+    data.columns = new_columns
 
-    # --- 3. Instantiate the User Strategy ---
+    rename_map = {"open": "Open", "high": "High", "low": "Low", "close": "Close", "volume": "Volume"}
+    data.rename(columns=rename_map, inplace=True)
+
+    # --- 3. INSTANTIATE THE USER STRATEGY USING THE FACTORY ---
     strategy_params = cfg.STRATEGY_PARAMS.get(strategy_name_to_run, {})
     user_strategy_object = strategy_factory(strategy_name_to_run, strategy_params)
     if not user_strategy_object:
         logging.error("Aborting backtest due to strategy loading failure.")
         return
 
-    # --- 4. Inject the User Strategy into the Adapter ---
-    # This is the magic step that makes our live strategy compatible with the backtester.
+    # --- 4. INJECT THE USER STRATEGY INTO THE ADAPTER ---
     StrategyAdapter.user_strategy = user_strategy_object
-
-    # --- 5. Initialize and Run the Backtest ---
-    bt = Backtest(
-        data,
-        StrategyAdapter,
-        cash=10000,
-        commission=0.002,  # Example 0.2% commission per trade
-        trade_on_close=True,
-        exclusive_orders=True,
-    )
+    StrategyAdapter.risk_config = cfg.RISK_CONFIG  # Give adapter access to risk settings
+    StrategyAdapter.symbol_info = {"digits": 2, "tick_value": 0.01, "contract_size": 100}
+    # --- 5. INITIALIZE AND RUN THE BACKTEST ---
+    bt = Backtest(data, StrategyAdapter, cash=10000, commission=0.002, trade_on_close=True, exclusive_orders=True)
 
     stats = bt.run()
 
-    # --- 6. Print and Plot Results ---
+    # --- 6. PRINT AND PLOT RESULTS ---
     logging.info("\n--- Backtest Results ---")
-    logging.info(stats)
+    print(stats)
 
     logging.info("\n--- Trade Log ---")
-    logging.info(stats["_trades"])
+    print(stats["_trades"])
 
-    logging.info("\nGenerating interactive plot... A new tab should open in your web browser.")
-    bt.plot(plot_volume=True, plot_equity=True, plot_return=True, resample=False, open_browser=True)
+    # 1. Create a unique filename for the plot based on the strategy and current time
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    plot_filename = f"logs/backtest_{strategy_name_to_run}_{timestamp}.html"
+
+    logging.info(f"\nGenerating interactive plot... Saving to: {plot_filename}")
+
+    # 2. Call plot() with the new filename
+    bt.plot(filename=plot_filename, plot_volume=True, plot_equity=True, plot_return=True, resample=False, open_browser=True)
 
 
 if __name__ == "__main__":

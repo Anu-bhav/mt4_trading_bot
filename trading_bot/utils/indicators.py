@@ -26,36 +26,64 @@ def t3_ma(source: pd.Series, length: int = 5, v_factor: float = 0.7) -> pd.Serie
 # --- THIS IS THE NEW, ROBUST HURST EXPONENT FUNCTION ---
 def hurst_exponent(prices: pd.Series, max_lag: int = 100) -> float:
     """
-    Calculates the Hurst Exponent of a time series in a numerically stable way.
+    Calculates the Hurst Exponent of a time series using Rescaled Range (R/S) analysis.
+
+    :param prices: A pandas Series of prices.
+    :param max_lag: The maximum number of lags to use for the analysis.
+    :return: The Hurst Exponent as a float.
     """
     if len(prices) < max_lag:
-        return 0.5
+        return 0.5  # Not enough data, return neutral value
 
+    # Create a list of lags to analyze
     lags = range(2, max_lag)
 
-    # Calculate variances for all lags
-    variances = [np.var(np.subtract(prices[lag:], prices[:-lag])) for lag in lags]
+    # Calculate the Rescaled Range for each lag
+    # We use a helper list to store the R/S values for valid lags
+    rescaled_ranges = []
 
-    # --- The Fix: Filter out zero variances before taking the log ---
-    # Create pairs of (lag, variance) and filter
-    lag_variance_pairs = [(lag, var) for lag, var in zip(lags, variances) if var > 0]
+    for lag in lags:
+        # Create two subsets of the data, offset by the lag
+        ts1 = prices[lag:]
+        ts2 = prices[:-lag]
 
-    # If we don't have enough valid points to fit a line, we can't calculate.
-    if len(lag_variance_pairs) < 2:
-        return 0.5  # Return neutral value for flat/unstable series
+        # Calculate the differences
+        diffs = np.subtract(ts1.values, ts2.values)
 
-    # Unpack the valid pairs
-    valid_lags, valid_variances = zip(*lag_variance_pairs)
+        # Calculate the standard deviation of the differences
+        std_dev = np.std(diffs)
 
-    # Now we can safely take the log and perform the regression (polyfit).
+        # If std_dev is zero, the series is flat for this lag; skip it
+        if std_dev == 0:
+            continue
+
+        # Calculate the cumulative sum of the differences (the "mean-adjusted" series)
+        mean_diff = np.mean(diffs)
+        cumulative_sum = np.cumsum(diffs - mean_diff)
+
+        # Calculate the range (max - min of the cumulative sum)
+        r = np.max(cumulative_sum) - np.min(cumulative_sum)
+
+        # Calculate the Rescaled Range (R/S)
+        rs_value = r / std_dev
+        rescaled_ranges.append(rs_value)
+
+    # If we have no valid R/S values, we cannot proceed
+    if len(rescaled_ranges) < 2:
+        return 0.5
+
+    # --- Perform a log-log regression to find the Hurst Exponent ---
+    # We fit a line to the log of the R/S values vs. the log of the lags.
+    # The slope of this line is the Hurst Exponent.
     try:
-        # R/S analysis uses standard deviation, which is sqrt of variance
-        tau = np.sqrt(valid_variances)
-        poly = np.polyfit(np.log(valid_lags), np.log(tau), 1)
-        return poly[0]  # The slope of the log-log plot is the Hurst Exponent
+        # The lags used correspond to the rescaled_ranges we calculated
+        valid_lags = lags[: len(rescaled_ranges)]
+
+        poly = np.polyfit(np.log(valid_lags), np.log(rescaled_ranges), 1)
+        return poly[0]
     except (np.linalg.LinAlgError, ValueError) as e:
         logging.warning(f"Could not calculate Hurst Exponent due to numerical instability: {e}")
-        return 0.5  # Return neutral value on mathematical error
+        return 0.5
 
 
 def qqe(source: pd.Series, rsi_len: int = 14, rsi_smooth_factor: int = 5) -> tuple[pd.Series, pd.Series]:

@@ -1,4 +1,4 @@
-# data_handler.py
+# trading_bot/core/data_handler.py
 import logging
 from os import makedirs, path
 
@@ -10,78 +10,107 @@ DATA_DIR = "data"
 
 def get_yf_symbol(mt4_symbol: str) -> str:
     """Converts a typical MT4/broker symbol to a Yahoo Finance compatible ticker."""
-    if mt4_symbol.upper() == "GOLD" or mt4_symbol.upper() == "XAUUSD":
-        return "GC=F"  # Gold Futures ticker
-    if mt4_symbol.upper() == "SILVER" or mt4_symbol.upper() == "XAGUSD":
-        return "SI=F"  # Silver Futures ticker
-
-    # For Forex pairs like EURUSD, GBPJPY, etc.
-    if len(mt4_symbol) == 6 and mt4_symbol.isalpha():
-        return f"{mt4_symbol[:3]}-{mt4_symbol[3:]}=X"
-
-    # For Crypto pairs like BTCUSD, ETHUSD, etc.
-    if "USD" in mt4_symbol.upper() and len(mt4_symbol) > 3:
-        return f"{mt4_symbol.upper().replace('USD', '')}-USD"
-
-    return mt4_symbol.upper()  # Fallback for stock tickers etc.
+    symbol = mt4_symbol.upper()
+    if symbol == "GOLD" or symbol == "XAUUSD":
+        return "GC=F"
+    if symbol == "SILVER" or symbol == "XAGUSD":
+        return "SI=F"
+    if "USD" in symbol and not symbol.endswith("=X"):
+        return f"{symbol.replace('USD', '')}-USD"
+    if len(symbol) == 6 and symbol.isalpha():
+        return f"{symbol[:3]}{symbol[3:]}=X"
+    return symbol
 
 
 def get_yf_interval(mt4_timeframe: str) -> str:
     """Converts an MT4 timeframe to a Yahoo Finance compatible interval."""
-    # Note: Yahoo Finance has limited intervals. We map to the closest available one.
-    tf_map = {
-        "M1": "1m",
-        "M5": "5m",
-        "M15": "15m",
-        "M30": "30m",
-        "H1": "60m",
-        "H4": "1d",  # YF doesn't have 4h, mapping to daily as a fallback
-        "D1": "1d",
-        "W1": "1wk",
-        "MN1": "1mo",
-    }
-    return tf_map.get(mt4_timeframe.upper(), "1d")  # Default to daily if not found
+    tf_map = {"M1": "1m", "M5": "5m", "M15": "15m", "M30": "30m", "H1": "60m", "H4": "1d", "D1": "1d", "W1": "1wk", "MN1": "1mo"}
+    return tf_map.get(mt4_timeframe.upper(), "1d")
 
 
 def download_and_get_data(mt4_symbol: str, mt4_timeframe: str) -> pd.DataFrame:
     """
-    Main function to download and cache historical data from Yahoo Finance.
-    It checks if a local CSV file exists first. If not, it downloads,
-    saves, and then returns the data.
+    Downloads, caches, and robustly cleans historical data from Yahoo Finance.
     """
     if not path.exists(DATA_DIR):
         makedirs(DATA_DIR)
 
-    file_path = path.join(DATA_DIR, f"{mt4_symbol}_{mt4_timeframe}.csv")
+    file_path = path.join(DATA_DIR, f"{mt4_symbol.upper()}_{mt4_timeframe.upper()}.csv")
 
-    # 1. Check if the data is already cached locally
+    data = None
+
     if path.exists(file_path):
         logging.info(f"Loading cached data from: {file_path}")
         try:
-            return pd.read_csv(file_path, index_col=0, parse_dates=True)
+            data = pd.read_csv(file_path, index_col=0)
         except Exception as e:
-            logging.warning(f"Could not read cached file {file_path}. Re-downloading. Error: {e}")
+            logging.warning(f"Could not read cached file. Re-downloading. Error: {e}")
 
-    # 2. If not cached, download from Yahoo Finance
-    yf_symbol = get_yf_symbol(mt4_symbol)
-    yf_interval = get_yf_interval(mt4_timeframe)
+    if data is None or data.empty:
+        yf_symbol = get_yf_symbol(mt4_symbol)
+        yf_interval = get_yf_interval(mt4_timeframe)
+        logging.info(f"Downloading {yf_symbol} at {yf_interval} interval...")
 
-    logging.info(f"No cached data found. Downloading {yf_symbol} at {yf_interval} interval from Yahoo Finance...")
+        try:
+            if yf_interval == "1m":
+                period_to_download = "8d"
+            elif yf_interval in ["2m", "5m", "15m", "30m", "60m", "90m", "1h"]:
+                period_to_download = "60d"
+            else:
+                period_to_download = "2y"
 
-    try:
-        # Note: 'period' can be 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
-        # For intraday data (1m, 5m, etc.), Yahoo limits downloads to the last 7-60 days.
-        data = yf.download(tickers=yf_symbol, period="1mo", interval=yf_interval, auto_adjust=True)
+            logging.info(f"Interval '{yf_interval}' detected. Requesting period='{period_to_download}'.")
+            data = yf.download(
+                tickers=yf_symbol, period=period_to_download, interval=yf_interval, auto_adjust=True, progress=False
+            )
 
-        if data.empty:
-            raise ValueError(f"No data returned from Yahoo Finance for ticker {yf_symbol}.")
+            if data.empty:
+                raise ValueError(f"No data returned for {yf_symbol} at {yf_interval}.")
 
-        # 3. Save the downloaded data to a CSV for future use
-        data.to_csv(file_path)
-        logging.info(f"Data downloaded and cached successfully at: {file_path}")
+            data.to_csv(file_path)
+            logging.info(f"Data downloaded and cached successfully at: {file_path}")
 
+        except Exception as e:
+            logging.error(f"FATAL ERROR: Could not download data for {yf_symbol}. Reason: {e}")
+            return pd.DataFrame()
+
+    return _clean_data(data)
+
+
+# --- THIS IS THE DEFINITIVE, BULLETPROOF CLEANING FUNCTION ---
+def _clean_data(data: pd.DataFrame) -> pd.DataFrame:
+    """A helper function to robustly clean and type data."""
+    if data.empty:
         return data
 
-    except Exception as e:
-        logging.error(f"FATAL ERROR: Could not download data for {yf_symbol}. Reason: {e}")
-        return pd.DataFrame()  # Return empty dataframe on failure
+    # 1. Robustly flatten and clean column names
+    # This handles both string and tuple (multi-level) column names.
+    clean_columns = []
+    for col in data.columns:
+        # If col is a tuple (e.g., ('Open', 'GC=F')), take the first element.
+        col_name = col[0] if isinstance(col, tuple) else col
+        # Ensure it's a string and standardize it.
+        clean_columns.append(str(col_name).capitalize())
+    data.columns = clean_columns
+
+    # 2. Convert the index to a proper DatetimeIndex.
+    data.index = pd.to_datetime(data.index, errors="coerce", utc=True)
+    data.dropna(axis=0, how="any", inplace=True)  # Drop rows with unparseable dates
+
+    # 3. Ensure OHLCV columns exist and are numeric.
+    required_cols = ["Open", "High", "Low", "Close", "Volume"]
+    for col in required_cols:
+        if col in data.columns:
+            data[col] = pd.to_numeric(data[col], errors="coerce")
+        else:
+            logging.error(f"Required column '{col}' not found after cleaning. Aborting.")
+            return pd.DataFrame()
+
+    # 4. Final drop of any rows that became NaN during numeric conversion.
+    original_rows = len(data)
+    data.dropna(subset=required_cols, inplace=True)
+    cleaned_rows = len(data)
+    if original_rows > cleaned_rows:
+        logging.warning(f"Data cleaning removed {original_rows - cleaned_rows} rows with invalid values.")
+
+    return data

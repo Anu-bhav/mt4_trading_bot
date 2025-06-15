@@ -3,6 +3,7 @@ import json
 import logging
 from datetime import datetime, timezone
 from os.path import join
+from tkinter import N
 
 import pandas as pd
 
@@ -117,7 +118,8 @@ class TradeManager:
             self.manage_open_positions()
 
         # 3. Get a signal from the strategy.
-        signal = self.strategy.get_signal(self.market_data_df.copy())
+        signal_dict = self.strategy.get_signal(self.market_data_df.copy(), is_backtest=False)
+        signal = signal_dict.get("signal", "HOLD")
 
         logging.info(f"Signal Check: Received '{signal}' | In Position: {self.in_position}")
 
@@ -125,7 +127,7 @@ class TradeManager:
         open_positions = self._get_open_positions()  # Get a fresh copy for this logic block
         if not self.in_position and signal in ["BUY", "SELL"]:
             if len(open_positions) < self.risk_config["MAX_OPEN_POSITIONS"]:
-                self._execute_new_trade(signal)
+                self._execute_new_trade(signal, signal_dict.get("comment"))
         elif self.in_position:
             current_trade_type = list(open_positions.values())[0]["type"]
             if (signal == "BUY" and current_trade_type == "sell") or (signal == "SELL" and current_trade_type == "buy"):
@@ -134,7 +136,7 @@ class TradeManager:
         else:
             logging.info("Decision: No action taken.")
 
-    def _execute_new_trade(self, signal: str):
+    def _execute_new_trade(self, signal: str, comment: str = None):
         """
         Orchestrates the process of opening a new trade with correct logic,
         price normalization, and proper context for MT4.
@@ -173,9 +175,10 @@ class TradeManager:
         digits = symbol_data["digits"]
         final_sl = round(stop_loss_price, digits)
         final_tp = round(take_profit_price, digits) if take_profit_price > 0 else 0.0
-
+        # Add the comment to the execution log
+        log_comment = f" | Comment: {comment}" if comment else ""
         logging.info(
-            f">>> EXECUTION: {signal.upper()} signal received. Sending order! [Lots: {lot_size}, SL: {final_sl}, TP: {final_tp}]"
+            f">>> EXECUTION: {signal.upper()} signal received. Sending order! [Lots: {lot_size}, SL: {final_sl}, TP: {final_tp}]{log_comment}"
         )
         self.dwx.open_order(
             symbol=self.config.STRATEGY_SYMBOL,
@@ -185,6 +188,7 @@ class TradeManager:
             stop_loss=final_sl,
             take_profit=final_tp,
             magic=self.config.MAGIC_NUMBER,
+            comment=comment or f"PythonBot v1.0",
         )
 
     def manage_open_positions(self):

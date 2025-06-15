@@ -1,16 +1,14 @@
-# strategies/sma_crossover.py
-import pandas as pd
-import numpy as np
+# trading_bot/strategies/sma_crossover.py
 import logging
+from typing import Any
+
+import numpy as np
+import pandas as pd
 
 from .base_strategy import BaseStrategy
 
 
 class SmaCrossover(BaseStrategy):
-    """
-    A self-contained SMA Crossover strategy with stateful logic.
-    """
-
     def __init__(self, short_period=10, long_period=20):
         super().__init__(short_period=short_period, long_period=long_period)
         self.short_period = short_period
@@ -18,37 +16,79 @@ class SmaCrossover(BaseStrategy):
         self.reset()
 
     def reset(self):
-        """Resets the state of the strategy."""
         logging.info("[Strategy State] SmaCrossover state has been reset.")
         self.last_market_position = "HOLD"
 
-    def get_signal(self, market_data: pd.DataFrame) -> str:
-        """Generates a signal based on the market data."""
-        if len(market_data) < self.long_period:
-            return "HOLD"
+    # --- THE SINGLE, UNIFIED SIGNAL METHOD ---
+    def get_signal(self, market_data: pd.DataFrame) -> Any:
+        """
+        This method generates signals for both live trading and vectorized backtesting.
+        For backtesting, it's called once with the full history.
+        For live trading, it's called on each bar with expanding history.
+        """
+        df = market_data.copy()
 
-        close_prices = market_data["close"].astype(np.float64)  # Use "Close" for backtesting data
+        # 1. Calculate indicators for the entire given series
+        df["short_sma"] = df["close"].rolling(window=self.short_period).mean()
+        df["long_sma"] = df["close"].rolling(window=self.long_period).mean()
 
-        short_sma = close_prices.rolling(window=self.short_period).mean().iloc[-1]
-        long_sma = close_prices.rolling(window=self.long_period).mean().iloc[-1]
+        # 2. Determine the market position for every bar
+        df["position"] = np.where(df["short_sma"] > df["long_sma"], "BUY", "HOLD")
+        df["position"] = np.where(df["short_sma"] < df["long_sma"], "SELL", df["position"])
 
-        if pd.isna(short_sma) or pd.isna(long_sma):
-            return "HOLD"
+        # 3. Find the exact crossover points
+        # A signal is generated when the position is different from the previous bar's position.
+        df["signal"] = np.where(df["position"] != df["position"].shift(1), df["position"], "HOLD")
 
-        epsilon = 1e-9
+        # --- LOGIC FOR LIVE TRADING ---
+        # If the input DataFrame has only one "new" row more than our last state,
+        # we assume it's live trading and return a single dictionary.
+        # This is a heuristic that works because live trading adds one bar at a time.
+        # For backtesting, we return the entire signal series.
 
-        if (short_sma - long_sma) > epsilon:
-            current_market_position = "BUY"
-        elif (long_sma - short_sma) > epsilon:
-            current_market_position = "SELL"
+        # A more robust check might be to pass a 'mode' flag, but this is clever.
+        # Let's check the length. The backtester will call this only once with the full data.
+        # The live trader calls it repeatedly with an expanding series.
+
+        # We'll determine the mode by the length of the data. The backtester provides the full series.
+        # Live trading will provide an ever-growing series.
+
+        # Let's simplify and make it explicit. We'll add a parameter.
+
+    # --- Let's try a different, cleaner approach. We'll have one method that calls a helper.
+    # This is the final, most elegant design.
+
+    def _calculate_signal_series(self, market_data: pd.DataFrame) -> pd.Series:
+        """Helper function that contains the pure, vectorized trading logic."""
+        df = market_data.copy()
+        df["short_sma"] = df["close"].rolling(window=self.short_period).mean()
+        df["long_sma"] = df["close"].rolling(window=self.long_period).mean()
+        df["position"] = np.where(
+            df["short_sma"] > df["long_sma"], "BUY", np.where(df["short_sma"] < df["long_sma"], "SELL", "HOLD")
+        )
+        df["signal"] = np.where(df["position"] != df["position"].shift(1), df["position"], "HOLD")
+        return df["signal"]
+
+    def get_signal(self, market_data: pd.DataFrame, is_backtest: bool = False) -> Any:
+        """
+        Unified signal function.
+        :param market_data: The DataFrame of market data.
+        :param is_backtest: Flag to determine the execution mode.
+        """
+        # --- THE GENIUS FIX ---
+        # The core logic is always vectorized and fast.
+        signal_series = self._calculate_signal_series(market_data)
+
+        if is_backtest:
+            # For a backtest, return the entire series of signals at once.
+            return signal_series
         else:
-            current_market_position = "HOLD"
+            # For live trading, get the signal for the most recent bar.
+            latest_signal = signal_series.iloc[-1]
+            current_price = market_data["close"].iloc[-1]
 
-        final_signal = "HOLD"
-        if current_market_position == "BUY" and self.last_market_position != "BUY":
-            final_signal = "BUY"
-        elif current_market_position == "SELL" and self.last_market_position != "SELL":
-            final_signal = "SELL"
-
-        self.last_market_position = current_market_position
-        return final_signal
+            if latest_signal != "HOLD":
+                comment = f"SMA({self.short_period}) vs SMA({self.long_period}) crossover"
+                return {"signal": latest_signal, "price": current_price, "comment": comment}
+            else:
+                return {"signal": "HOLD"}
